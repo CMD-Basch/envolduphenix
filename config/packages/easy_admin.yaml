@@ -1,0 +1,9 @@
+easy_admin:
+    entities:
+        - App\Entity\User
+        - App\Entity\Menu
+        - App\Entity\View
+        - App\Entity\Event
+        - App\Entity\EventType
+        - App\Entity\Round
+

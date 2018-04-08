@@ -1,0 +1,34 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: ~
+            user_checker: App\Security\UserChecker
+            form_login:
+                login_path: login
+                check_path: login
+
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
+                remember_me_parameter: _remember_me
+
+            logout:
+                path: /logout
+                target: /
+
+    access_control:
+        # require ROLE_ADMIN for /admin*
+         - { path: ^/admin, roles: ROLE_ADMIN }

@@ -1,0 +1,32 @@
+{% extends "envol/core.html.twig" %}
+
+{% block body %}
+
+
+    <!-- BANDEAU TITRE -->
+    <div class="row bd-titre bd-orange">
+        <div class="container">
+            <h2 id="titre-ic">INSCRIPTION</h2>
+        </div> <!-- container -->
+    </div> <!-- row -->
+
+    <!-- CORPS DE PAGE -->
+    <div class="container corps-page">
+        <!-- Texte -->
+        <div class="row">
+            <div class="col-sm-6 col-sm-push-3">
+                <h5 class="sous-titre">Merci de remplir le formulaire</h5>
+                <hr class="hr-titre">
+                <br>
+            </div> <!-- col -->
+        </div> <!-- row -->
+        <div class="row">
+            <div class="col-sm-offset-4 col-sm-4 form-ic">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

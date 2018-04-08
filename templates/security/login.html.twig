@@ -1,0 +1,55 @@
+{% extends "envol/core.html.twig" %}
+
+{% block body %}
+
+    <!-- BANDEAU TITRE -->
+    <div class="row bd-titre bd-bleu">
+        <div class="container">
+            <h2 id="titre-ic">CONNEXION</h2>
+        </div> <!-- container -->
+    </div> <!-- row -->
+
+    <!-- CORPS DE PAGE -->
+    <div class="container corps-page">
+        <!-- Texte -->
+        <div class="row">
+            <div class="col-sm-6 col-sm-push-3">
+                <h5 class="sous-titre">Merci de remplir le formulaire</h5>
+                <hr class="hr-titre">
+                <br>
+            </div> <!-- col -->
+        </div> <!-- row -->
+        <div class="row">
+            <div class="col-sm-offset-4 col-sm-4 form-ic">
+
+                {% if error %}
+                    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+
+                <form action="{{ path('login') }}" method="post">
+
+                    <div class="form-group">
+                        <label for="username">E-mail:</label>
+                        <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Mot de passe:</label>
+                        <input type="password" class="form-control" id="password" name="_password" />
+                    </div>
+                    <div class="checkbox">
+                        <label for="remember_me" ><input id="remember_me" name="_remember_me" type="checkbox"> Se souvenir de moi</label>
+                    </div>
+                    <button type="submit">Connexion</button>
+                </form>
+
+                <p class="text-right"><small><a href="index.php?p=lostpass">J'ai perdu mon mot de passe.</a><br>
+                        <!--Je n'ai pas reçu le mail de validation.--></small></p>
+
+            </div> <!-- col -->
+        </div> <!-- row -->
+    </div> <!-- container -->
+
+
+{% endblock %}

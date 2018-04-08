@@ -1,0 +1,27 @@
+{% extends "envol/core.html.twig" %}
+
+{% block title %}
+
+    {{ parent() }} - {{ title.name }}
+
+{% endblock %}
+
+
+
+{% block body %}
+    <div class="row bd-titre {{ title.color }}">
+        <div class="container">
+            <h2>
+                <img src="{{ asset( title.pic ) }}">
+                {{ title.name|upper }}
+                <img src="{{ asset( title.pic ) }}">
+            </h2>
+        </div>
+    </div>
+
+    <div class="container corps-page">
+    {% block container %}
+    {% endblock %}
+    </div>
+
+{% endblock %}

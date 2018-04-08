@@ -1,0 +1,20 @@
+{% extends "envol/standard.html.twig" %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-sm-8 col-sm-push-2">
+            <h3 class="titre-page">Liste des tables de jeu de rôles</h3>
+            <hr class="hr-titre">
+        </div> <!-- col -->
+    </div> <!-- row -->
+
+    <ul class="nav nav-tabs nav-liste">
+        {# class="active" #}
+        {% for key, time in timezones.all %}
+            <li {% if key == active_tab %} class="active" {% endif %} data-toggle="tooltip" title=""><a href="{{ path('roleplay', {'time': key}) }}">{{ time.name }}</a></li>
+        {% endfor %}
+       <!-- <li data-toggle="tooltip" title="" data-original-title="11h => 18h"><a href="/envolduphenix/index.php?p=tables&amp;h=2">Samedi journée</a></li>
+        <li data-toggle="tooltip" title="" data-original-title="21h => 4h"><a href="/envolduphenix/index.php?p=tables&amp;h=3">Samedi soir</a></li>
+        <li data-toggle="tooltip" title="" data-original-title="11h => 16h"><a href="/envolduphenix/index.php?p=tables&amp;h=4">Dimanche journée</a></li>-->
+    </ul>
+{% endblock %}
