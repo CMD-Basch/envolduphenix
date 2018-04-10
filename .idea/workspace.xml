@@ -2,25 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="de990d81-e74b-40bb-86e3-9583110137c6" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/deployment.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/templates/envol/pages/roleplay-add-event.html.twig" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/public/css/stylenono.css" afterPath="$PROJECT_DIR$/public/css/stylenono.css" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RoleplayController.php" afterPath="$PROJECT_DIR$/src/Controller/RoleplayController.php" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Event.php" afterPath="$PROJECT_DIR$/src/Entity/Event.php" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/EventType.php" afterPath="$PROJECT_DIR$/src/Entity/EventType.php" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Round.php" afterPath="$PROJECT_DIR$/src/Entity/Round.php" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Test.php" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" afterPath="$PROJECT_DIR$/src/Entity/User.php" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/EventBoardgameRepository.php" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/EventRoleplayRepository.php" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/EventWargameRepository.php" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/TestRepository.php" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/Service/TimeZones.php" afterPath="$PROJECT_DIR$/src/Service/TimeZones.php" />
-      <change beforePath="$PROJECT_DIR$/symfony.lock" afterPath="$PROJECT_DIR$/symfony.lock" />
-      <change beforePath="$PROJECT_DIR$/templates/envol/core.html.twig" afterPath="$PROJECT_DIR$/templates/envol/core.html.twig" />
-      <change beforePath="$PROJECT_DIR$/templates/envol/pages/roleplay-list.html.twig" afterPath="$PROJECT_DIR$/templates/envol/pages/roleplay-list.html.twig" />
+      <change beforePath="$PROJECT_DIR$/envolduphenix.sql" afterPath="$PROJECT_DIR$/envolduphenix.sql" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -88,11 +71,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="site-nav.html.twig" pinned="false" current-in-tab="true">
+      <file leaf-file-name="site-nav.html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/envol/nav/site-nav.html.twig">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
               <caret line="19" column="66" lean-forward="false" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="66" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sym.bat" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sym.bat">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -117,7 +110,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/templates/Envol/core.html.twig" />
         <option value="$PROJECT_DIR$/public/css/bootstrap.min.css" />
         <option value="$PROJECT_DIR$/src/Controller/LoginController.php" />
         <option value="$PROJECT_DIR$/templates/envol/nav/site.html.twig" />
@@ -168,6 +160,7 @@
         <option value="$PROJECT_DIR$/templates/envol/pages/roleplay-add-event.html.twig" />
         <option value="$PROJECT_DIR$/src/Form/RoleplayEventType.php" />
         <option value="$PROJECT_DIR$/src/Controller/RoleplayController.php" />
+        <option value="$PROJECT_DIR$/sym.bat" />
       </list>
     </option>
   </component>
@@ -336,7 +329,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -344,57 +336,11 @@
               <item name="envolduphenix" type="b2602c69:ProjectViewProjectNode" />
               <item name="envolduphenix" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
-            <path>
-              <item name="envolduphenix" type="b2602c69:ProjectViewProjectNode" />
-              <item name="envolduphenix" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="public" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="envolduphenix" type="b2602c69:ProjectViewProjectNode" />
-              <item name="envolduphenix" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="envolduphenix" type="b2602c69:ProjectViewProjectNode" />
-              <item name="envolduphenix" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="Controller" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="envolduphenix" type="b2602c69:ProjectViewProjectNode" />
-              <item name="envolduphenix" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="Form" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="envolduphenix" type="b2602c69:ProjectViewProjectNode" />
-              <item name="envolduphenix" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="templates" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="envolduphenix" type="b2602c69:ProjectViewProjectNode" />
-              <item name="envolduphenix" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="templates" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="envol" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="envolduphenix" type="b2602c69:ProjectViewProjectNode" />
-              <item name="envolduphenix" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="templates" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="envol" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="nav" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="envolduphenix" type="b2602c69:ProjectViewProjectNode" />
-              <item name="envolduphenix" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="templates" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="envol" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="pages" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -403,17 +349,18 @@
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.PHP" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\wamp64\www\envolduphenix" />
+      <recent name="E:\Prog\PHP\envolduphenix_v4\templates\envol" />
+      <recent name="E:\Prog\PHP\envolduphenix_v4\templates" />
+      <recent name="E:\Prog\PHP\envolduphenix_v4\public" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\wamp64\www\envolduphenix\templates\envol\pages" />
       <recent name="E:\Prog\PHP\envolduphenix_v4\templates\envol\pages" />
       <recent name="E:\Prog\PHP\envolduphenix_v4\src\Controller" />
       <recent name="E:\Prog\PHP\envolduphenix_v4\templates\security" />
       <recent name="E:\Prog\PHP\envolduphenix_v4\public\images\title" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\Prog\PHP\envolduphenix_v4\templates\envol" />
-      <recent name="E:\Prog\PHP\envolduphenix_v4\templates" />
-      <recent name="E:\Prog\PHP\envolduphenix_v4\public" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -457,24 +404,33 @@
       <workItem from="1523302325475" duration="6796000" />
       <workItem from="1523341949967" duration="515000" />
       <workItem from="1523379818137" duration="2625000" />
-      <workItem from="1523384815744" duration="25000" />
+      <workItem from="1523384815744" duration="622000" />
+      <workItem from="1523387019449" duration="50000" />
     </task>
+    <task id="LOCAL-00001" summary="push">
+      <created>1523384884089</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1523384884089</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="100585000" />
+    <option name="totallyTimeSpent" value="101232000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26545843" sideWeight="0.49565217" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26812366" sideWeight="0.49565217" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25746268" sideWeight="0.5043478" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -494,6 +450,10 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="push" />
+    <option name="LAST_COMMIT_MESSAGE" value="push" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <option name="time" value="2" />
@@ -501,13 +461,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/vendor/symfony/security/Core/Exception/AuthenticationException.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="21" column="6" lean-forward="false" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/symfony/security/Core/Exception/AccountStatusException.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="124">
@@ -826,6 +779,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="19" column="66" lean-forward="false" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sym.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
           <folding />
         </state>
       </provider>
