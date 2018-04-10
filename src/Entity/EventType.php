@@ -23,16 +23,23 @@ class EventType
      */
     private $name;
 
+
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Test", mappedBy="eventType")
+     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="eventType")
      */
-    private $tests;
+    private $events;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Round", mappedBy="eventType")
+     */
+    private $rounds;
+
 
     public function __construct()
     {
-        $this->tests = new ArrayCollection();
+        $this->events = new ArrayCollection();
+        $this->rounds = new ArrayCollection();
     }
-
 
     public function __toString()
     {
@@ -52,37 +59,6 @@ class EventType
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Test[]
-     */
-    public function getTests(): Collection
-    {
-        return $this->tests;
-    }
-
-    public function addTest(Test $test): self
-    {
-        if (!$this->tests->contains($test)) {
-            $this->tests[] = $test;
-            $test->setEventType($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTest(Test $test): self
-    {
-        if ($this->tests->contains($test)) {
-            $this->tests->removeElement($test);
-            // set the owning side to null (unless already changed)
-            if ($test->getEventType() === $this) {
-                $test->setEventType(null);
-            }
-        }
 
         return $this;
     }

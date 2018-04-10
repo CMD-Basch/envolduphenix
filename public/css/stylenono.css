@@ -49,6 +49,13 @@ body a {
 	background-color: #FFA337;
 }
 
+.btn-tab {
+	border-radius: 4px!important;
+	float: right;
+	display: inline-block;
+}
+
+
 .responsive-menu {
 	background-color: #4b4b4b;
 }

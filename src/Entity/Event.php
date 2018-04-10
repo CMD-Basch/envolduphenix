@@ -25,12 +25,12 @@ class Event
     private $name;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $start;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $end;
 
@@ -60,6 +60,22 @@ class Event
      */
     private $style;
 
+  /**
+   * @ORM\ManyToOne(targetEntity="App\Entity\EventType", inversedBy="events")
+   * @ORM\JoinColumn(nullable=true)
+   */
+    private $eventType;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Round", inversedBy="events")
+     */
+    private $round;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $slots;
+
     public function __construct()
     {
         $this->players = new ArrayCollection();
@@ -87,24 +103,40 @@ class Event
         return $this;
     }
 
-    public function getStart(): ?\DateTimeInterface
+    public function getStart()
     {
         return $this->start;
     }
 
-    public function setStart(\DateTimeInterface $start): self
+    public function getFinalStart()
+    {
+        if( $this->start == null ) {
+            return $this->getRound()->getStart();
+        }
+        return $this->start;
+    }
+
+    public function setStart( $start ): self
     {
         $this->start = $start;
 
         return $this;
     }
 
-    public function getEnd(): ?\DateTimeInterface
+    public function getEnd()
     {
         return $this->end;
     }
 
-    public function setEnd(\DateTimeInterface $end): self
+    public function getFinalEnd()
+    {
+        if( $this->end == null ) {
+            return $this->getRound()->getEnd();
+        }
+        return $this->end;
+    }
+
+    public function setEnd( $end): self
     {
         $this->end = $end;
 
@@ -117,6 +149,11 @@ class Event
     public function getPlayers(): Collection
     {
         return $this->players;
+    }
+
+    public function isPlayer( $user ): bool
+    {
+        return $this->getPlayers()->contains( $user );
     }
 
     public function addPlayer(User $player): self
@@ -181,6 +218,47 @@ class Event
     public function setStyle(string $style): self
     {
         $this->style = $style;
+
+        return $this;
+    }
+
+    public function getEventType(): ?EventType
+    {
+        return $this->eventType;
+    }
+
+    public function setEventType(?EventType $eventType): self
+    {
+        $this->eventType = $eventType;
+
+        return $this;
+    }
+
+    public function getRound(): ?Round
+    {
+        return $this->round;
+    }
+
+    public function setRound(?Round $round): self
+    {
+        $this->round = $round;
+
+        return $this;
+    }
+
+    public function getSlots(): ?int
+    {
+        return $this->slots;
+    }
+
+    public function getFreeSlots(): ?int
+    {
+        return $this->getSlots() - count($this->getPlayers());
+    }
+
+    public function setSlots(int $slots): self
+    {
+        $this->slots = $slots;
 
         return $this;
     }

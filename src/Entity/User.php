@@ -49,7 +49,7 @@ class User implements UserInterface, \Serializable
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
     private $password;
@@ -97,6 +97,7 @@ class User implements UserInterface, \Serializable
     public function __construct() {
         $this->events = new ArrayCollection();
         $this->masteredEvents = new ArrayCollection();
+        $this->isActive = true;
     }
 
     public function  __toString() {

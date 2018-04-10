@@ -3,46 +3,55 @@
 namespace App\Service;
 
 
+use App\Entity\EventType;
+use App\Entity\Round;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+
 class TimeZones
 {
+    private $em;
 
-    private const TIME_CODES = [
-        'vendredi-soir' => [
-            'name' => 'Vendredi soir',
-            'start' => 21,
-            'end' => 28,
-            'day' => 0,
-        ],
-        'samedi-journee' => [
-            'name' => 'Samedi journée',
-            'start' => 11,
-            'end' => 18,
-            'day' => 1,
-        ],
-        'samedi-soir' => [
-            'name' => 'Samedi soir',
-            'start' => 21,
-            'end' => 28,
-            'day' => 1,
-        ],
-        'dimanche-journee' => [
-            'name' => 'Dimanche journée',
-            'start' => 11,
-            'end' => 16,
-            'day' => 2,
-        ],
-    ];
-
-    public function getAll() {
-        return self::TIME_CODES;
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
     }
 
-    public function checkTimeCode( $code ) {
-        if( $code )
-            return array_key_exists( $code, self::TIME_CODES );
-        else
-            return false;
+    public function getAll()
+    {
+        return $this->formatId( $this->em->getRepository(Round::class)->findAll() );
     }
 
+    public function getByEventName( $eventType )
+    {
+        $id = $this->em->getRepository(EventType::class)->findOneBy( ['name' => $eventType] );
+        $return = $this->em->getRepository(Round::class)->findBy( ['eventType' => $id] );
+        $return = $this->formatId( $return );
+        return $return;
+    }
+
+    public function checkTimeCode( $code, $eventType = false )
+    {
+        if ( $code ) {
+            if ( $eventType ) {
+                return array_key_exists( $code, $this->getByEventName( $eventType ) );
+            } else {
+                return array_key_exists( $code, $this->getAll() );
+            }
+        }
+
+        return false;
+    }
+
+    private function formatId( $rounds ) {
+        $output = [];
+        /** @var Round $round */
+        foreach ( $rounds as $round ) {
+            if( get_class( $round ) == Round::class ) {
+                $output[ $round->getCode() ] = $round;
+            }
+        }
+        return $output;
+    }
 
 }
