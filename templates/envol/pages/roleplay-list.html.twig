@@ -11,13 +11,13 @@
 
             <ul class="nav nav-tabs nav-liste">
                 {# class="active" #}
-                {% for key, time in rounds %}
-                    <li {% if key == active_tab %} class="active" {% endif %} data-toggle="tooltip" title=""><a href="{{ path('roleplay', {'time': key}) }}">{{ time.name }}</a></li>
+                {% for key, round in rounds %}
+                    <li {% if key == active_round.code %} class="active" {% endif %} data-toggle="tooltip" title=""><a href="{{ path('roleplay', {'time': key}) }}">{{ round.name }}</a></li>
                 {% endfor %}
             </ul>
 
             <ul class="nav nav-pills nav-justified">
-                <li><a href="#">Ajouter une table</a></li>
+                <li><a href="{{ path('roleplay.add', {'time' : active_round.code }) }}">Ajouter une table</a></li>
             </ul>
 
     </div> <!-- row -->
@@ -25,39 +25,7 @@
     <br>
     <div class="row">
     {% for event in events %}
-
-        {% if event.master == app.user %}
-            {% set slotted = 'master' %}
-            {% set panel_color = 'panel-invites' %}
-        {% elseif event.isPlayer( app.user ) %}
-            {% set slotted = 'player' %}
-            {% set panel_color = 'panel-invites' %}
-        {% else %}
-            {% set slotted = false %}
-            {% set panel_color = 'panel-default' %}
-        {% endif %}
-
-        <div class="col-sm-4 ">
-            <div class="panel {{ panel_color }}">
-                <div class="panel-heading">
-                    <h4>Test</h4>
-                </div>
-                <div class="panel-body">
-                    <p><strong>Meneur :</strong> {{ event.master }}
-                        <br>
-                        <strong>Jeu :</strong> {{ event.game }}<br>
-                        <strong>Style :</strong> {{ event.style }}<br>
-                        <strong>Description :</strong><br>
-                        {{ event.description }}<br>
-                        <strong>Places libres:</strong> {{ event.freeSlots }} / {{ event.slots }}<br>
-                        <strong>Joueurs :</strong><br>
-                        {% for player in event.players %}
-                            {{ player.username }}{% if loop.last != true %}, {% endif %}
-                        {% endfor %}
-                    </p>
-                </div>
-            </div>
-        </div>
+        {% include 'envol/block/roleplay-event.html.twig' with {'event': event} %}
     {% endfor %}
     </div>
 

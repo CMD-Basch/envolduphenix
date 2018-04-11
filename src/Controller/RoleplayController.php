@@ -17,7 +17,7 @@ class RoleplayController extends Controller
 
     private $timezones;
 
-    private const EVENT_TYPE_NAME = 'roleplay';
+    public const EVENT_TYPE_NAME = 'roleplay';
 
     public function __construct( TimeZones $timeZones )
     {
@@ -25,45 +25,35 @@ class RoleplayController extends Controller
     }
 
     /**
-     * @Route("/jeu-de-roles/test", name="roleplay.test")
-     */
-    public function date(  ) {
-
-        $title = [
-            'color' =>  'bd-orange',
-            'pic' => 'images/title/jdr.png',
-            'name' => 'Jeu de rôle',
-        ];
-
-        $page = 'YOLO';
-
-        return $this->render('envol/standard.html.twig', array(
-            'title' => $title,
-            'page' => $page,
-        ));
-
-    }
-
-    /**
      * @Route("/jeu-de-roles/ajouter/{time}", name="roleplay.add")
      */
     public function add( $time = false,  Request $request ) {
 
-        $round = $this->getRoundFromTimecode( $time, $rounds );
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $round = $this->getRoundFromTimeCode( $time, $rounds );
 
         $event = new Event();
         $event->setRound($round);
 
         $form = $this->createForm( RoleplayEventType::class, $event );
 
-
         $form->handleRequest( $request );
         if ( $form->isSubmitted() && $form->isValid() ) {
-            dump($request);
+
+            $eventType = $this->getDoctrine()->getRepository( EventType::class )->findOneBy( ['name' => self::EVENT_TYPE_NAME] );
+
+            $event
+                ->setEventType( $eventType )
+                ->setMaster( $this->getUser() )
+                ;
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist( $event );
+            $entityManager->flush();
+
+            return $this->redirectToRoute('roleplay', ['time' => $event->getRound()->getCode() ]);
         }
-
-
-
 
         $title = [
             'color' =>  'bd-orange',
@@ -83,8 +73,7 @@ class RoleplayController extends Controller
      */
     public function home( $time = false ) {
 
-        $round = $this->getRoundFromTimecode( $time, $rounds );
-
+        $round = $this->getRoundFromTimeCode( $time, $rounds );
         $eventType = $this->getDoctrine()->getRepository( EventType::class )->findOneBy( ['name' => self::EVENT_TYPE_NAME] );
 
         $events = $this->getDoctrine()->getRepository(Event::class )
@@ -101,13 +90,13 @@ class RoleplayController extends Controller
 
         return $this->render('envol/pages/roleplay-list.html.twig', array(
             'title' => $title,
-            'active_tab' => $time,
+            'active_round' => $round,
             'rounds' => $rounds,
             'events' => $events,
         ));
     }
 
-    private function getRoundFromTimecode( &$time, &$rounds ) {
+    private function getRoundFromTimeCode( &$time, &$rounds ) {
 
         $rounds = $this->timezones->getByEventName( self::EVENT_TYPE_NAME );
 
