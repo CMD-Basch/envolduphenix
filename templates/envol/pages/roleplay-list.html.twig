@@ -16,17 +16,33 @@
                 {% endfor %}
             </ul>
 
+            {% if app.user %}
+                {% if eventuser.isRoundTimeFree( active_round ) %}
             <ul class="nav nav-pills nav-justified">
                 <li><a href="{{ path('roleplay.add', {'time' : active_round.code }) }}">Ajouter une table</a></li>
             </ul>
+                {% else %}
+                    <div class="alert alert-info">
+                        <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Vous ne pouvez pas ajouter une table sur ce créneau horaire car vous êtes déja inscrit sur un jeu.
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info">
+                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Connectez-vous pour pouvoir ajouter ou rejoindre une table de jeu de rôles.
+                </div>
+            {% endif %}
 
     </div> <!-- row -->
-
     <br>
-    <div class="row">
-    {% for event in events %}
-        {% include 'envol/block/roleplay-event.html.twig' with {'event': event} %}
-    {% endfor %}
+
+    <div id="table-list" class="row">
+        {% include 'envol/block/roleplay-events.html.twig' with {'events': events} %}
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/bootstrap-select.defaults-fr_FR.js') }}"></script>
+    <script src="{{ asset('js/ajax/roleplay.table.js') }}"></script>
 {% endblock %}

@@ -156,6 +156,11 @@ class Event
         return $this->getPlayers()->contains( $user );
     }
 
+    public function isUser( $user ): bool
+    {
+        return $this->getPlayers()->contains( $user ) || $this->getMaster() == $user;
+    }
+
     public function addPlayer(User $player): self
     {
         if (!$this->players->contains($player)) {

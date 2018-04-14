@@ -1,27 +1,73 @@
 <?php
 
 namespace App\Controller;
+
 use App\Entity\Event;
 use App\Entity\EventType;
 use App\Entity\Round;
-use App\Entity\View;
 use App\Form\RoleplayEventType;
+use App\Service\EventUser;
 use App\Service\TimeZones;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
 
 class RoleplayController extends Controller
 {
 
     private $timezones;
+    private $eventUser;
+    private $user;
 
     public const EVENT_TYPE_NAME = 'roleplay';
 
-    public function __construct( TimeZones $timeZones )
+    public function __construct( TimeZones $timeZones, TokenStorageInterface $tokenStorage, EventUser $eventUser )
     {
         $this->timezones = $timeZones;
+        $this->eventUser = $eventUser;
+
+        if( get_class($tokenStorage->getToken() ) == UsernamePasswordToken::class ) { // TODO : checker autrement
+            $this->user = $tokenStorage->getToken()->getUser();
+        }
+    }
+
+    /**
+     * @Route("/jeu-de-roles/ajax/{act}/{id}", name="roleplay.join")
+     */
+    public function ajax( $act, Event $event ) {
+
+        $this->denyAccessUnlessGranted( 'IS_AUTHENTICATED_REMEMBERED' );
+
+        $eventType = $this->getDoctrine()->getRepository(EventType::class )->findOneBy( ['name' => self::EVENT_TYPE_NAME] );
+        $round = $event->getRound();
+        $events = $this->getDoctrine()->getRepository(Event::class )
+            ->findBy( [
+                'round' => $round,
+                'eventType' => $eventType,
+            ] );
+
+        switch( $act ){
+            case 'join' :
+                if( $this->eventUser->isEventTimeFree( $event ) ) {
+
+                    $event->addPlayer( $this->user );
+                    $this->getDoctrine()->getManager()->flush();
+
+                    return $this->render('envol/block/roleplay-events.html.twig',[ 'events' => $events, ]);
+                }
+                break;
+            case 'leave' :
+                $event->removePlayer( $this->user );
+                $this->getDoctrine()->getManager()->flush();
+
+                return $this->render('envol/block/roleplay-events.html.twig',[ 'events' => $events, ]);
+                break;
+        }
+
+        return null;
     }
 
     /**
@@ -34,25 +80,26 @@ class RoleplayController extends Controller
         $round = $this->getRoundFromTimeCode( $time, $rounds );
 
         $event = new Event();
-        $event->setRound($round);
+        $event->setRound( $round );
 
         $form = $this->createForm( RoleplayEventType::class, $event );
 
         $form->handleRequest( $request );
         if ( $form->isSubmitted() && $form->isValid() ) {
 
-            $eventType = $this->getDoctrine()->getRepository( EventType::class )->findOneBy( ['name' => self::EVENT_TYPE_NAME] );
+            if( $this->eventUser->isRoundTimeFree( $round ) ) {
+                $eventType = $this->getDoctrine()->getRepository(EventType::class )->findOneBy( ['name' => self::EVENT_TYPE_NAME] );
 
-            $event
-                ->setEventType( $eventType )
-                ->setMaster( $this->getUser() )
-                ;
+                $event
+                    ->setEventType( $eventType )
+                    ->setMaster( $this->getUser() );
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist( $event );
-            $entityManager->flush();
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist( $event );
+                $entityManager->flush();
 
-            return $this->redirectToRoute('roleplay', ['time' => $event->getRound()->getCode() ]);
+                return $this->redirectToRoute('roleplay', ['time' => $event->getRound()->getCode()]);
+            }
         }
 
         $title = [
@@ -61,10 +108,10 @@ class RoleplayController extends Controller
             'name' => 'Jeu de rôle',
         ];
 
-        return $this->render('envol/pages/roleplay-add-event.html.twig', array(
+        return $this->render('envol/pages/roleplay-add-event.html.twig', [
             'title' => $title,
             'form' => $form->createView(),
-        ));
+        ]);
 
     }
 

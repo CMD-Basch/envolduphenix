@@ -9,10 +9,9 @@
     {% set panel_color = 'panel-default' %}
 {% endif %}
 
-<div class="col-sm-4 ">
     <div class="panel {{ panel_color }}">
         <div class="panel-heading">
-            <h4>Test</h4>
+            <h4>{{ event.name }}</h4>
         </div>
         <div class="panel-body">
             <p><strong>Meneur :</strong> {{ event.master }}
@@ -27,9 +26,16 @@
                     {{ player.username }}{% if loop.last != true %}, {% endif %}
                 {% endfor %}
             </p>
-        </div>
-        <div class="panel-footer">
-            {{ eventuser.test }}
+            <p>
+            {% if app.user %}
+                {% if event.master == app.user %}
+                    <!--<a class="btn btn-active " href="#">Modifier</a>-->
+                {% elseif event.isPlayer( app.user ) %}
+                    <a class="btn btn-active btn-table" data-act="leave" data-table-id="{{ event.id }}" href="#">Quitter</a>
+                {% elseif eventuser.isEventTimeFree( event ) %}
+                    <a class="btn btn-active btn-table" data-act="join" data-table-id="{{ event.id }}" href="#">Rejoindre</a>
+                {% endif %}
+            {% endif %}
+            </p>
         </div>
     </div>
-</div>
