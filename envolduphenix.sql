@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  Dim 08 avr. 2018 à 13:09
+-- Généré le :  mar. 10 avr. 2018 à 19:03
 -- Version du serveur :  5.7.19
 -- Version de PHP :  7.1.9
 
@@ -33,21 +33,26 @@ CREATE TABLE IF NOT EXISTS `event` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `master_id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `start` datetime NOT NULL,
-  `end` datetime NOT NULL,
+  `start` datetime DEFAULT NULL,
+  `end` datetime DEFAULT NULL,
   `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `game` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `style` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `event_type_id` int(11) DEFAULT NULL,
+  `round_id` int(11) DEFAULT NULL,
+  `slots` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_3BAE0AA713B3DB11` (`master_id`)
+  KEY `IDX_3BAE0AA713B3DB11` (`master_id`),
+  KEY `IDX_3BAE0AA7401B253C` (`event_type_id`),
+  KEY `IDX_3BAE0AA7A6005CA0` (`round_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `event`
 --
 
-INSERT INTO `event` (`id`, `master_id`, `name`, `start`, `end`, `description`, `game`, `style`) VALUES
-(2, 10, 'Table Jdr', '2018-05-11 21:00:00', '2018-05-12 04:00:00', 'Table de jeu de rôle', 'Warhammer', 'Blablabla');
+INSERT INTO `event` (`id`, `master_id`, `name`, `start`, `end`, `description`, `game`, `style`, `event_type_id`, `round_id`, `slots`) VALUES
+(2, 15, 'Table Jdr', NULL, NULL, 'Table de jeu de rôle', 'Warhammer', 'Blablabla', 1, 1, 6);
 
 -- --------------------------------------------------------
 
@@ -85,6 +90,14 @@ CREATE TABLE IF NOT EXISTS `event_user` (
   KEY `IDX_92589AE271F7E88B` (`event_id`),
   KEY `IDX_92589AE2A76ED395` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `event_user`
+--
+
+INSERT INTO `event_user` (`event_id`, `user_id`) VALUES
+(2, 10),
+(2, 16);
 
 -- --------------------------------------------------------
 
@@ -131,7 +144,13 @@ CREATE TABLE IF NOT EXISTS `migration_versions` (
 
 INSERT INTO `migration_versions` (`version`) VALUES
 ('20180408120508'),
-('20180408122307');
+('20180408122307'),
+('20180409114033'),
+('20180409114407'),
+('20180409194855'),
+('20180409195037'),
+('20180409202307'),
+('20180409203050');
 
 -- --------------------------------------------------------
 
@@ -146,9 +165,21 @@ CREATE TABLE IF NOT EXISTS `round` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `start` datetime NOT NULL,
   `end` datetime NOT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `event_type_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_C5EEEA34401B253C` (`event_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `round`
+--
+
+INSERT INTO `round` (`id`, `code`, `name`, `start`, `end`, `event_type_id`) VALUES
+(1, 'vendredi-soir', 'Vendredi Soir', '2018-05-11 21:00:00', '2018-05-12 04:00:00', 1),
+(2, 'samedi-journee', 'Samedi journée', '2018-05-12 11:00:00', '2018-05-12 19:00:00', 1),
+(3, 'samedi-soir', 'Samedi soir', '2018-05-12 21:00:00', '2018-05-13 04:00:00', 1),
+(4, 'dimanche-journee', 'Dimanche journée', '2018-05-13 11:00:00', '2018-05-13 16:00:00', 1),
+(5, 'vendredi-soir', 'Vendredi Soir', '2018-05-11 20:00:00', '2018-05-12 04:00:00', 3);
 
 -- --------------------------------------------------------
 
@@ -171,16 +202,17 @@ CREATE TABLE IF NOT EXISTS `user` (
   `is_active` tinyint(1) NOT NULL,
   `roles` json NOT NULL COMMENT '(DC2Type:json_array)',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_8D93D649F85E0677` (`username`),
-  UNIQUE KEY `UNIQ_8D93D64935C246D5` (`password`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  UNIQUE KEY `UNIQ_8D93D649F85E0677` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `user`
 --
 
 INSERT INTO `user` (`id`, `password`, `hash`, `valid`, `created`, `updated`, `username`, `firstname`, `lastname`, `email`, `is_active`, `roles`) VALUES
-(10, '$2y$13$QqHg8oe/cSrqy8AUy3NXIOb0hlbLgt1063x/Fs/KbuhlEXGtO2y7O', '$2y$13$hoLLPJUHCpmJnnI1OOvFo.RHudwQVnlsfxiGxY4a8Rwx0MHtISUim', 1, '2018-04-02 22:37:50', '2018-04-02 22:37:50', 'Basch', 'Cedric', 'Molines', 'ced_46000@hotmail.com', 0, '[\"ROLE_ADMIN\"]');
+(10, '$2y$13$QqHg8oe/cSrqy8AUy3NXIOb0hlbLgt1063x/Fs/KbuhlEXGtO2y7O', '$2y$13$hoLLPJUHCpmJnnI1OOvFo.RHudwQVnlsfxiGxY4a8Rwx0MHtISUim', 1, '2018-04-02 22:37:50', '2018-04-02 22:37:50', 'Basch', 'Cedric', 'Molines', 'ced_46000@hotmail.com', 0, '[\"ROLE_ADMIN\"]'),
+(15, '$2y$13$QqHg8oe/cSrqy8AUy3NXIOb0hlbLgt1063x/Fs/KbuhlEXGtO2y7O', '$2y$13$QqHg8oe/cSrqy8AUy3NXIOb0hlbLgt1063x/Fs/KbuhlEdXGtO2y7O', 1, '2018-04-09 00:00:00', '2018-04-09 00:00:00', 'Test', 'test', 'test', 'test@mail.com', 1, '[\"ROLE_USER\"]'),
+(16, '$2y$13$QqHg8oe/cSrqy8AUy3NXIOb0hlbLgt1063x/Fs/KbuhlEXGtO2y7O', '$2y$1s3$QqHg8oe/cSrqy8AUy3NXIOb0hlbLgt1063x/Fs/KbuhlEXGtO2y7O', 1, '2018-04-09 00:00:00', '2018-04-09 00:00:00', 'Dreidr', 'aa', 'aa', 'dreidr@mail.com', 1, '[\"ROLE_USER\"]');
 
 -- --------------------------------------------------------
 
@@ -228,7 +260,9 @@ INSERT INTO `view` (`id`, `name`, `menu_id`, `link`, `content`, `weight`, `activ
 -- Contraintes pour la table `event`
 --
 ALTER TABLE `event`
-  ADD CONSTRAINT `FK_3BAE0AA713B3DB11` FOREIGN KEY (`master_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `FK_3BAE0AA713B3DB11` FOREIGN KEY (`master_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `FK_3BAE0AA7401B253C` FOREIGN KEY (`event_type_id`) REFERENCES `event_type` (`id`),
+  ADD CONSTRAINT `FK_3BAE0AA7A6005CA0` FOREIGN KEY (`round_id`) REFERENCES `round` (`id`);
 
 --
 -- Contraintes pour la table `event_user`
@@ -236,6 +270,12 @@ ALTER TABLE `event`
 ALTER TABLE `event_user`
   ADD CONSTRAINT `FK_92589AE271F7E88B` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_92589AE2A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `round`
+--
+ALTER TABLE `round`
+  ADD CONSTRAINT `FK_C5EEEA34401B253C` FOREIGN KEY (`event_type_id`) REFERENCES `event_type` (`id`);
 
 --
 -- Contraintes pour la table `view`

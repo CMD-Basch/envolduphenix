@@ -1,0 +1,23 @@
+{% extends "envol/standard.html.twig" %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-sm-8 col-sm-push-2">
+            <h3 class="titre-page">Votre emploi du temps</h3>
+            <hr class="hr-titre">
+        </div> <!-- col -->
+    </div> <!-- row -->
+
+    <div class="row">
+
+    {% for i in 1..timezones.countDays %}
+    <div class="col-sm-12 col-md-4">
+        {% for event in events if timezones.isInDay( event, i )%}
+        {{ event.name }}
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+    </div> <!-- row -->
+
+{% endblock %}

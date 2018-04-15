@@ -1,0 +1,5 @@
+{% for event in events %}
+    <div id="table-{{ event.id }}" class="col-sm-12 col-md-4">
+        {% include 'envol/block/roleplay-event.html.twig' with {'event': event} %}
+    </div>
+{% endfor %}
