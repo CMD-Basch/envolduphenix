@@ -80,7 +80,7 @@ class User implements UserInterface, \Serializable
     private $updated;
 
     /**
-     * @ORM\Column(type="json_array", length=255)
+     * @ORM\Column(type="array", length=255)
      */
     private $roles;
 
