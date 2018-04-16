@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,8 +28,17 @@ class UserType extends AbstractType
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Password'),
-                'second_options' => array('label' => 'Repeat Password'),
+                'first_options'  => array('label' => 'Mot de passe'),
+                'second_options' => array('label' => 'Confirmez le mot de passe'),
+            ])
+            ->add('sleep', ChoiceType::class, [
+                'label' => 'Voulez vous reserver une chambre : ',
+                'choices'  => [
+                    'Non merci' => 'nope',
+                    'Le vendredi soir uniquement ( 5€ )' => 'ven',
+                    'Le samedi soir uniquement. ( 5€ )' => 'sam',
+                    'Le vendredi et samedi soir. ( 10€ )' => 'ven & sam',
+                    ]
             ])
             ->add('save',SubmitType::class,      ['label' => 'S\'enregistrer :'] );
     }

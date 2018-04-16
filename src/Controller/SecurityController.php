@@ -40,7 +40,6 @@ class SecurityController extends Controller
 
         $form->handleRequest( $request );
         if ( $form->isSubmitted() && $form->isValid() ) {
-            dump($form->get('confirm_password')->getData());
 
             /** @var User $user */
             $user = $this->getUser();

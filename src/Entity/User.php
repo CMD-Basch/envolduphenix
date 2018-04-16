@@ -94,6 +94,11 @@ class User implements UserInterface, \Serializable
      */
     private $masteredEvents;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $sleep;
+
     public function __construct() {
         $this->events = new ArrayCollection();
         $this->masteredEvents = new ArrayCollection();
@@ -336,6 +341,18 @@ class User implements UserInterface, \Serializable
                 $masteredEvent->setMaster(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSleep(): ?string
+    {
+        return $this->sleep;
+    }
+
+    public function setSleep(?string $sleep): self
+    {
+        $this->sleep = $sleep;
 
         return $this;
     }

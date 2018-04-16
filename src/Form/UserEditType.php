@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -29,8 +30,17 @@ class UserEditType extends AbstractType
                 'type' => PasswordType::class,
                 'mapped' => false,
                 'required' => false,
-                'first_options'  => array('label' => 'Nouveau not de passe'),
+                'first_options'  => array('label' => 'Nouveau mot de passe'),
                 'second_options' => array('label' => 'Confirmez le nouveau mot de passe'),
+            ])
+            ->add('sleep', ChoiceType::class, [
+                'label' => 'Voulez vous reserver une chambre : ',
+                'choices'  => [
+                    'Non merci' => 'nope',
+                    'Le vendredi soir uniquement ( 5€ )' => 'ven',
+                    'Le samedi soir uniquement. ( 5€ )' => 'sam',
+                    'Le vendredi et samedi soir. ( 10€ )' => 'ven & sam',
+                ]
             ])
             ->add('confirm_password', PasswordType::class, [
                 'label' => 'Entrez votre mot de passe actuel :',
