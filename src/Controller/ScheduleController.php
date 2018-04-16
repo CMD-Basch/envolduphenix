@@ -63,7 +63,7 @@ class ScheduleController extends Controller
     public function act( $act, $tag ) {
         /** @var Event $event */
         $event = $this->em->getRepository( Event::class )->findBy( ['tag' => $tag] )[0];
-        dump($act);
+
         switch ( $act ){
             case 'join' :
                 if( $this->eventUser->isEventTimeFree( $event ) ){
@@ -71,7 +71,7 @@ class ScheduleController extends Controller
                 }
                 break;
             case 'leave' :
-                dump($event->isPlayer( $this->user ));
+
                 if( $event->isPlayer( $this->user ) ){
                     $event->removePlayer( $this->user );
                 }
