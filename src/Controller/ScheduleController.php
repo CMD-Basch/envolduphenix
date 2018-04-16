@@ -37,7 +37,7 @@ class ScheduleController extends Controller
 
 
     /**
-     * @Route("/emploi-du-temps", name="schedule")
+     * @Route("/profil/emploi-du-temps", name="schedule")
      */
     public function home() {
 
