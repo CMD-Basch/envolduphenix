@@ -108,7 +108,7 @@ class EventUser
     public function getEventStartAt( $hour, $day ){
         $events = $this->getEvents();
         foreach ( $events as $event ){
-            dump($event->getStart()->format('G') . ' == ' . $hour . ' : ' . ($event->getStart()->format('G') == $hour));
+            //dump($event->getStart()->format('G') . ' == ' . $hour . ' : ' . ($event->getStart()->format('G') == $hour));
             if ( $event->getStart()->format('G') == $hour && $this->timezones->isInDay( $event , $day )){
                 return $event;
             }
