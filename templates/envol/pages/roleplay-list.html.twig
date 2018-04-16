@@ -7,35 +7,17 @@
             <hr class="hr-titre">
         </div> <!-- col -->
     </div> <!-- row -->
+
     <div class="row">
+        <ul class="nav nav-tabs nav-liste">
+            {# class="active" #}
+            {% for key, round in rounds %}
+                <li {% if key == active_round.code %} class="active" {% endif %} data-toggle="tooltip" title=""><a href="{{ path('roleplay', {'time': key}) }}">{{ round.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 
-            <ul class="nav nav-tabs nav-liste">
-                {# class="active" #}
-                {% for key, round in rounds %}
-                    <li {% if key == active_round.code %} class="active" {% endif %} data-toggle="tooltip" title=""><a href="{{ path('roleplay', {'time': key}) }}">{{ round.name }}</a></li>
-                {% endfor %}
-            </ul>
-
-            {% if app.user %}
-                {% if eventuser.isRoundTimeFree( active_round ) %}
-            <ul class="nav nav-pills nav-justified">
-                <li><a href="{{ path('roleplay.add', {'time' : active_round.code }) }}">Ajouter une table</a></li>
-            </ul>
-                {% else %}
-                    <div class="alert alert-info">
-                        <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Vous ne pouvez pas ajouter une table sur ce créneau horaire car vous êtes déja inscrit sur un jeu.
-                    </div>
-                {% endif %}
-            {% else %}
-                <div class="alert alert-info">
-                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Connectez-vous pour pouvoir ajouter ou rejoindre une table de jeu de rôles.
-                </div>
-            {% endif %}
-
-    </div> <!-- row -->
-    <br>
-
-    <div id="table-list" class="row">
+    <div id="table-list">
         {% include 'envol/block/roleplay-events.html.twig' with {'events': events} %}
     </div>
 

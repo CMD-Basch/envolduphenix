@@ -17,6 +17,7 @@ class TimeZones
     private $em;
     private $user;
     private $days;
+    private $day;
 
 
 
@@ -43,6 +44,8 @@ class TimeZones
             ],
         ];
 
+        $this->day = [ '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '1', '2', '3', '4'];
+
     }
 
     public function getAll()
@@ -56,6 +59,18 @@ class TimeZones
         $return = $this->em->getRepository(Round::class )->findBy( ['eventType' => $id] );
         $return = $this->formatId( $return );
         return $return;
+    }
+
+    public function getDay() {
+        return $this->day;
+    }
+    public function getDayName( $day ){
+        switch( $day ){
+            case '1' : return 'Vendredi' ;
+            case '2' : return 'Samedi' ;
+            case '3' : return 'Dimanche' ;
+            default  : return ' ?? ';
+        }
     }
 
     public function checkTimeCode( $code, $eventType = false )
@@ -91,7 +106,7 @@ class TimeZones
 
         $day = $this->days[ $dayNbr ];
 
-        if( $event->getFinalEnd() > $day['start']  && $event->getFinalStart() < $day['end'] ) {
+        if( $event->getEnd() > $day['start']  && $event->getStart() < $day['end'] ) {
            return true;
         }
         return false;

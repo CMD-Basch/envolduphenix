@@ -114,7 +114,9 @@
             <div class="col-xs-12">
                 <h3><hr>NOS PARTENAIRES<hr></h3>
                 <!-- DBM::Sponsor()->getListOrderBy('weight') as $sponsor}-->
-                <a target="_blank" href="{$sponsor->getLink()}"><img src="images/partenaires/{$sponsor->getPicture()}" alt="{$sponsor->getName()}"></a>
+                {% for parrainer in parrainers %}
+                    <a target="_blank" href="{{ parrainer.link }}"><img src="{{ asset('images/partenaires/' ~ parrainer.pictureLink ) }}" alt="{{ parrainer.name }}"></a>
+                {% endfor %}
                 <!--{/foreach}-->
 
             </div> <!-- col -->

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use App\Entity\Parrainer;
 use App\Entity\View;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -12,7 +13,10 @@ class BaseController extends Controller
      * @Route("/", name="home")
      */
     public function home(AuthorizationCheckerInterface $authorizationChecker) {
-        return $this->render('envol/home.html.twig');
+
+        $parrainers = $this->getDoctrine()->getRepository( Parrainer::class )->findAll();
+
+        return $this->render('envol/home.html.twig', ['parrainers' => $parrainers]);
     }
 
     /**

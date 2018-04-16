@@ -16,10 +16,12 @@ class EventUser
     private $em;
     private $user;
     private $events;
+    private $timezones;
 
-    public function __construct( EntityManagerInterface $em, TokenStorageInterface $tokenStorage )
+    public function __construct( EntityManagerInterface $em, TokenStorageInterface $tokenStorage, TimeZones $timezones )
     {
         $this->em = $em;
+        $this->timezones = $timezones;
 
         if( get_class($tokenStorage->getToken() ) == UsernamePasswordToken::class ) { // TODO : checker autrement
             $this->user = $tokenStorage->getToken()->getUser();
@@ -56,6 +58,9 @@ class EventUser
         $this->events = $events;
     }
 
+    /**
+     * @return Event[]
+     */
     public function getEvents() {
         if( !isset( $this->events ) ){
             $this->loadEvents();
@@ -63,24 +68,52 @@ class EventUser
         return $this->events;
     }
 
+    /**
+     * @param Round $round
+     * @return bool
+     */
     public function isRoundTimeFree( Round $round ) {
         return $this->isFreeTime( $round->getStart(), $round->getEnd() );
     }
 
+    /**
+     * @param Event $event
+     * @return bool
+     */
     public function isEventTimeFree( Event $event ) {
-        return $this->isFreeTime( $event->getFinalStart(), $event->getFinalEnd() );
+        return $this->isFreeTime( $event->getStart(), $event->getEnd() );
     }
 
-    private function isFreeTime( $start, $end ) {
+    /**
+     * @param $start
+     * @param $end
+     * @return bool
+     */
+    private function isFreeTime( $start, $end ) { // TODO : a reecrire avec ->getEvents();
         $events = $this->em->getRepository(Event::class )->findAll();
         foreach( $events as $event ){
             if( $event->getMaster() == $this->user || $event->isPlayer( $this->user )) {
-                if ($event->getFinalStart() < $end && $event->getFinalEnd() > $start) {
+                if ($event->getStart() < $end && $event->getEnd() > $start) {
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    /**
+     * @param $hour
+     * @return Event|false
+     */
+    public function getEventStartAt( $hour, $day ){
+        $events = $this->getEvents();
+        foreach ( $events as $event ){
+            dump($event->getStart()->format('G') . ' == ' . $hour . ' : ' . ($event->getStart()->format('G') == $hour));
+            if ( $event->getStart()->format('G') == $hour && $this->timezones->isInDay( $event , $day )){
+                return $event;
+            }
+        }
+        return false;
     }
 
 }

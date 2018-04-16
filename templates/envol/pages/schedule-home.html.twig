@@ -1,5 +1,9 @@
 {% extends "envol/standard.html.twig" %}
 
+{% block stylesheets %}
+    {{  parent() }}
+{% endblock %}
+
 {% block container %}
     <div class="row">
         <div class="col-sm-8 col-sm-push-2">
@@ -8,15 +12,45 @@
         </div> <!-- col -->
     </div> <!-- row -->
 
+
     <div class="row">
 
-    {% for i in 1..timezones.countDays %}
-    <div class="col-sm-12 col-md-4">
-        {% for event in events if timezones.isInDay( event, i )%}
-        {{ event.name }}
+        {% for day in 1..timezones.countDays %}
+        <div class="col-sm-12 col-md-4">
+            <table class="table table-custom">
+                <tr>
+                    <th width="1%"{% if day > 1 %} class="visible-xs visible-sm"{% endif %} ></th>
+                    <th width="99%" class="text-center">{{ timezones.getDayName( day ) }}</th>
+                </tr>
+            {% set gap = 0 %}
+            {% for hour in timezones.getDay %}
+                <tr>
+                    <td class="cell-time{% if day > 1 %} visible-xs visible-sm{% endif %}" ><span>{{ hour }}H</span></td>
+
+                    {% set event = eventuser.getEventStartAt( hour, day ) %}
+
+                    {% if gap < 1 %}
+
+                        {% if event %}
+                            <td rowspan="{{ event.getLength }}" class="panel-light" >
+                                {% include 'envol/block/generic-event.html.twig' with {'event': event} %}
+                            </td>
+                            {% set gap = event.getLength %}
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+
+
+                    {% endif %}
+
+                    {% set gap = gap - 1 %}
+
+                </tr>
+            {% endfor %}
+            </table>
+
+        </div>
         {% endfor %}
-    </div>
-    {% endfor %}
 
     </div> <!-- row -->
 
