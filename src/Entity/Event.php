@@ -136,6 +136,13 @@ class Event
         return $this;
     }
 
+    public function setLocalStart( $start ): self
+    {
+        $this->localStart = $start;
+
+        return $this;
+    }
+
     /**
      * @return \DateTimeInterface|null
      */
@@ -156,6 +163,13 @@ class Event
     }
 
     public function setEnd( $end): self
+    {
+        $this->end = $end;
+
+        return $this;
+    }
+
+    public function setLocalEnd( $end): self
     {
         $this->end = $end;
 
