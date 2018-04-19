@@ -14,7 +14,7 @@ class BaseController extends Controller
      */
     public function home(AuthorizationCheckerInterface $authorizationChecker) {
 
-        $parrainers = $this->getDoctrine()->getRepository( Parrainer::class )->findAll();
+        $parrainers = $this->getDoctrine()->getRepository( Parrainer::class )->findBy([], ['weight' => 'ASC'] );
 
         return $this->render('envol/home.html.twig', ['parrainers' => $parrainers]);
     }
