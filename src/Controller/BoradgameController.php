@@ -79,6 +79,56 @@ class BoradgameController extends Controller
     }
 
     /**
+     * @Route("/jeu-de-societe/editer/{event}", name="boardgame.edit")
+     */
+    public function edit( Event $event,  Request $request ) {
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        /** @var User $current_user */
+        $current_user = $this->getUser();
+
+        if(!in_array('ROLE_JDS',$current_user->getRoles() )){
+            $exeption = $this->createAccessDeniedException();
+            throw $exeption;
+        }
+
+        //$round = $this->getRoundFromTimeCode( $time, $rounds );
+
+        $form = $this->createForm( BoardgameEventType::class, $event );
+
+        $form->handleRequest( $request );
+
+        if ( $form->isSubmitted() && $form->isValid() ) {
+
+
+            $eventType = $this->getDoctrine()->getRepository(EventType::class )->findOneBy( ['name' => self::EVENT_TYPE_NAME] );
+
+            $event
+                ->setEventType( $eventType );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            //$entityManager->persist( $event );
+            $entityManager->flush();
+
+            return $this->redirectToRoute('boardgame', ['time' => $event->getRound()->getCode()]);
+
+        }
+
+        $title = [
+            'color' =>  'bd-bleu',
+            'pic' => 'images/title/jds.png',
+            'name' => 'Jeu de société',
+        ];
+
+        return $this->render('envol/pages/boardgame-edit-event.html.twig', [
+            'title' => $title,
+            'form' => $form->createView(),
+        ]);
+
+    }
+
+    /**
      * @Route("/jeu-de-societe/ajouter/{time}", name="boardgame.add")
      */
     public function add( $time = false,  Request $request ) {
@@ -145,7 +195,7 @@ class BoradgameController extends Controller
                 'round' => $round,
                 'eventType' => $eventType,
                 ] );
-        dump($events);
+
         $title = [
             'color' =>  'bd-bleu',
             'pic' => 'images/title/jds.png',

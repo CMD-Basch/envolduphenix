@@ -16,6 +16,7 @@
         <div class="panel-body">
             <p> <strong>Jeu :</strong> {{ event.game }}<br>
                 <strong>Style :</strong> {{ event.style }}<br>
+                <strong>Horaires :</strong> de {{ event.toStringStart }} à {{ event.toStringEnd }}<br>
                 <strong>Description :</strong><br>
                 {{ event.description }}<br>
                 <strong>Places libres:</strong> {{ event.freeSlots }} / {{ event.slots }}<br>
@@ -26,6 +27,9 @@
             </p>
             <p>
             {% if app.user %}
+                {% if is_granted('ROLE_JDS') %}
+                    <a class="btn btn-active"  href="{{ path('boardgame.edit', {'event' : event.id }) }}">Modifier</a>
+                {% endif %}
                 {% if event.master == app.user %}
                     <!--<a class="btn btn-active " href="#">Modifier</a>-->
                 {% elseif event.isPlayer( app.user ) %}
@@ -33,6 +37,7 @@
                 {% elseif eventuser.isEventTimeFree( event ) %}
                     <a class="btn btn-active btn-table" data-act="join" data-table-id="{{ event.id }}" href="#">Rejoindre</a>
                 {% endif %}
+
             {% endif %}
             </p>
         </div>

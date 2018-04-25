@@ -143,6 +143,10 @@ class Event
         return $this;
     }
 
+    public function toStringStart() {
+        return $this->getStart()->format('H\Hi');
+    }
+
     /**
      * @return \DateTimeInterface|null
      */
@@ -164,16 +168,20 @@ class Event
 
     public function setEnd( $end): self
     {
-        $this->end = $end;
+        $this->localEnd = $end;
 
         return $this;
     }
 
     public function setLocalEnd( $end): self
     {
-        $this->end = $end;
+        $this->localEnd = $end;
 
         return $this;
+    }
+
+    public function toStringEnd() {
+        return $this->getEnd()->format('H\Hi');
     }
 
     /**

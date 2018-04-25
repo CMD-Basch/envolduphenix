@@ -18,6 +18,7 @@ class TimeZones
     private $user;
     private $days;
     private $day;
+    private $dayTime;
 
 
 
@@ -46,6 +47,28 @@ class TimeZones
 
         $this->day = [ '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '1', '2', '3', '4'];
 
+        $this->dayTime = [
+            '9' => 9,
+            '10' => 10,
+            '11' => 11,
+            '12' => 12,
+            '13' => 13,
+            '14' => 14,
+            '15' => 15,
+            '16' => 16,
+            '17' => 17,
+            '18' => 18,
+            '19' => 19,
+            '20' => 20,
+            '21' => 21,
+            '22' => 22,
+            '23' => 23,
+            '24' => 24,
+            '1'  => 25,
+            '2'  => 26,
+            '3'  => 27,
+            '4'  => 28];
+
     }
 
     public function getAll()
@@ -63,6 +86,10 @@ class TimeZones
 
     public function getDay() {
         return $this->day;
+    }
+
+    public function getDayTime() {
+        return $this->dayTime;
     }
     public function getDayName( $day ){
         switch( $day ){

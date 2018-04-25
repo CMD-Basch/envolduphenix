@@ -9,10 +9,11 @@ use App\Entity\EventType;
 use App\Entity\Round;
 use App\Service\EventUser;
 use App\Service\TimeZones;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -25,12 +26,14 @@ class BoardgameEventType extends AbstractType
 
     private $eventUser;
     private $em;
+    private $tz;
 
 
-    public function __construct( EventUser $eventUser, EntityManagerInterface $em )
+    public function __construct( EventUser $eventUser, EntityManagerInterface $em, TimeZones $tz )
     {
         $this->eventUser = $eventUser;
         $this->em = $em;
+        $this->tz = $tz;
     }
 
     public function buildForm( FormBuilderInterface $builder, array $options )
@@ -41,6 +44,9 @@ class BoardgameEventType extends AbstractType
             ->add('game',       TextType::class,        ['label' => 'Jeu'])
             ->add('style',      TextType::class,        ['label' => 'Style de jeu'])
             ->add('description',TextareaType::class,    ['label' => 'Description'])
+            ->add('start',      DateTimeType::class,    ['label' => 'Début'])
+            ->add('end',        DateTimeType::class,    ['label' => 'Fin'])
+            ->add('slots',      IntegerType::class,     ['label' => 'Places'])
             ->add('slots',      IntegerType::class,     ['label' => 'Places'])
             ->add('round',      EntityType::class,      ['choices' => $this->em->getRepository( Round::class)->findBy(['eventType' => $eventType ]),
                                                                     'class' => Round::class ]  )
