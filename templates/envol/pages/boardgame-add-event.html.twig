@@ -1,0 +1,15 @@
+{% extends "envol/standard.html.twig" %}
+
+{% block container %}
+    <div class="row">
+        <div class="col-sm-8 col-sm-push-2">
+            <h3 class="titre-page">Ajouter une partie de jeu de société</h3>
+            <hr class="hr-titre">
+        </div> <!-- col -->
+    </div> <!-- row -->
+    <div class="row">
+        <div class="col-sm-4 col-sm-push-4">
+        {{ form( form ) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+
+    <div class="row">
+
+        {% if app.user %}
+            {% if is_granted('ROLE_JDS') %}
+
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="{{ path('boardgame.add', {'time' : active_round.code }) }}">Ajouter une table</a></li>
+                    </ul>
+
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info">
+                <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Connectez-vous pour pouvoir rejoindre une partie de jeu de société.
+            </div>
+        {% endif %}
+    </div> <!-- row -->
+    <br>
+
+        <div class="row">
+            {% for event in events %}
+            <div id="table-{{ event.id }}" class="col-sm-12 col-md-4">
+                {% include 'envol/block/boardgame-event.html.twig' with {'event': event} %}
+            </div>
+            {% endfor %}
+        </div>
+
+
