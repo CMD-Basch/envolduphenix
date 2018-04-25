@@ -80,7 +80,7 @@ class User implements UserInterface, \Serializable
     private $updated;
 
     /**
-     * @ORM\Column(type="json_array", length=255)
+     * @ORM\Column(type="array", length=255)
      */
     private $roles;
 
@@ -93,6 +93,11 @@ class User implements UserInterface, \Serializable
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="master")
      */
     private $masteredEvents;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $sleep;
 
     public function __construct() {
         $this->events = new ArrayCollection();
@@ -336,6 +341,18 @@ class User implements UserInterface, \Serializable
                 $masteredEvent->setMaster(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSleep(): ?string
+    {
+        return $this->sleep;
+    }
+
+    public function setSleep(?string $sleep): self
+    {
+        $this->sleep = $sleep;
 
         return $this;
     }

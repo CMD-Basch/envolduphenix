@@ -24,7 +24,7 @@ class RoleplayController extends Controller
 
     public const EVENT_TYPE_NAME = 'roleplay';
 
-    public function __construct( TimeZones $timeZones, TokenStorageInterface $tokenStorage, EventUser $eventUser )
+    public function __construct( TimeZones $timeZones, TokenStorageInterface $tokenStorage, EventUser $eventUser)
     {
         $this->timezones = $timeZones;
         $this->eventUser = $eventUser;
@@ -49,6 +49,12 @@ class RoleplayController extends Controller
                 'eventType' => $eventType,
             ] );
 
+
+        $arguments = [
+            'events' => $events,
+            'active_round' => $round,
+        ];
+
         switch( $act ){
             case 'join' :
                 if( $this->eventUser->isEventTimeFree( $event ) ) {
@@ -56,14 +62,14 @@ class RoleplayController extends Controller
                     $event->addPlayer( $this->user );
                     $this->getDoctrine()->getManager()->flush();
 
-                    return $this->render('envol/block/roleplay-events.html.twig',[ 'events' => $events, ]);
+                    return $this->render('envol/block/roleplay-events.html.twig', $arguments );
                 }
                 break;
             case 'leave' :
                 $event->removePlayer( $this->user );
                 $this->getDoctrine()->getManager()->flush();
 
-                return $this->render('envol/block/roleplay-events.html.twig',[ 'events' => $events, ]);
+                return $this->render('envol/block/roleplay-events.html.twig', $arguments );
                 break;
         }
 

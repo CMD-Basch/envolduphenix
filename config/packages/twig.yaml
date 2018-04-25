@@ -6,4 +6,5 @@ twig:
         menu_loader: '@App\Service\MenuLoader'
         timezones: '@App\Service\TimeZones'
         eventuser: '@App\Service\EventUser'
+        button: '@App\Service\EventButton'
     form_themes: ['bootstrap_3_layout.html.twig']

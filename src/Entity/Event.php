@@ -5,9 +5,11 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
+ * @UniqueEntity("tag", message="Ce tag est déjà utilisé")
  */
 
 class Event
@@ -27,12 +29,12 @@ class Event
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $start;
+    private $localStart;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $end;
+    private $localEnd;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="events")
@@ -51,7 +53,7 @@ class Event
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="masteredEvents")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $master;
 
@@ -75,6 +77,11 @@ class Event
      * @ORM\Column(type="integer")
      */
     private $slots;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tag;
 
     public function __construct()
     {
@@ -103,40 +110,66 @@ class Event
         return $this;
     }
 
-    public function getStart()
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getLocalStart()
     {
-        return $this->start;
+        return $this->localStart;
     }
 
-    public function getFinalStart()
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getStart()
     {
-        if( $this->start == null ) {
+        if( $this->localStart == null ) {
             return $this->getRound()->getStart();
         }
-        return $this->start;
+        return $this->localStart;
     }
 
     public function setStart( $start ): self
     {
-        $this->start = $start;
+        $this->localStart = $start;
 
         return $this;
     }
 
-    public function getEnd()
+    public function setLocalStart( $start ): self
     {
-        return $this->end;
+        $this->localStart = $start;
+
+        return $this;
     }
 
-    public function getFinalEnd()
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getLocalEnd()
     {
-        if( $this->end == null ) {
+        return $this->localEnd;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getEnd()
+    {
+        if( $this->localEnd == null ) {
             return $this->getRound()->getEnd();
         }
-        return $this->end;
+        return $this->localEnd;
     }
 
     public function setEnd( $end): self
+    {
+        $this->end = $end;
+
+        return $this;
+    }
+
+    public function setLocalEnd( $end): self
     {
         $this->end = $end;
 
@@ -151,26 +184,27 @@ class Event
         return $this->players;
     }
 
-    public function isPlayer( $user ): bool
+    public function isPlayer( ?User $user ): bool
     {
         return $this->getPlayers()->contains( $user );
+
     }
 
-    public function isUser( $user ): bool
+    public function isUser( User $user ): bool
     {
-        return $this->getPlayers()->contains( $user ) || $this->getMaster() == $user;
+        return $this->getPlayers()->contains( $user ) || $this->getMaster() === $user;
     }
 
-    public function addPlayer(User $player): self
+    public function addPlayer( User $player ): self
     {
-        if (!$this->players->contains($player)) {
+        if (!$this->players->contains( $player )) {
             $this->players[] = $player;
         }
 
         return $this;
     }
 
-    public function removePlayer(User $player): self
+    public function removePlayer( User $player ): self
     {
         if ($this->players->contains($player)) {
             $this->players->removeElement($player);
@@ -264,6 +298,23 @@ class Event
     public function setSlots(int $slots): self
     {
         $this->slots = $slots;
+
+        return $this;
+    }
+
+
+    public function getLength() {
+        return $this->getStart()->diff( $this->getEnd() )->h ;
+    }
+
+    public function getTag(): ?string
+    {
+        return $this->tag;
+    }
+
+    public function setTag(?string $tag): self
+    {
+        $this->tag = $tag;
 
         return $this;
     }

@@ -5,9 +5,11 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RoundRepository")
+ * @UniqueEntity("code", message="Ce code est déjà utilisé")
  */
 class Round
 {
@@ -48,6 +50,11 @@ class Round
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="round")
      */
     private $events;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
 
     public function __construct()
     {
@@ -112,18 +119,6 @@ class Round
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
     public function getEventType(): ?EventType
     {
         return $this->eventType;
@@ -163,6 +158,18 @@ class Round
                 $event->setRound(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

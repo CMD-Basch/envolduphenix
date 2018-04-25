@@ -6,4 +6,5 @@ easy_admin:
         - App\Entity\Event
         - App\Entity\EventType
         - App\Entity\Round
+        - App\Entity\Parrainer
 
