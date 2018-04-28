@@ -12,21 +12,21 @@
     <!-- CAROUSEL -->
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
-        <ol class="carousel-indicators">
+        {#<ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
             <li data-target="#myCarousel" data-slide-to="1"></li>
             <li data-target="#myCarousel" data-slide-to="2"></li>
-        </ol>
+        </ol>#}
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
-            <div class="item active">
-                <img src="{{ asset('images/slide2.png') }}" alt="Slide 1">
+            <div class="carousel-item active">
+                <img src="{{ asset('images/slide2.png') }}" class="img-fluid w-100" alt="Slide 1">
             </div>
-            <div class="item">
-                <img src="{{ asset('images/slide3.png') }}" alt="Slide 2">
+            <div class="carousel-item">
+                <img src="{{ asset('images/slide3.png') }}" class="img-fluid w-100" alt="Slide 2">
             </div>
-            <div class="item">
-                <img src="{{ asset('images/slide4.png') }}" alt="Slide 3">
+            <div class="carousel-item">
+                <img src="{{ asset('images/slide4.png') }}" class="img-fluid w-100" alt="Slide 3">
             </div>
         </div>
         <!-- Left and right controls -->
@@ -44,7 +44,7 @@
     <div class="container corps-page">
         <!-- Introduction -->
         <div class="row">
-            <img src="{{ asset('images/phenix-trans.png') }}" class="img-responsive phenix-trans">
+            <img src="{{ asset('images/phenix-trans.png') }}" class="d-sm-none d-md-block float-right phenix-trans">
             <div class="intro col-sm-8 col-sm-push-2">
                 <h2>FESTIVAL DE RENCONTRES MULTI-JEUX</h2>
                 <p>L'Envol du Phénix est un évènement ludique organisé les <b>11, 12 et 13 mai 2018</b> à l'espace Valentré à Cahors.</p><p>Cet événement a pour but de faire découvrir au plus grand nombre et de partager les expériences ludiques que sont le jeu de société, le jeu de rôles et le wargame.</p><p>Cette année, nous avons choisi pour thème <b>"Légendes"</b> : des créatures de tous horizons se sont donné rendez-vous. Peut-être croiserez-vous le diable du Pont Valentré au détour d’un jet de dés, à moins que des gobelins ne vous entrainent sur un terrain de Blood Bowl, ou bien encore que vous découvriez un loup-garou une nuit de pleine lune…<br>Qui sait quelles légendes vous affronterez ?</p>

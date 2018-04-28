@@ -1,25 +1,24 @@
 
 <!-- NAV GENERALE -->
-<nav class="navbar nav-gen">
+<nav class="navbar navbar-expand-lg navbar-light bg-light nav-gen">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle responsive-menu" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ path( 'home' ) }}"><img class="img-responsive" src="{{ asset('images/logo1.png') }}"></a>
-        </div> <!-- nav-bar header -->
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav" id="ul-nav-gen">
 
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-nav-toggler" aria-controls="site-nav-toggler" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+            <a class="navbar-brand" href="{{ path( 'home' ) }}"><img class="img-responsive" src="{{ asset('images/logo1.png') }}"></a>
+
+
+        <div class="collapse navbar-collapse justify-content-end" id="site-nav-toggler">
+            <ul class="nav navbar-nav" id="ul-nav-gen">
                 {% for menu in menu_loader.list %}
-                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ menu.name|upper }}<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="site_navbar_{{ menu.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">{{ menu.name|upper }}<span class="caret"></span></a>
+                    <div class="dropdown-menu" aria-labelledby="site_navbar_{{ menu.id }}">
                         {% for view in menu.views %}
-                        <li><a href="{{ menu_loader.url( view ) }}">{{ view.name }}</a></li>
+                        <a class="dropdown-item" href="{{ menu_loader.url( view ) }}">{{ view.name }}</a>
                         {% endfor %}
-                    </ul>
+                    </div >
                 </li>
                 {% endfor %}
 

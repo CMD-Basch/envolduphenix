@@ -1,10 +1,32 @@
 easy_admin:
-    entities:
-        - App\Entity\User
-        - App\Entity\Menu
-        - App\Entity\View
-        - App\Entity\Event
-        - App\Entity\EventType
-        - App\Entity\Round
-        - App\Entity\Parrainer
+  entities:
+    User:
+      class: App\Entity\User
 
+    Menu:
+      class: App\Entity\Menu
+
+    Event:
+      class: App\Entity\Event
+
+    EventType:
+      class: App\Entity\EventType
+
+    Round:
+      class: App\Entity\Round
+
+    Parrainer:
+      class: App\Entity\Parrainer
+
+    View:
+      class: App\Entity\View
+      form:
+        fields:
+          - name
+          - menu
+          - link
+          - content
+          - active
+#          - { property: 'content', type: 'Hillrange\CKEditor\Form\CKEditorType', type_options: { trim: true } }
+          - weight
+          - link
