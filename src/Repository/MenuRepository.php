@@ -20,7 +20,8 @@ class MenuRepository extends ServiceEntityRepository
     }
 
     public function findForPrint() {
-        return $this->findBy(['active' => true],['weight' => 'ASC']);
+        $menu = $this->findBy(['active' => true],['weight' => 'ASC']);
+        return $menu;
     }
 
 //    /**
