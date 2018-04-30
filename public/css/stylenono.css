@@ -368,19 +368,23 @@ body a {
 }
 
 /*Encadrés tables*/
-.panel-default {
+.card-blue {
     border-color: #0B3754;
 }
-.panel-default > .panel-heading {
+.card-blue .card-header {
     color: #fff;
     background-color: #1A5E94;
     border-color: #0B3754;
 }
-.panel-heading>h4 {
+.card-header h4 {
 	font-weight: 600;
+	line-height: 19.8px;
+	font-size: 18px;
 }
-.panel-body {
+.card-body {
 	text-align: left;
+	line-height: 23px;
+	font-size: 18px;
 }
 
 
@@ -482,15 +486,15 @@ body a {
  }
 
  /*-------INVITÉS-------*/
- .panel-invites {
+ .card-invites {
     border-color: #bb6604;
 }
-.panel-invites > .panel-heading {
+.card-invites > .card-header {
     color: #fff;
     background-color: #E77C00;
     border-color: #bb6604;
 }
-.panel-invites em {
+.card-invites em {
 	color: #E77C00;
 }
 
@@ -514,7 +518,7 @@ body a {
 	top : -18px;
 }
 
-.panel-light {
+.card-light {
 	margin: 0;
 	font-size: 15px;
 	background-image: url("../images/bandeau-orange.png");
@@ -522,7 +526,7 @@ body a {
 
 }
 
-.panel-light h4 {
+.card-light h4 {
 	font-size: 17px;
 	font-weight: bold;
 }

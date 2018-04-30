@@ -1,20 +1,22 @@
 {% extends "envol/standard.html.twig" %}
 
 {% block container %}
-    <div class="row">
-        <div class="col-sm-8 col-sm-push-2">
+    <div class="row justify-content-center">
+        <div class="col-sm-8">
             <h3 class="titre-page">Liste des tables de jeu de rôles</h3>
             <hr class="hr-titre">
         </div> <!-- col -->
     </div> <!-- row -->
 
     <div class="row">
-        <ul class="nav nav-tabs nav-liste">
-            {# class="active" #}
-            {% for key, round in rounds %}
-                <li {% if key == active_round.code %} class="active" {% endif %} data-toggle="tooltip" title=""><a href="{{ path('roleplay', {'time': key}) }}">{{ round.name }}</a></li>
-            {% endfor %}
-        </ul>
+        <div class="col">
+            <ul class="nav nav-tabs nav-fill w-100">
+                {# class="active" #}
+                {% for key, round in rounds %}
+                    <li class="nav-item" data-toggle="tooltip" title=""><a class="nav-link {% if key == active_round.code %} active{% endif %}" href="{{ path('roleplay', {'time': key}) }}">{{ round.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
     <div id="table-list">

@@ -1,28 +1,30 @@
 
-    <div class="row">
+    <div class="row justify-content-center mt-3">
+        <div class="col">
 
         {% if app.user %}
 
             {% if eventuser.isRoundTimeFree( active_round ) %}
-                <ul class="nav nav-pills nav-justified">
-                    <li><a href="{{ path('roleplay.add', {'time' : active_round.code }) }}">Ajouter une table</a></li>
-                </ul>
+                <div class="alert alert-success w-100">
+                    <a href="{{ path('roleplay.add', {'time' : active_round.code }) }}"><span class="badge badge-success">Ajouter une table</span></a>
+                </div>
             {% else %}
-                <div class="alert alert-info">
-                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Vous ne pouvez pas ajouter une table sur ce créneau horaire car vous êtes déja inscrit sur un jeu.
+                <div class="alert alert-info w-100">
+                    Vous ne pouvez pas ajouter une table sur ce créneau horaire car vous êtes déja inscrit sur un jeu.
                 </div>
             {% endif %}
         {% else %}
-            <div class="alert alert-info">
-                <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Connectez-vous pour pouvoir ajouter ou rejoindre une table de jeu de rôles.
+            <div class="alert alert-info w-100">
+                Connectez-vous pour pouvoir ajouter ou rejoindre une table de jeu de rôles.
             </div>
         {% endif %}
+        </div>
     </div> <!-- row -->
     <br>
 
-        <div class="row">
+        <div class="d-flex flex-wrap align-content-stretch">
             {% for event in events %}
-            <div id="table-{{ event.id }}" class="col-sm-12 col-md-4" style="margin-bottom: 15px">
+            <div id="table-{{ event.id }}" class="col-sm-12 col-md-4 mb-3">
                 {% include 'envol/block/roleplay-event.html.twig' with {'event': event} %}
             </div>
             {% endfor %}
