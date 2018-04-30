@@ -22,7 +22,7 @@
 
         <div class="row">
             {% for event in events %}
-            <div id="table-{{ event.id }}" class="col-sm-12 col-md-4">
+            <div id="table-{{ event.id }}" class="col-sm-12 col-md-4" style="margin-bottom: 15px">
                 {% include 'envol/block/roleplay-event.html.twig' with {'event': event} %}
             </div>
             {% endfor %}

@@ -9,11 +9,11 @@
     {% set panel_color = 'panel-default' %}
 {% endif %}
 
-    <div class="panel {{ panel_color }}">
-        <div class="panel-heading">
+    <div class="card {{ panel_color }}">
+        <div class="card-header">
             <h4>{{ event.name }}</h4>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <p><strong>Meneur :</strong> {{ event.master }}
                 <br>
                 <strong>Jeu :</strong> {{ event.game }}<br>
