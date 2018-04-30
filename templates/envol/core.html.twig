@@ -55,7 +55,7 @@
                             <li><a href="{{ menu_loader.url( view ) }}">• {{ view.name }}</a></li>
                         {% endfor %}
 
-                        {% if loop.index == ( loop.length / 2 ) %}
+                        {% if loop.index == ( loop.length / 2 )|round(0, 'floor') %}
                     </ul>
                 </nav>
             </div>
