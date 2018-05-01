@@ -508,6 +508,10 @@ body a {
 	position: relative;
 }
 
+.table-custom td {
+	padding : 8px;
+}
+
 
 
 .cell-time {

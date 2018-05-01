@@ -1,12 +1,12 @@
 {% if event.master == app.user %}
     {% set slotted = 'master' %}
-    {% set panel_color = 'panel-invites' %}
+    {% set panel_color = 'card-invites' %}
 {% elseif event.isPlayer( app.user ) %}
     {% set slotted = 'player' %}
-    {% set panel_color = 'panel-invites' %}
+    {% set panel_color = 'card-invites' %}
 {% else %}
     {% set slotted = false %}
-    {% set panel_color = 'panel-default' %}
+    {% set panel_color = 'card-blue' %}
 {% endif %}
 
 
