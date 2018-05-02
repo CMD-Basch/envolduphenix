@@ -31,9 +31,9 @@
                 {% if event.master == app.user %}
                     <!--<a class="btn btn-active " href="#">Modifier</a>-->
                 {% elseif event.isPlayer( app.user ) %}
-                    <a class="btn btn-active btn-table" data-act="leave" data-table-id="{{ event.id }}" href="#">Quitter</a>
+                    <a class="btn btn-outline-primary btn-table" role="button" data-act="leave" data-table-id="{{ event.id }}" href="#">Quitter</a>
                 {% elseif eventuser.isEventTimeFree( event ) %}
-                    <a class="btn btn-active btn-table" data-act="join" data-table-id="{{ event.id }}" href="#">Rejoindre</a>
+                    <a class="btn btn-outline-primary btn-table" role="button" data-act="join" data-table-id="{{ event.id }}" href="#">Rejoindre</a>
                 {% endif %}
             {% endif %}
             </p>
