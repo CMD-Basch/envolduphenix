@@ -5,9 +5,10 @@
             {% if app.user %}
                 {% if is_granted('ROLE_JDS') %}
 
-            <div class="alert alert-success w-100">
+            {#<div class="alert alert-success w-100">
                 <a href="{{ path('boardgame.add', {'time' : active_round.code }) }}"><span class="badge badge-success">Ajouter une table</span></a>
-            </div>
+            </div>#}
+                    <a href="{{ path('boardgame.add', {'time' : active_round.code }) }}" class="btn btn-success btn-lg btn-block" >Ajouter une table</a>
 
                 {% endif %}
             {% else %}

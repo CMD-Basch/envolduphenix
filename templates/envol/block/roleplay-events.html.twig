@@ -5,16 +5,17 @@
         {% if app.user %}
 
             {% if eventuser.isRoundTimeFree( active_round ) %}
-                <div class="alert alert-success w-100">
+                {#<div class="alert alert-success w-100">
                     <a href="{{ path('roleplay.add', {'time' : active_round.code }) }}"><span class="badge badge-success">Ajouter une table</span></a>
-                </div>
+                </div>#}
+                <a href="{{ path('roleplay.add', {'time' : active_round.code }) }}" class="btn btn-success btn-lg btn-block mb-10" >Ajouter une table</a>
             {% else %}
-                <div class="alert alert-info w-100">
+                <div class="alert alert-info w-100 mb-10">
                     Vous ne pouvez pas ajouter une table sur ce créneau horaire car vous êtes déja inscrit sur un jeu.
                 </div>
             {% endif %}
         {% else %}
-            <div class="alert alert-info w-100">
+            <div class="alert alert-info w-100 mb-10">
                 Connectez-vous pour pouvoir ajouter ou rejoindre une table de jeu de rôles.
             </div>
         {% endif %}
