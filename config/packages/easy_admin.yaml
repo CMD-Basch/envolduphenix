@@ -2,6 +2,14 @@ easy_admin:
   entities:
     User:
       class: App\Entity\User
+      list:
+        fields:
+          - username
+          - firstname
+          - lastname
+          - email
+          - sleep
+          - valid
 
     Menu:
       class: App\Entity\Menu
