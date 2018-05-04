@@ -303,6 +303,11 @@ class Event
         return $this->getSlots() - count($this->getPlayers());
     }
 
+    public function isFreeSlots(): bool
+    {
+        return $this->getFreeSlots() > 0;
+    }
+
     public function setSlots(int $slots): self
     {
         $this->slots = $slots;

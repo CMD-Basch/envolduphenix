@@ -59,7 +59,7 @@ class BoradgameController extends Controller
 
         switch( $act ){
             case 'join' :
-                if( $this->eventUser->isEventTimeFree( $event ) ) {
+                if( $this->eventUser->isEventTimeFree( $event ) && $event->isFreeSlots() ) {
 
                     $event->addPlayer( $this->user );
                     $this->getDoctrine()->getManager()->flush();
