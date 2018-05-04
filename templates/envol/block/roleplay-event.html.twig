@@ -30,10 +30,10 @@
             {% if app.user %}
                 {% if event.master == app.user %}
                     <!--<a class="btn btn-active " href="#">Modifier</a>-->
-                {% elseif not event.isFreeSlots() %}
-                    <a class="btn btn-outline-secondary disabled" role="button" tabindex="-1" aria-disabled="true" href="#">Partie pleine</a>
                 {% elseif event.isPlayer( app.user ) %}
                     <a class="btn btn-outline-primary btn-table" role="button" data-act="leave" data-table-id="{{ event.id }}" href="#">Quitter</a>
+                {% elseif not event.isFreeSlots() %}
+                    <a class="btn btn-outline-secondary disabled" role="button" tabindex="-1" aria-disabled="true" href="#">Partie pleine</a>
                 {% elseif eventuser.isEventTimeFree( event ) %}
                     <a class="btn btn-outline-primary btn-table" role="button" data-act="join" data-table-id="{{ event.id }}" href="#">Rejoindre</a>
                 {% endif %}
