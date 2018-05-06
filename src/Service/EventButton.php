@@ -41,13 +41,14 @@ class EventButton
         if( $this->user ) {
             if ($event->isPlayer($this->user)) {
                 $button = '<span id="link-' . $event_tag . '"><a href="#" role="button" data-act="leave" data-id="' . $event_tag . '" class="ajax-link btn btn-primary">Quitter l\'activité ' . $event->getName() . '</a></span>';
+            } else if ( !$event->isFreeSlots() ) {
+                $button = '<span id="link-' . $event_tag . '"><a href="#" role="button" tabindex="-1" aria-disabled="true"  class="btn btn-secondary disabled">' . $event->getName() . ' complet</a></span>';
+            } else if ($this->eventUser->isEventTimeFree($event)) {
+                $button = '<span id="link-' . $event_tag . '"><a href="#" role="button" data-act="join" data-id="' . $event_tag . '" class="ajax-link btn btn-primary">S\'inscrire à ' . $event->getName() . '</a></span>';
             } else {
-                if ($this->eventUser->isEventTimeFree($event)) {
-                    $button = '<span id="link-' . $event_tag . '"><a href="#" role="button" data-act="join" data-id="' . $event_tag . '" class="ajax-link btn btn-primary">S\'inscrire à ' . $event->getName() . '</a></span>';
-                } else {
-                    $button = '<span id="link-' . $event_tag . '"><a href="#" class="btn btn-secondary btn-lg disabled" tabindex="-1" role="button" aria-disabled="true">Vous avez une autre activité à ce moment là</a></span>';
-                }
+                $button = '<span id="link-' . $event_tag . '"><a href="#" class="btn btn-secondary btn-lg disabled" tabindex="-1" role="button" aria-disabled="true">Vous avez une autre activité à ce moment là</a></span>';
             }
+
         }
         else {
             $button = '<span id="link-' . $event_tag . '"><a href="#" class="btn btn-secondary btn-lg disabled" tabindex="-1" role="button" aria-disabled="true">Vous devez être connecté pour pouvoir vous inscrire</a></span>';
