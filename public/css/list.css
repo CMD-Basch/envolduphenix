@@ -1,0 +1,23 @@
+html {
+    height: 100%;
+}
+body {
+    min-height: 100%;
+}
+.carousel, .carousel-inner, .carousel-item, .card {
+    height : 100vh;
+}
+
+.card-header {
+    height : 100px;
+}
+
+.card-header h4 {
+    font-size: 50pt !important;
+    line-height: initial;
+}
+
+.card-body {
+    font-size: 32pt;
+    line-height: initial;
+}

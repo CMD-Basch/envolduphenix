@@ -9,6 +9,11 @@
     {% set panel_color = 'card-blue' %}
 {% endif %}
 
+
+{% if buttons is not defined %}
+    {% set buttons = true %}
+{% endif %}
+
     <div class="card {{ panel_color }}">
         <div class="card-header">
             <h4>{{ event.name }}</h4>
@@ -27,7 +32,7 @@
                 {% endfor %}
             </p>
             <p>
-            {% if app.user %}
+            {% if app.user and buttons %}
                 {% if event.master == app.user %}
                     <!--<a class="btn btn-active " href="#">Modifier</a>-->
                 {% elseif event.isPlayer( app.user ) %}

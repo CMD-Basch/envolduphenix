@@ -331,4 +331,9 @@ class Event
 
         return $this;
     }
+
+    public function getType(): ?string
+    {
+        return $this->getEventType()->getName();
+    }
 }

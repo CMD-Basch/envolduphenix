@@ -1,0 +1,37 @@
+{% extends "screen/core.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/list.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+    <div id="carousselJDR" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner h-100">
+
+            <ol class="carousel-indicators">
+                {% for event in round.events %}
+                <li data-target="#carousselJDR" data-slide-to="{{ loop.index0 }}" class="active"></li>
+                {% endfor %}
+            </ol>
+
+        {% for event in round.events %}
+            <div class="carousel-item {% if loop.first %}active{%  endif %}">
+            {% include 'envol/block/roleplay-event.html.twig' with {'event': event, 'buttons': false } only %}
+            </div>
+        {% endfor %}
+
+            <a class="carousel-control-prev" href="#carousselJDR" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carousselJDR" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+
+        </div>
+    </div>
+
+{%  endblock %}

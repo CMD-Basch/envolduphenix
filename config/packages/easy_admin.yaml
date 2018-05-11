@@ -1,6 +1,23 @@
 easy_admin:
+  design:
+    menu:
+      - label: 'Admin'
+        children: ['User', 'Menu', 'Event', 'EventType', 'Round', 'Parrainer', 'View']
+      - label: 'Outils'
+        children: [ 'Utilisateur', 'Jeux']
   entities:
     User:
+      class: App\Entity\User
+      list:
+        fields:
+          - username
+          - firstname
+          - lastname
+          - email
+          - sleep
+          - valid
+
+    Utilisateur:
       class: App\Entity\User
       list:
         fields:
@@ -16,6 +33,17 @@ easy_admin:
 
     Event:
       class: App\Entity\Event
+
+    Jeux:
+      class: App\Entity\Event
+      list:
+        fields:
+          - type
+          - name
+          - game
+          - style
+          - round
+          - slots
 
     EventType:
       class: App\Entity\EventType
