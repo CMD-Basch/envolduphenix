@@ -12,7 +12,7 @@ class ListController extends Controller
 {
 
     /**
-     * @Route("/show/{id}", name="page")
+     * @Route("/show/{id}", name="listeprojo")
      */
     public function textView( Round $round ) {
 
