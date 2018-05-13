@@ -43,9 +43,11 @@ class ListController extends Controller
         $users = $this->getDoctrine()->getRepository(User::class )->findAll();
 
 
-        $nb_player = 0;
-        $nb_master = 0;
-        $nb_total  = 0;
+        $stats['rpg_player'] = 0;
+        $stats['rpg_master'] = 0;
+        $stats['rpg_total']  = 0;
+
+        $stats['murder_player'] = 0;
 
         foreach( $users as $user ){
 
@@ -53,29 +55,37 @@ class ListController extends Controller
             $bool_master = false;
 
             foreach ( $user->getEvents() as $event ) {
-                if( $event->getEventType()->getName() == 'roleplay' ){
+                if( $event->getEventType()->getName() == 'roleplay' ) {
                     $bool_player = true;
-                    break;
+                }
+                if( $event->getEventType()->getName() == 'murder' ) {
+                    $stats['murder_player']++;
                 }
             }
             if( count($user->getMasteredEvents()) > 0 ) {
                 $bool_master = true;
             }
             if( $bool_player ){
-                $nb_player++;
+                $stats['rpg_player']++;
             }
             if( $bool_master ){
-                $nb_master++;
+                $stats['rpg_master']++;
             }
             if( $bool_master || $bool_player ){
-                $nb_total++;
+                $stats['rpg_total']++;
             }
 
         }
 
-        $lines[] = 'Nombre Joueurs : '.$nb_player;
-        $lines[] = 'Nombre Meneurs : '.$nb_master;
-        $lines[] = 'Nombre Total : '.$nb_total;
+
+        $lines[] = '### JEU DE ROLE ###';
+        $lines[] = 'Nombre Joueurs : ' . $stats['rpg_player'];
+        $lines[] = 'Nombre Meneurs : ' . $stats['rpg_master'];
+        $lines[] = 'Nombre Total : ' . $stats['rpg_total'];
+
+        $lines[] = '';
+        $lines[] = '### MURDER PARTY ###';
+        $lines[] = 'Nombre Joueurs : ' . $stats['murder_player'];
 
 
         return $this->render('raw/stats.html.twig', [
