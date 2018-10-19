@@ -1,7 +1,11 @@
 ###> symfony/framework-bundle ###
 /.idea/
 .idea
-/.env
+.env
+yarn-error.log
+symfony.lock
+composer.lock
+
 /public/bundles/
 /var/
 /vendor/
