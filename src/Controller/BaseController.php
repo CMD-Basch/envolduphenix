@@ -36,6 +36,7 @@ class BaseController extends Controller
 
         return $this->render('envol/pages/text.html.twig', array(
             'title' => $title,
+            'view' => $view,
             'page' => $page,
         ));
 

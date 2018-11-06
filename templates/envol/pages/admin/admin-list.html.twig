@@ -1,0 +1,23 @@
+{% extends "envol/standard.html.twig" %}
+
+{% block container %}
+    <div class="row justify-content-center">
+        <div class="col-sm-8">
+            <h3 class="titre-page">Admin JDR</h3>
+            <hr class="hr-titre">
+        </div> <!-- col -->
+    </div> <!-- row -->
+    <div class="row justify-content-center">
+        <div class="col-sm-4">
+            <ul>
+            {% for view in views %}
+                {% if view.fixed %}
+                    <li>{{ view.name }}</li>
+                {% else %}
+                    <li><a href="{{ path('admin.edit', {'type': type, 'view': view.id }) }}">{{ view.name }}</a></li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

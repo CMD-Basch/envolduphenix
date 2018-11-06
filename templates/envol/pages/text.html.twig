@@ -1,5 +1,21 @@
 {% extends "envol/standard.html.twig" %}
 
 {% block container %}
-    {{ page|raw }}
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+            <h3 class="titre-page">{{ view.title }}</h3>
+            <hr class="hr-titre">
+            <h5 class="sous-titre">{{ view.subtitle }}</h5>
+        </div> <!-- col -->
+    </div> <!-- row -->
+    <div class="row justify-content-center">
+        <div>
+            {% if view.picture != '' %}<img src="{{ asset( view.picture )}}" class="img-fluid">{% endif %}
+        </div>
+    </div> <!-- row -->
+    <div class="row justify-content-center">
+        <div class="col-sm-8 justi-txt mt-5">
+            {{ page|raw }}
+        </div>
+    </div>
 {% endblock %}

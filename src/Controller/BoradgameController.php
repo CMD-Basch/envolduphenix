@@ -7,7 +7,6 @@ use App\Entity\EventType;
 use App\Entity\Round;
 use App\Entity\User;
 use App\Form\BoardgameEventType;
-use App\Form\RoleplayEventType;
 use App\Service\EventUser;
 use App\Service\TimeZones;
 use Symfony\Component\HttpFoundation\Request;
