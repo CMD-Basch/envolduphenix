@@ -8,8 +8,11 @@
         </div> <!-- col -->
     </div> <!-- row -->
     <div class="row justify-content-center">
-        <div class="col-sm-4">
-            Form
+        <div class="col-sm-8">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input type="submit" class="btn" value="Sauvegarder" />
+            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}

@@ -16,7 +16,9 @@
         <div class="container">
             <h2>
                 <img src="{{ asset( title.pic|default('images/title/blk.png') ) }}">
+                {% block title_banner %}
                 {{ title.name|default('page')|upper }}
+                {% endblock %}
                 <img src="{{ asset( title.pic|default('images/title/blk.png') ) }}">
             </h2>
         </div>
