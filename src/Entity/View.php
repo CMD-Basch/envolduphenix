@@ -2,11 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\ViewRepository;
 use Doctrine\ORM\Mapping as ORM;
+
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ViewRepository")
+ * @Vich\Uploadable
  */
 class View
 {
@@ -59,16 +65,28 @@ class View
      */
     private $subtitle;
 
+
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Vich\UploadableField(mapping="view_image", fileNameProperty="image.name", size="image.size", mimeType="image.mimeType", originalName="image.originalName", dimensions="image.dimensions")
+     * @var File
      */
-    private $picture;
+    private $imageFile;
+
+    /**
+     * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
+     * @var EmbeddedFile
+     */
+    private $image;
 
     /**
      * @ORM\Column(type="boolean")
      */
     private $fixed;
 
+    public function __construct()
+    {
+        $this->image = new EmbeddedFile();
+    }
 
     public function __toString(){
         return $this->name;
@@ -185,6 +203,35 @@ class View
         $this->picture = $picture;
 
         return $this;
+    }
+
+    /**
+     * @param File|UploadedFile $image
+     */
+    public function setImageFile( ?File $image = null )
+    {
+        $this->imageFile = $image;
+
+        if ( null !== $image ) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImage(EmbeddedFile $image)
+    {
+        $this->image = $image;
+    }
+
+    public function getImage(): ?EmbeddedFile
+    {
+        return $this->image;
     }
 
     public function getFixed(): ?bool

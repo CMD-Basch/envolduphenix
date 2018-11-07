@@ -84,6 +84,7 @@ class User implements UserInterface, \Serializable
      */
     private $roles;
 
+
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="players")
      */
@@ -99,10 +100,18 @@ class User implements UserInterface, \Serializable
      */
     private $sleep;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Menu")
+     */
+    private $rights;
+
+
+
     public function __construct() {
         $this->events = new ArrayCollection();
         $this->masteredEvents = new ArrayCollection();
         $this->isActive = true;
+        $this->rights = new ArrayCollection();
     }
 
     public function  __toString() {
@@ -356,4 +365,32 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    /**
+     * @return Collection|Menu[]
+     */
+    public function getRights(): Collection
+    {
+        return $this->rights;
+    }
+
+    public function addRight(Menu $right): self
+    {
+        if (!$this->rights->contains($right)) {
+            $this->rights[] = $right;
+        }
+
+        return $this;
+    }
+
+    public function removeRight(Menu $right): self
+    {
+        if ($this->rights->contains($right)) {
+            $this->rights->removeElement($right);
+        }
+
+        return $this;
+    }
+
+
 }

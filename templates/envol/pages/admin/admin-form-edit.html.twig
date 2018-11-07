@@ -1,13 +1,22 @@
 {% extends "envol/standard.html.twig" %}
 
+{% block title_banner %}
+    Admin - {{ view.menu.name }}
+{% endblock %}
+
 {% block container %}
     <div class="row justify-content-center">
         <div class="col-sm-8">
-            <h3 class="titre-page">Admin JDR</h3>
+            <h3 class="titre-page">Éditer une page</h3>
             <hr class="hr-titre">
+            <span>
+                <a href="{{ path('admin.home') }}" >Panneau d'administration</a> /
+                <a href="{{ path('admin.list', {'type': view.menu.slug}) }}" >{{ view.menu.name }}</a> /
+                Éditer page "{{ view.name }}"
+            </span>
         </div> <!-- col -->
     </div> <!-- row -->
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mt-4">
         <div class="col-sm-8">
             {{ form_start(form) }}
             {{ form_widget(form) }}

@@ -1,9 +1,7 @@
 {% extends "envol/standard.html.twig" %}
 
 {% block title_banner %}
-
     Admin - {{ menu.name }}
-
 {% endblock %}
 
 {% block container %}
@@ -11,10 +9,15 @@
         <div class="col-sm-8">
             <h3 class="titre-page">Liste des pages</h3>
             <hr class="hr-titre">
+            <span>
+                <a href="{{ path('admin.home') }}" >Panneau d'administration</a> /
+                {{ menu.name }}
+            </span>
         </div> <!-- col -->
     </div> <!-- row -->
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mt-4">
         <div class="col-sm-4">
+            <a href="{{ path('admin.add', {'type': type }) }}">Ajouter une page</a>
             <ul>
             {% for view in views %}
                 {% if view.fixed %}

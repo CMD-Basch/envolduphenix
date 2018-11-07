@@ -1,8 +1,6 @@
 easy_admin:
   design:
-    menu:
-      - label: 'Admin'
-        children: ['User', 'Menu', 'Event', 'EventType', 'Round', 'Parrainer', 'View']
+    menu: ['User', 'Menu', 'Event', 'EventType', 'Round', 'Parrainer', 'View']
 
   entities:
     User:
