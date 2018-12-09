@@ -21,9 +21,9 @@
     <br>
 
         <div class="d-flex flex-wrap align-content-stretch">
-            {% for event in events %}
+            {% for activity in activities %}
             <div id="table-{{ event.id }}" class="col-sm-12 col-md-4">
-                {% include 'envol/block/boardgame-event.html.twig' with {'event': event} %}
+                {% include 'envol/block/boardgame-activity.html.twig' with {'activity': activity} %}
             </div>
             {% endfor %}
         </div>

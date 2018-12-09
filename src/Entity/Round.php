@@ -41,15 +41,15 @@ class Round
     private $end;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\EventType", inversedBy="rounds")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ActivityType", inversedBy="rounds")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $eventType;
+    private $activityType;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="round")
+     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="round")
      */
-    private $events;
+    private $activities;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -58,7 +58,7 @@ class Round
 
     public function __construct()
     {
-        $this->events = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     public function __toString()
@@ -119,43 +119,43 @@ class Round
         return $this;
     }
 
-    public function getEventType(): ?EventType
+    public function getActivityType(): ?ActivityType
     {
-        return $this->eventType;
+        return $this->activityType;
     }
 
-    public function setEventType(?EventType $eventType): self
+    public function setActivityType( ?ActivityType $activityType): self
     {
-        $this->eventType = $eventType;
+        $this->activityType = $activityType;
 
         return $this;
     }
 
     /**
-     * @return Collection|Event[]
+     * @return Collection|Activity[]
      */
-    public function getEvents(): Collection
+    public function getActivities(): Collection
     {
-        return $this->events;
+        return $this->activities;
     }
 
-    public function addEvent(Event $event): self
+    public function addActivity( Activity $activity): self
     {
-        if (!$this->events->contains($event)) {
-            $this->events[] = $event;
-            $event->setRound($this);
+        if (!$this->activities->contains($activity)) {
+            $this->activities[] = $activity;
+            $activity->setRound($this);
         }
 
         return $this;
     }
 
-    public function removeEvent(Event $event): self
+    public function removeActivity( Activity $activity): self
     {
-        if ($this->events->contains($event)) {
-            $this->events->removeElement($event);
+        if ($this->activities->contains($activity)) {
+            $this->activities->removeElement($activity);
             // set the owning side to null (unless already changed)
-            if ($event->getRound() === $this) {
-                $event->setRound(null);
+            if ($activity->getRound() === $this) {
+                $activity->setRound(null);
             }
         }
 

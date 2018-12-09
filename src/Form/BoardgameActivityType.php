@@ -4,10 +4,10 @@ namespace App\Form;
 
 use App\Controller\BoradgameController;
 use App\Controller\RoleplayController;
-use App\Entity\Event;
-use App\Entity\EventType;
+use App\Entity\Activity;
+use App\Entity\ActivityType;
 use App\Entity\Round;
-use App\Service\EventUser;
+use App\Service\ActivityUser;
 use App\Service\TimeZones;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -21,24 +21,24 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BoardgameEventType extends AbstractType
+class BoardgameActivityType extends AbstractType
 {
 
-    private $eventUser;
+    private $activityUser;
     private $em;
     private $tz;
 
 
-    public function __construct( EventUser $eventUser, EntityManagerInterface $em, TimeZones $tz )
+    public function __construct( ActivityUser $activityUser, EntityManagerInterface $em, TimeZones $tz )
     {
-        $this->eventUser = $eventUser;
+        $this->activityUser = $activityUser;
         $this->em = $em;
         $this->tz = $tz;
     }
 
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $eventType = $this->em->getRepository(EventType::class )->findOneBy( ['name' => BoradgameController::EVENT_TYPE_NAME] );
+        $activityType = $this->em->getRepository(ActivityType::class )->findOneBy( ['name' => BoradgameController::ACTIVITY_TYPE_NAME] );
         $builder
             ->add('name',       TextType::class,        ['label' => 'Nom de la partie'])
             ->add('game',       TextType::class,        ['label' => 'Jeu'])
@@ -48,7 +48,7 @@ class BoardgameEventType extends AbstractType
             ->add('end',        DateTimeType::class,    ['label' => 'Fin'])
             ->add('slots',      IntegerType::class,     ['label' => 'Places'])
             ->add('slots',      IntegerType::class,     ['label' => 'Places'])
-            ->add('round',      EntityType::class,      ['choices' => $this->em->getRepository( Round::class)->findBy(['eventType' => $eventType ]),
+            ->add('round',      EntityType::class,      ['choices' => $this->em->getRepository( Round::class)->findBy(['activityType' => $activityType ]),
                                                                     'class' => Round::class ]  )
             ->add('save',       SubmitType::class,      ['label' => 'Enregister la partie'] )
         ;
@@ -57,7 +57,7 @@ class BoardgameEventType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Event::class,
+            'data_class' => Activity::class,
         ]);
     }
 }

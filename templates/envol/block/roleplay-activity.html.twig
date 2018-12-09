@@ -1,7 +1,7 @@
-{% if event.master == app.user %}
+{% if activity.master == app.user %}
     {% set slotted = 'master' %}
     {% set panel_color = 'card-invites' %}
-{% elseif event.isPlayer( app.user ) %}
+{% elseif activity.isPlayer( app.user ) %}
     {% set slotted = 'player' %}
     {% set panel_color = 'card-invites' %}
 {% else %}
@@ -16,31 +16,31 @@
 
     <div class="card {{ panel_color }}">
         <div class="card-header">
-            <h4>{{ event.name }}</h4>
+            <h4>{{ activity.name }}</h4>
         </div>
         <div class="card-body">
-            <p><strong>Meneur :</strong> {{ event.master }}
+            <p><strong>Meneur :</strong> {{ activity.master }}
                 <br>
-                <strong>Jeu :</strong> {{ event.game }}<br>
-                <strong>Style :</strong> {{ event.style }}<br>
+                <strong>Jeu :</strong> {{ activity.game }}<br>
+                <strong>Style :</strong> {{ activity.style }}<br>
                 <strong>Description :</strong><br>
-                {{ event.description }}<br>
-                <strong>Places libres:</strong> {{ event.freeSlots }} / {{ event.slots }}<br>
+                {{ activity.description }}<br>
+                <strong>Places libres:</strong> {{ activity.freeSlots }} / {{ activity.slots }}<br>
                 <strong>Joueurs :</strong><br>
-                {% for player in event.players %}
+                {% for player in activity.players %}
                     {{ player.username }}{% if loop.last != true %}, {% endif %}
                 {% endfor %}
             </p>
             <p>
             {% if app.user and buttons %}
-                {% if event.master == app.user %}
+                {% if activity.master == app.user %}
                     <!--<a class="btn btn-active " href="#">Modifier</a>-->
-                {% elseif event.isPlayer( app.user ) %}
-                    <a class="btn btn-outline-primary btn-table" role="button" data-act="leave" data-table-id="{{ event.id }}" href="#">Quitter</a>
-                {% elseif not event.isFreeSlots() %}
+                {% elseif activity.isPlayer( app.user ) %}
+                    <a class="btn btn-outline-primary btn-table" role="button" data-act="leave" data-table-id="{{ activity.id }}" href="#">Quitter</a>
+                {% elseif not activity.isFreeSlots() %}
                     <a class="btn btn-outline-secondary disabled" role="button" tabindex="-1" aria-disabled="true" href="#">Partie pleine</a>
-                {% elseif eventuser.isEventTimeFree( event ) %}
-                    <a class="btn btn-outline-primary btn-table" role="button" data-act="join" data-table-id="{{ event.id }}" href="#">Rejoindre</a>
+                {% elseif activityuser.isActivityTimeFree( activity ) %}
+                    <a class="btn btn-outline-primary btn-table" role="button" data-act="join" data-table-id="{{ activity.id }}" href="#">Rejoindre</a>
                 {% endif %}
             {% endif %}
             </p>

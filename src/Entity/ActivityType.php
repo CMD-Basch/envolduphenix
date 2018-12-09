@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\EventTypeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ActivityTypeRepository")
  */
-class EventType
+class ActivityType
 {
     /**
      * @ORM\Id()
@@ -25,12 +25,12 @@ class EventType
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="eventType")
+     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="activityType")
      */
-    private $events;
+    private $activities;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Round", mappedBy="eventType")
+     * @ORM\OneToMany(targetEntity="App\Entity\Round", mappedBy="activityType")
      */
     private $rounds;
 
@@ -47,7 +47,7 @@ class EventType
 
     public function __construct()
     {
-        $this->events = new ArrayCollection();
+        $this->activities = new ArrayCollection();
         $this->rounds = new ArrayCollection();
     }
 
@@ -74,30 +74,30 @@ class EventType
     }
 
     /**
-     * @return Collection|Event[]
+     * @return Collection|Activity[]
      */
-    public function getEvents(): Collection
+    public function getActivities(): Collection
     {
-        return $this->events;
+        return $this->activities;
     }
 
-    public function addEvent(Event $event): self
+    public function addActivity( Activity $activity): self
     {
-        if (!$this->events->contains($event)) {
-            $this->events[] = $event;
-            $event->setEventType($this);
+        if (!$this->activities->contains($activity)) {
+            $this->activities[] = $activity;
+            $activity->setActivityType($this);
         }
 
         return $this;
     }
 
-    public function removeEvent(Event $event): self
+    public function removeActivity( Activity $activity): self
     {
-        if ($this->events->contains($event)) {
-            $this->events->removeElement($event);
+        if ($this->activities->contains($activity)) {
+            $this->activities->removeElement($activity);
             // set the owning side to null (unless already changed)
-            if ($event->getEventType() === $this) {
-                $event->setEventType(null);
+            if ($activity->getActivityType() === $this) {
+                $activity->setActivityType(null);
             }
         }
 
@@ -116,7 +116,7 @@ class EventType
     {
         if (!$this->rounds->contains($round)) {
             $this->rounds[] = $round;
-            $round->setEventType($this);
+            $round->setActivityType($this);
         }
 
         return $this;
@@ -124,11 +124,11 @@ class EventType
 
     public function removeRound(Round $round): self
     {
-        if ($this->events->contains($round)) {
-            $this->events->removeElement($round);
+        if ($this->activities->contains($round)) {
+            $this->activities->removeElement($round);
             // set the owning side to null (unless already changed)
-            if ($round->getEventType() === $this) {
-                $round->setEventType(null);
+            if ($round->getActivityType() === $this) {
+                $round->setActivityType(null);
             }
         }
 

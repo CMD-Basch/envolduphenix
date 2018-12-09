@@ -3,8 +3,8 @@
 namespace App\Service;
 
 
-use App\Entity\Event;
-use App\Entity\EventType;
+use App\Entity\Activity;
+use App\Entity\ActivityType;
 use App\Entity\Round;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -76,10 +76,10 @@ class TimeZones
         return $this->formatId( $this->em->getRepository(Round::class )->findAll() );
     }
 
-    public function getByEventName( $eventType )
+    public function getByActivityName( $activityTypeName )
     {
-        $id = $this->em->getRepository(EventType::class )->findOneBy( ['name' => $eventType] );
-        $return = $this->em->getRepository(Round::class )->findBy( ['eventType' => $id] );
+        $activityType = $this->em->getRepository(ActivityType::class )->findOneBy( ['name' => $activityTypeName] );
+        $return = $this->em->getRepository(Round::class )->findBy( ['activityType' => $activityType] );
         $return = $this->formatId( $return );
         return $return;
     }
@@ -100,11 +100,11 @@ class TimeZones
         }
     }
 
-    public function checkTimeCode( $code, $eventType = false )
+    public function checkTimeCode( $code, $activityTypeName = false )
     {
         if ( $code ) {
-            if ( $eventType ) {
-                return array_key_exists( $code, $this->getByEventName( $eventType ) );
+            if ( $activityTypeName ) {
+                return array_key_exists( $code, $this->getByActivityName( $activityTypeName ) );
             } else {
                 return array_key_exists( $code, $this->getAll() );
             }
@@ -129,11 +129,11 @@ class TimeZones
         return 3;
     }
 
-    public function isInDay( Event $event, $dayNbr ) {
+    public function isInDay( Activity $activity, $dayNbr ) {
 
         $day = $this->days[ $dayNbr ];
 
-        if( $event->getEnd() > $day['start']  && $event->getStart() < $day['end'] ) {
+        if( $activity->getEnd() > $day['start']  && $activity->getStart() < $day['end'] ) {
            return true;
         }
         return false;

@@ -16,7 +16,7 @@
         <div class="col-sm-4">
             <ul>
             {% for menu in user.rights %}
-                <li><a href="{{ path('admin.list', {'type': menu.slug}) }}">{{ menu.name }}</a></li>
+                <li><a href="{{ path('admin.view.list', {'type': menu.slug}) }}">{{ menu.name }}</a></li>
                 {#<li>{{ menu.name }}</li>#}
             {% endfor %}
             </ul>

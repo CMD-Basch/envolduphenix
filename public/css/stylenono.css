@@ -28,15 +28,19 @@ body a:hover {
 }
 
 .btn {
-    margin-right: 15px;
+    /**/
     font-size: 14px;
     font-weight: 400;
     line-height: 2;
-    /*border: 1px solid transparent;*/
-    /*border-radius: 0;*/
-    float: right;
+
 }
 
+.nav-top .btn{
+    border: 1px solid transparent;
+    margin-right: 15px;
+    border-radius: 0;
+    float: right;
+}
 
 .btn-connex {
 	background-color: #195D94;

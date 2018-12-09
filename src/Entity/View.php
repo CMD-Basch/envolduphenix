@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\WeightTrait;
+use App\Model\WeightableInterface;
+use App\Model\WeightableItemInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\HttpFoundation\File\File;
@@ -14,8 +17,31 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass="App\Repository\ViewRepository")
  * @Vich\Uploadable
  */
-class View
+class View implements WeightableInterface
 {
+
+    use WeightTrait;
+
+    public function weightFilters(): array
+    {
+        return ['menu'];
+    }
+
+    public function getParentClass(): string
+    {
+        return Menu::class;
+    }
+
+    public function getParent()
+    {
+        return $this->getMenu();
+    }
+
+    public function setParent( $parent )
+    {
+        $this->setMenu( $parent );
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -83,13 +109,24 @@ class View
      */
     private $fixed;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $deleted;
+
     public function __construct()
     {
         $this->image = new EmbeddedFile();
     }
 
-    public function __toString(){
-        return $this->name;
+    public function __toString(): string
+    {
+        return $this->name ?? '';
+    }
+
+    public function getFilter()
+    {
+        return ['menu' => $this->getMenu()->getId()];
     }
 
     public function getId()
@@ -145,7 +182,7 @@ class View
         return $this;
     }
 
-    public function getWeight(): ?int
+    public function getWeight(): int
     {
         return $this->weight;
     }
@@ -242,6 +279,18 @@ class View
     public function setFixed(bool $fixed): self
     {
         $this->fixed = $fixed;
+
+        return $this;
+    }
+
+    public function getDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): self
+    {
+        $this->deleted = $deleted;
 
         return $this;
     }

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\WeightTrait;
+use App\Model\WeightableInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,8 +11,28 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MenuRepository")
  */
-class Menu
+class Menu implements WeightableInterface
 {
+
+    use WeightTrait;
+
+    public function weightFilters(): array
+    {
+        return [];
+    }
+
+    public function getParentClass(): string
+    {
+        return '';
+    }
+
+    public function getParent()
+    {
+        return null;
+    }
+
+    public function setParent( $parent ) {}
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -39,12 +61,8 @@ class Menu
     private $pic;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $weight;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\View", mappedBy="menu", orphanRemoval=true)
+     * @ORM\OrderBy({"weight" = "ASC"})
      */
     private $views;
 
@@ -59,7 +77,7 @@ class Menu
     }
 
     public function __toString(){
-        return $this->name;
+        return $this->getName();
     }
 
     public function getId()
@@ -108,17 +126,6 @@ class Menu
     public function setPic(string $pic): self
     {
         $this->pic = $pic;
-        return $this;
-    }
-
-    public function getWeight(): ?int
-    {
-        return $this->weight;
-    }
-
-    public function setWeight(int $weight): self
-    {
-        $this->weight = $weight;
         return $this;
     }
 

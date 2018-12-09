@@ -11,14 +11,14 @@
         <div class="carousel-inner h-100">
 
             <ol class="carousel-indicators">
-                {% for event in round.events %}
+                {% for activity in round.activities %}
                 <li data-target="#carousselJDR" data-slide-to="{{ loop.index0 }}" class="active"></li>
                 {% endfor %}
             </ol>
 
-        {% for event in round.events %}
+        {% for activity in round.activities %}
             <div class="carousel-item {% if loop.first %}active{%  endif %}">
-            {% include 'envol/block/roleplay-event.html.twig' with {'event': event, 'buttons': false } only %}
+            {% include 'envol/block/roleplay-activity.html.twig' with {'activity': activity, 'buttons': false } only %}
             </div>
         {% endfor %}
 

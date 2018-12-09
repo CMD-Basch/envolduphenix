@@ -86,14 +86,14 @@ class User implements UserInterface, \Serializable
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="players")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Activity", mappedBy="players")
      */
-    private $events;
+    private $activities;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="master")
+     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="master")
      */
-    private $masteredEvents;
+    private $masteredActivities;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -105,13 +105,19 @@ class User implements UserInterface, \Serializable
      */
     private $rights;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Event", inversedBy="users")
+     */
+    private $events;
+
 
 
     public function __construct() {
-        $this->events = new ArrayCollection();
-        $this->masteredEvents = new ArrayCollection();
+        $this->activities = new ArrayCollection();
+        $this->masteredActivities = new ArrayCollection();
         $this->isActive = true;
         $this->rights = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function  __toString() {
@@ -296,58 +302,58 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return Collection|Event[]
+     * @return Collection|Activity[]
      */
-    public function getEvents(): Collection
+    public function getActivities(): Collection
     {
-        return $this->events;
+        return $this->activities;
     }
 
-    public function addEvent(Event $event): self
+    public function addActivity( Activity $activity): self
     {
-        if (!$this->events->contains($event)) {
-            $this->events[] = $event;
-            $event->addPlayer($this);
+        if (!$this->activities->contains($activity)) {
+            $this->activities[] = $activity;
+            $activity->addPlayer($this);
         }
 
         return $this;
     }
 
-    public function removeEvent(Event $event): self
+    public function removeActivity( Activity $activity): self
     {
-        if ($this->events->contains($event)) {
-            $this->events->removeElement($event);
-            $event->removePlayer($this);
+        if ($this->activities->contains($activity)) {
+            $this->activities->removeElement($activity);
+            $activity->removePlayer($this);
         }
 
         return $this;
     }
 
     /**
-     * @return Collection|Event[]
+     * @return Collection|Activity[]
      */
-    public function getMasteredEvents(): Collection
+    public function getMasteredActivities(): Collection
     {
-        return $this->masteredEvents;
+        return $this->masteredActivities;
     }
 
-    public function addMasteredEvent(Event $masteredEvent): self
+    public function addMasteredActivity( Activity $activity): self
     {
-        if (!$this->masteredEvents->contains($masteredEvent)) {
-            $this->masteredEvents[] = $masteredEvent;
-            $masteredEvent->setMaster($this);
+        if (!$this->masteredActivities->contains($activity)) {
+            $this->masteredActivities[] = $activity;
+            $activity->setMaster($this);
         }
 
         return $this;
     }
 
-    public function removeMasteredEvent(Event $masteredEvent): self
+    public function removeMasteredActivity( Activity $activity): self
     {
-        if ($this->masteredEvents->contains($masteredEvent)) {
-            $this->masteredEvents->removeElement($masteredEvent);
+        if ($this->masteredActivities->contains($activity)) {
+            $this->masteredActivities->removeElement($activity);
             // set the owning side to null (unless already changed)
-            if ($masteredEvent->getMaster() === $this) {
-                $masteredEvent->setMaster(null);
+            if ($activity->getMaster() === $this) {
+                $activity->setMaster(null);
             }
         }
 
@@ -387,6 +393,32 @@ class User implements UserInterface, \Serializable
     {
         if ($this->rights->contains($right)) {
             $this->rights->removeElement($right);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent( Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+        }
+
+        return $this;
+    }
+
+    public function removeEvent( Event $event): self
+    {
+        if ($this->events->contains($event)) {
+            $this->events->removeElement($event);
         }
 
         return $this;

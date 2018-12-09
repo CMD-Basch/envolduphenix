@@ -2,26 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Activity;
-use App\Entity\Parrainer;
+use App\Entity\ActivityType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Parrainer|null find($id, $lockMode = null, $lockVersion = null)
- * @method Parrainer|null findOneBy(array $criteria, array $orderBy = null)
- * @method Parrainer[]    findAll()
- * @method Parrainer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ActivityType|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ActivityType|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ActivityType[]    findAll()
+ * @method ActivityType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ParrainerRepository extends ServiceEntityRepository
+class ActivityTypeRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Parrainer::class);
+        parent::__construct($registry, ActivityType::class);
     }
 
 //    /**
-//     * @return Parrainer[] Returns an array of Parrainer objects
+//     * @return ActivityType[] Returns an array of ActivityType objects
 //     */
     /*
     public function findByExampleField($value)
@@ -38,7 +37,7 @@ class ParrainerRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Parrainer
+    public function findOneBySomeField($value): ?ActivityType
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.exampleField = :val')
