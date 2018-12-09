@@ -4,7 +4,7 @@
 
         {% if app.user %}
 
-            {% if eventuser.isRoundTimeFree( active_round ) %}
+            {% if activityuser.isRoundTimeFree( active_round ) %}
                 {#<div class="alert alert-success w-100">
                     <a href="{{ path('roleplay.add', {'time' : active_round.code }) }}"><span class="badge badge-success">Ajouter une table</span></a>
                 </div>#}
@@ -23,12 +23,12 @@
     </div> <!-- row -->
     <br>
 
-        <div class="d-flex flex-wrap align-content-stretch">
-            {% for event in events %}
-            <div id="table-{{ event.id }}" class="col-sm-12 col-md-4 mb-3">
-                {% include 'envol/block/roleplay-event.html.twig' with {'event': event} %}
-            </div>
-            {% endfor %}
+    <div class="d-flex flex-wrap align-content-stretch">
+        {% for activity in activities %}
+        <div id="table-{{ activity.id }}" class="col-sm-12 col-md-4 mb-3">
+            {% include 'envol/block/roleplay-activity.html.twig' with {'activity': activity} %}
         </div>
+        {% endfor %}
+    </div>
 
 

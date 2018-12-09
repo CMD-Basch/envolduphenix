@@ -1,0 +1,20 @@
+{% set _referer = path('easyadmin', app.request.query.all)|url_encode %}
+
+{% set _request_parameters = app.request.query.all|merge({
+    action: 'weight',
+    referer: _referer,
+    id: item.id,
+}) %}
+{# TODO : Changer le grisement des icones en allant cherche a savoir si l'item est le 1er ou le dernier de sa collection plutot qu'en se référant à l'affichage ( bug sur pagination ) #}
+<span style="font-size: large" >
+{% if not field_options.loop.first %}
+    <a href="{{ path('admin', _request_parameters|merge({ w_act:'sub' }) ) }}" ><i class="fa fa-chevron-circle-up"></i></a>
+{% else %}
+    <i style="color: grey" class="fa fa-chevron-circle-up"></i>
+{% endif %}
+    {% if not field_options.loop.last %}
+    <a href="{{ path('admin', _request_parameters|merge({ w_act:'add' }) ) }}"><i class="fa fa-chevron-circle-down"></i></a>
+{% else %}
+    <i style="color: grey" class="fa fa-chevron-circle-down"></i>
+{% endif %}
+</span>

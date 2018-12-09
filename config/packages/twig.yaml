@@ -5,7 +5,7 @@ twig:
     globals:
         menu_loader: '@App\Service\MenuLoader'
         timezones: '@App\Service\TimeZones'
-        eventuser: '@App\Service\EventUser'
-        button: '@App\Service\EventButton'
+        activityuser: '@App\Service\ActivityUser'
+        button: '@App\Service\ActivityButton'
     form_themes: ['bootstrap_4_layout.html.twig']
 #    form_themes: ['bootstrap_4_layout.html.twig']

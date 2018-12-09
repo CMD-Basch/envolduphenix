@@ -15,7 +15,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="site_navbar_{{ menu.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">{{ menu.name|upper }}<span class="caret"></span></a>
                     <div class="dropdown-menu" aria-labelledby="site_navbar_{{ menu.id }}">
-                        {% for view in menu.views %}
+                        {% for view in menu.views if view.active and not view.deleted %}
                         <a class="dropdown-item" href="{{ menu_loader.url( view ) }}">{{ view.name }}</a>
                         {% endfor %}
                     </div >

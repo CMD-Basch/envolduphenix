@@ -3,9 +3,9 @@
 namespace App\Form;
 
 use App\Controller\RoleplayController;
-use App\Entity\Event;
+use App\Entity\Activity;
 use App\Entity\Round;
-use App\Service\EventUser;
+use App\Service\ActivityUser;
 use App\Service\TimeZones;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -16,15 +16,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RoleplayEventType extends AbstractType
+class RoleplayActivityType extends AbstractType
 {
 
-    private $eventUser;
+    private $activityUser;
 
 
-    public function __construct( EventUser $eventUser )
+    public function __construct( ActivityUser $activityUser )
     {
-        $this->eventUser = $eventUser;
+        $this->activityUser = $activityUser;
     }
 
     public function buildForm( FormBuilderInterface $builder, array $options )
@@ -35,7 +35,7 @@ class RoleplayEventType extends AbstractType
             ->add('style',      TextType::class,        ['label' => 'Style de jeu'])
             ->add('description',TextareaType::class,    ['label' => 'Description'])
             ->add('slots',      IntegerType::class,     ['label' => 'Places'])
-            ->add('round',      EntityType::class,      ['choices' => $this->eventUser->getFreeRounds( RoleplayController::EVENT_TYPE_NAME ),
+            ->add('round',      EntityType::class,      ['choices' => $this->activityUser->getFreeRounds( RoleplayController::ACTIVITY_TYPE_NAME ),
                                                                     'class' => Round::class ]  )
             ->add('save',       SubmitType::class,      ['label' => 'Enregister la table'] )
         ;
@@ -44,7 +44,7 @@ class RoleplayEventType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Event::class,
+            'data_class' => Activity::class,
         ]);
     }
 }

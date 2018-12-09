@@ -2,14 +2,46 @@
 
 namespace App\Entity;
 
-use App\Repository\ViewRepository;
+use App\Entity\Traits\WeightTrait;
+use App\Model\WeightableInterface;
+use App\Model\WeightableItemInterface;
 use Doctrine\ORM\Mapping as ORM;
+
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ViewRepository")
+ * @Vich\Uploadable
  */
-class View
+class View implements WeightableInterface
 {
+
+    use WeightTrait;
+
+    public function weightFilters(): array
+    {
+        return ['menu'];
+    }
+
+    public function getParentClass(): string
+    {
+        return Menu::class;
+    }
+
+    public function getParent()
+    {
+        return $this->getMenu();
+    }
+
+    public function setParent( $parent )
+    {
+        $this->setMenu( $parent );
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -59,19 +91,42 @@ class View
      */
     private $subtitle;
 
+
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Vich\UploadableField(mapping="view_image", fileNameProperty="image.name", size="image.size", mimeType="image.mimeType", originalName="image.originalName", dimensions="image.dimensions")
+     * @var File
      */
-    private $picture;
+    private $imageFile;
+
+    /**
+     * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
+     * @var EmbeddedFile
+     */
+    private $image;
 
     /**
      * @ORM\Column(type="boolean")
      */
     private $fixed;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $deleted;
 
-    public function __toString(){
-        return $this->name;
+    public function __construct()
+    {
+        $this->image = new EmbeddedFile();
+    }
+
+    public function __toString(): string
+    {
+        return $this->name ?? '';
+    }
+
+    public function getFilter()
+    {
+        return ['menu' => $this->getMenu()->getId()];
     }
 
     public function getId()
@@ -127,7 +182,7 @@ class View
         return $this;
     }
 
-    public function getWeight(): ?int
+    public function getWeight(): int
     {
         return $this->weight;
     }
@@ -187,6 +242,35 @@ class View
         return $this;
     }
 
+    /**
+     * @param File|UploadedFile $image
+     */
+    public function setImageFile( ?File $image = null )
+    {
+        $this->imageFile = $image;
+
+        if ( null !== $image ) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImage(EmbeddedFile $image)
+    {
+        $this->image = $image;
+    }
+
+    public function getImage(): ?EmbeddedFile
+    {
+        return $this->image;
+    }
+
     public function getFixed(): ?bool
     {
         return $this->fixed;
@@ -195,6 +279,18 @@ class View
     public function setFixed(bool $fixed): self
     {
         $this->fixed = $fixed;
+
+        return $this;
+    }
+
+    public function getDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): self
+    {
+        $this->deleted = $deleted;
 
         return $this;
     }

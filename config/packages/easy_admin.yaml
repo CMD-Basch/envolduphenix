@@ -1,8 +1,18 @@
 easy_admin:
   design:
     menu:
-      - label: 'Admin'
-        children: ['User', 'Menu', 'Event', 'EventType', 'Round', 'Parrainer', 'View']
+      - User
+      - Menu
+      - Event
+      - Activity
+      - ActivityType
+      - Round
+      - Parrainer
+      - View
+      - { label: 'Admin' }
+      - MenuAdmin
+      - ViewAdmin
+      - { label: 'Moderateur' }
 
   entities:
     User:
@@ -23,8 +33,11 @@ easy_admin:
     Event:
       class: App\Entity\Event
 
-    EventType:
-      class: App\Entity\EventType
+    Activity:
+      class: App\Entity\Activity
+
+    ActivityType:
+      class: App\Entity\ActivityType
 
     Round:
       class: App\Entity\Round
@@ -43,8 +56,8 @@ easy_admin:
           - link
           - active
           - fixed
+          - deleted
           - weight
-
 
       form:
         fields:
@@ -53,6 +66,43 @@ easy_admin:
           - link
           - content
           - active
+          - fixed
+          - deleted
 #          - { property: 'content', type: 'Hillrange\CKEditor\Form\CKEditorType', type_options: { trim: true } }
           - weight
           - link
+
+    MenuAdmin:
+      class: App\Entity\Menu
+      disabled_actions: ['delete']
+      list:
+        actions:
+          - explore
+        sort: ['weight', 'ASC']
+        show_sort: false
+        fields:
+          - name
+          - color
+          - pic
+          - { property: 'order', mapped: false, template: 'admin/field/field_weight_buttons.html.twig' }
+
+    ViewAdmin:
+      class: App\Entity\View
+      disabled_actions: ['delete']
+      actions: ['explore']
+      list:
+        actions:
+          - inspect
+        sort: ['weight', 'ASC']
+        show_sort: false
+        fields:
+          - name
+          - menu
+          - link
+          - active
+          - fixed
+          - deleted
+          - weight
+          - { property: 'order', mapped: false, template: 'admin/field/field_weight_buttons.html.twig' }
+
+

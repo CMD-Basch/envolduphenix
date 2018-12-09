@@ -1,6 +1,15 @@
 vich_uploader:
     db_driver: orm
 
+    mappings:
+        view_image:
+            uri_prefix: /uploads/view
+            upload_destination: '%kernel.project_dir%/public/uploads/view'
+            namer: App\Service\File\Namer
+
+            inject_on_load: true
+            delete_on_update: true
+            delete_on_remove: true
     #mappings:
     #    products:
     #        uri_prefix: /images/products

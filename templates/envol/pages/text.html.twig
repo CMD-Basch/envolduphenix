@@ -10,7 +10,7 @@
     </div> <!-- row -->
     <div class="row justify-content-center">
         <div>
-            {% if view.picture != '' %}<img src="{{ asset( view.picture )}}" class="img-fluid">{% endif %}
+            {% if view.image.name %}<img src="{{ asset( 'uploads/view/' ~ view.image.name )}}" class="img-fluid">{% endif %}
         </div>
     </div> <!-- row -->
     <div class="row justify-content-center">

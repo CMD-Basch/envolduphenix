@@ -27,13 +27,13 @@
                 <tr>
                     <td class="cell-time{% if day > 1 %} d-sm-block d-md-none{% endif %}" ><span>{{ hour }}H</span></td>
 
-                    {% set event = eventuser.getEventStartAt( hour, day ) %}
+                    {% set event = activityuser.getEventStartAt( hour, day ) %}
 
                     {% if gap < 1 %}
 
                         {% if event %}
                             <td rowspan="{{ event.getLength }}" class="card-light" >
-                                {% include 'envol/block/generic-event.html.twig' with {'event': event} %}
+                                {% include 'envol/block/generic-activity.html.twig' with {'event': event} %}
                             </td>
                             {% set gap = event.getLength %}
                         {% else %}

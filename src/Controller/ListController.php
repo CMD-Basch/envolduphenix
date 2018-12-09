@@ -17,7 +17,7 @@ class ListController extends Controller
      */
     public function textView( Round $round ) {
 
-        return $this->render('screen/roleplay-event-list.html.twig', [
+        return $this->render( 'roleplay-activity-list.html.twig', [
             'round' => $round
         ]);
 
@@ -54,15 +54,15 @@ class ListController extends Controller
             $bool_player = false;
             $bool_master = false;
 
-            foreach ( $user->getEvents() as $event ) {
-                if( $event->getEventType()->getName() == 'roleplay' ) {
+            foreach ( $user->getActivities() as $activity ) {
+                if( $activity->getActivityType()->getName() == 'roleplay' ) {
                     $bool_player = true;
                 }
-                if( $event->getEventType()->getName() == 'murder' ) {
+                if( $activity->getActivityType()->getName() == 'murder' ) {
                     $stats['murder_player']++;
                 }
             }
-            if( count($user->getMasteredEvents()) > 0 ) {
+            if( count($user->getMasteredActivities()) > 0 ) {
                 $bool_master = true;
             }
             if( $bool_player ){

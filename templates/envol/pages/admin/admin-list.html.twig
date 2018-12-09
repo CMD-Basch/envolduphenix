@@ -1,9 +1,7 @@
 {% extends "envol/standard.html.twig" %}
 
 {% block title_banner %}
-
     Admin - {{ menu.name }}
-
 {% endblock %}
 
 {% block container %}
@@ -11,19 +9,60 @@
         <div class="col-sm-8">
             <h3 class="titre-page">Liste des pages</h3>
             <hr class="hr-titre">
+            <span>
+                <a href="{{ path('admin.home') }}" >Panneau d'administration</a> /
+                {{ menu.name }}
+            </span>
         </div> <!-- col -->
     </div> <!-- row -->
-    <div class="row justify-content-center">
-        <div class="col-sm-4">
-            <ul>
-            {% for view in views %}
-                {% if view.fixed %}
-                    <li>{{ view.name }}</li>
-                {% else %}
-                    <li><a href="{{ path('admin.edit', {'type': type, 'view': view.id }) }}">{{ view.name }}</a></li>
-                {% endif %}
-            {% endfor %}
-            </ul>
+    <div class="row">
+        <div class="col-md-3 mt-3">
+            <a href="{{ path('admin.view.add', {'type': type }) }}" class="btn btn-primary" >Ajouter une page</a>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+        <div class="col-sm-8">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Nom de la page</th>
+                        <th scope="col">Activée</th>
+                        <th colspan="2" scope="col">Ordre</th>
+                        <th scope="col">Supprimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for view in views %}
+                    <tr>
+                        <td>
+                        {% if view.fixed %}
+                            <span style="position: relative; top:7px;">{{ view.name }}</span>
+                        {% else %}
+                            <a href="{{ path('admin.view.edit', {'type': type, 'view': view.id }) }}" class="btn btn-primary w-100" >{{ view.name }}</a>
+                        {% endif %}
+                        </td>
+                        <td>
+                            {% if view.active %}
+                                <a href="{{ path('admin.view.active', {'type': type, 'view': view.id , 'act': 'off'}) }}" class="btn btn-primary w-100" >Visible</a>
+                            {% else %}
+                                <a href="{{ path('admin.view.active', {'type': type, 'view': view.id , 'act': 'on'}) }}" class="btn btn-warning w-100">Cachée</a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not loop.first %}<a href="{{ path('admin.view.weight', {'type': type, 'view': view.id , 'act': 'sub' }) }}" class="btn btn-primary" >↑</a>{% endif %}
+                        </td>
+                        <td>
+                            {% if not loop.last %}<a href="{{ path('admin.view.weight', {'type': type, 'view': view.id , 'act': 'add' }) }}" class="btn btn-primary" >↓</a>{% endif %}
+                        </td>
+                        <td>
+                            {% if not view.fixed %}
+                            <a href="{{ path('admin.view.delete', {'type': type, 'view': view.id }) }}" class="btn btn-primary w-100" > Supprimer </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

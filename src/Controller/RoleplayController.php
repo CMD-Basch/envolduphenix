@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Event;
-use App\Entity\EventType;
+use App\Entity\Activity;
+use App\Entity\ActivityType;
 use App\Entity\Round;
-use App\Form\RoleplayEventType;
-use App\Service\EventUser;
+use App\Form\RoleplayActivityType;
+use App\Service\ActivityUser;
 use App\Service\TimeZones;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,15 +19,15 @@ class RoleplayController extends Controller
 {
 
     private $timezones;
-    private $eventUser;
+    private $activityUser;
     private $user;
 
-    public const EVENT_TYPE_NAME = 'roleplay';
+    public const ACTIVITY_TYPE_NAME = 'roleplay';
 
-    public function __construct( TimeZones $timeZones, TokenStorageInterface $tokenStorage, EventUser $eventUser)
+    public function __construct( TimeZones $timeZones, TokenStorageInterface $tokenStorage, ActivityUser $activityUser)
     {
         $this->timezones = $timeZones;
-        $this->eventUser = $eventUser;
+        $this->activityUser = $activityUser;
 
         if( get_class($tokenStorage->getToken() ) == UsernamePasswordToken::class ) { // TODO : checker autrement
             $this->user = $tokenStorage->getToken()->getUser();
@@ -37,43 +37,43 @@ class RoleplayController extends Controller
     /**
      * @Route("/jeu-de-roles/ajax/{act}/{id}", name="roleplay.join")
      */
-    public function ajax( $act, Event $event ) {
+    public function ajax( $act, Activity $activity ) {
 
         $this->denyAccessUnlessGranted( 'IS_AUTHENTICATED_REMEMBERED' );
 
-        $eventType = $this->getDoctrine()->getRepository(EventType::class )->findOneBy( ['name' => self::EVENT_TYPE_NAME] );
-        $round = $event->getRound();
-        $events = $this->getDoctrine()->getRepository(Event::class )
+        $activityType = $this->getDoctrine()->getRepository(ActivityType::class )->findOneBy( ['name' => self::ACTIVITY_TYPE_NAME] );
+        $round = $activity->getRound();
+        $activities = $this->getDoctrine()->getRepository(Activity::class )
             ->findBy( [
                 'round' => $round,
-                'eventType' => $eventType,
+                'activityType' => $activityType,
             ] );
 
 
         $arguments = [
-            'events' => $events,
+            'activities' => $activities,
             'active_round' => $round,
         ];
 
         switch( $act ){
             case 'join' :
-                if( $this->eventUser->isEventTimeFree( $event ) && $event->isFreeSlots() ) {
+                if( $this->activityUser->isActivityTimeFree( $activity ) && $activity->isFreeSlots() ) {
 
-                    $event->addPlayer( $this->user );
+                    $activity->addPlayer( $this->user );
                     $this->getDoctrine()->getManager()->flush();
 
-                    return $this->render('envol/block/roleplay-events.html.twig', $arguments );
+                    return $this->render( 'roleplay-activities.html.twig', $arguments );
                 }
                 break;
             case 'leave' :
-                $event->removePlayer( $this->user );
+                $activity->removePlayer( $this->user );
                 $this->getDoctrine()->getManager()->flush();
 
-                return $this->render('envol/block/roleplay-events.html.twig', $arguments );
+                return $this->render( 'roleplay-activities.html.twig', $arguments );
                 break;
         }
 
-        return $this->render('envol/block/roleplay-events.html.twig', $arguments );
+        return $this->render( 'roleplay-activities.html.twig', $arguments );
     }
 
     /**
@@ -85,26 +85,26 @@ class RoleplayController extends Controller
 
         $round = $this->getRoundFromTimeCode( $time, $rounds );
 
-        $event = new Event();
-        $event->setRound( $round );
+        $activity = new Activity();
+        $activity->setRound( $round );
 
-        $form = $this->createForm( RoleplayEventType::class, $event );
+        $form = $this->createForm( RoleplayActivityType::class, $activity );
 
         $form->handleRequest( $request );
         if ( $form->isSubmitted() && $form->isValid() ) {
 
-            if( $this->eventUser->isRoundTimeFree( $round ) ) {
-                $eventType = $this->getDoctrine()->getRepository(EventType::class )->findOneBy( ['name' => self::EVENT_TYPE_NAME] );
+            if( $this->activityUser->isRoundTimeFree( $round ) ) {
+                $activityType = $this->getDoctrine()->getRepository(ActivityType::class )->findOneBy( ['name' => self::ACTIVITY_TYPE_NAME] );
 
-                $event
-                    ->setEventType( $eventType )
+                $activity
+                    ->setActivityType( $activityType )
                     ->setMaster( $this->getUser() );
 
                 $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist( $event );
+                $entityManager->persist( $activity );
                 $entityManager->flush();
 
-                return $this->redirectToRoute('roleplay', ['time' => $event->getRound()->getCode()]);
+                return $this->redirectToRoute('roleplay', ['time' => $activity->getRound()->getCode()]);
             }
         }
 
@@ -114,7 +114,7 @@ class RoleplayController extends Controller
             'name' => 'Jeu de rôle',
         ];
 
-        return $this->render('envol/pages/roleplay-add-event.html.twig', [
+        return $this->render('envol/pages/roleplay-add-activity.html.twig', [
             'title' => $title,
             'form' => $form->createView(),
         ]);
@@ -127,12 +127,12 @@ class RoleplayController extends Controller
     public function home( $time = false ) {
 
         $round = $this->getRoundFromTimeCode( $time, $rounds );
-        $eventType = $this->getDoctrine()->getRepository( EventType::class )->findOneBy( ['name' => self::EVENT_TYPE_NAME] );
+        $activityType = $this->getDoctrine()->getRepository( ActivityType::class )->findOneBy( ['name' => self::ACTIVITY_TYPE_NAME] );
 
-        $events = $this->getDoctrine()->getRepository(Event::class )
+        $activities = $this->getDoctrine()->getRepository(Activity::class )
             ->findBy( [
                 'round' => $round,
-                'eventType' => $eventType,
+                'activityType' => $activityType,
                 ] );
 
         $title = [
@@ -145,13 +145,13 @@ class RoleplayController extends Controller
             'title' => $title,
             'active_round' => $round,
             'rounds' => $rounds,
-            'events' => $events,
+            'activities' => $activities,
         ));
     }
 
     private function getRoundFromTimeCode( &$time, &$rounds ) {
 
-        $rounds = $this->timezones->getByEventName( self::EVENT_TYPE_NAME );
+        $rounds = $this->timezones->getByActivityName( self::ACTIVITY_TYPE_NAME );
 
         if( !$this->timezones->checkTimeCode( $time ) ) {
             $time = key( $rounds );
