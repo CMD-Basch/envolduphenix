@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Entity\Traits\WeightTrait;
 use App\Model\WeightableInterface;
-use App\Model\WeightableItemInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\HttpFoundation\File\File;
@@ -40,6 +39,12 @@ class View implements WeightableInterface
     public function setParent( $parent )
     {
         $this->setMenu( $parent );
+    }
+
+    public function isFirst() :bool
+    {
+        dump($this->getParent()->getViews()->first()->getId());
+        return true;
     }
 
     /**

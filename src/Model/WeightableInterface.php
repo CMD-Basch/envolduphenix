@@ -13,4 +13,6 @@ interface WeightableInterface
     public function getParent();
     public function setParent( $parent );
 
+    public function isFirst(): bool;
+
 }

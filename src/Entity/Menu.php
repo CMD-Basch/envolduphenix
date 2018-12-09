@@ -33,6 +33,11 @@ class Menu implements WeightableInterface
 
     public function setParent( $parent ) {}
 
+    public function isFirst() :bool
+    {
+        return true;
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -170,4 +175,5 @@ class Menu implements WeightableInterface
 
         return $this;
     }
+
 }

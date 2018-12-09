@@ -2,16 +2,16 @@ easy_admin:
   design:
     menu:
       - User
-      - Menu
+      - MenuAdmin
       - Event
       - Activity
       - ActivityType
       - Round
       - Parrainer
-      - View
-      - { label: 'Admin' }
-      - MenuAdmin
       - ViewAdmin
+      - { label: 'Admin' }
+      - Menu
+      - View
       - { label: 'Moderateur' }
 
   entities:
@@ -27,7 +27,7 @@ easy_admin:
           - sleep
           - valid
 
-    Menu:
+    MenuAdmin:
       class: App\Entity\Menu
 
     Event:
@@ -45,7 +45,7 @@ easy_admin:
     Parrainer:
       class: App\Entity\Parrainer
 
-    View:
+    ViewAdmin:
       class: App\Entity\View
       list:
         fields:
@@ -72,7 +72,7 @@ easy_admin:
           - weight
           - link
 
-    MenuAdmin:
+    Menu:
       class: App\Entity\Menu
       disabled_actions: ['delete']
       list:
@@ -86,23 +86,25 @@ easy_admin:
           - pic
           - { property: 'order', mapped: false, template: 'admin/field/field_weight_buttons.html.twig' }
 
-    ViewAdmin:
+    View:
       class: App\Entity\View
       disabled_actions: ['delete']
       actions: ['explore']
+      templates:
+        list: '@EasyAdmin/view/list.html.twig'
       list:
-        actions:
-          - inspect
         sort: ['weight', 'ASC']
         show_sort: false
         fields:
           - name
-          - menu
-          - link
+#          - menu
+#          - link
           - active
-          - fixed
-          - deleted
-          - weight
+#          - weight
           - { property: 'order', mapped: false, template: 'admin/field/field_weight_buttons.html.twig' }
 
-
+      form:
+        fields:
+          - name
+          - { property: 'imageFile', type: 'vich_image' }
+          - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
