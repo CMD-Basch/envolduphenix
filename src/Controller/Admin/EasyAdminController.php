@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 class EasyAdminController extends BaseAdminController
 {
 
-    private $sWeight;
-    private $sClass;
+    protected $sWeight;
+    protected $sClass;
 
     public function __construct( WeightService $sWeight, ItemClassService $sClass )
     {
@@ -23,11 +23,11 @@ class EasyAdminController extends BaseAdminController
     public function weightAction()
     {
         $referer = $this->request->query->get('referer');
-        $act = $this->request->query->get('w_act');
+        /*$act = $this->request->query->get('w_act');
         $easyadmin = $this->request->attributes->get('easyadmin');
         $entity = $easyadmin['item'];
 
-        $this->sWeight->changeWeight( $entity, $act );
+        $this->sWeight->changeWeight( $entity, $act );*/
 
         return $this->redirect( urldecode($referer) );
     }
@@ -48,7 +48,7 @@ class EasyAdminController extends BaseAdminController
             'entity' => $class,
             'action' => 'filter',
             'filterId' => $entity->getId(),
-            'filterClass' => $this->sClass->getSnakeName( $entity ),
+            'filterClass' => $this->sClass->getSnakeClassName( $entity ),
             'menuIndex' => $this->request->query->get('menuIndex'),
             'submenuIndex' => $this->request->query->get('submenuIndex'),
             ]);

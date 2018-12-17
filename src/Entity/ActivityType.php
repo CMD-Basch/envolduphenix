@@ -45,6 +45,7 @@ class ActivityType
     private $tag;
 
 
+
     public function __construct()
     {
         $this->activities = new ArrayCollection();
@@ -158,6 +159,8 @@ class ActivityType
 
         return $this;
     }
+
+
 
 
 }

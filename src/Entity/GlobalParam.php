@@ -21,6 +21,11 @@ class GlobalParam
      */
     private $siteName;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $mainText;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -37,4 +42,19 @@ class GlobalParam
 
         return $this;
     }
+
+
+    public function getMainText(): ?string
+    {
+        return $this->mainText;
+    }
+
+    public function setMainText( string $mainText ): self
+    {
+        $this->mainText = $mainText;
+
+        return $this;
+    }
+
+
 }

@@ -16,7 +16,9 @@ class BaseController extends Controller
 
         $parrainers = $this->getDoctrine()->getRepository( Parrainer::class )->findBy([], ['weight' => 'ASC'] );
 
-        return $this->render('envol/home.html.twig', ['parrainers' => $parrainers]);
+        return $this->render('envol/home.html.twig', [
+            'parrainers' => $parrainers
+        ]);
     }
 
     /**

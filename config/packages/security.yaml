@@ -1,13 +1,10 @@
 security:
     encoders:
-        App\Entity\User:
-            algorithm: bcrypt
+        FOS\UserBundle\Model\UserInterface: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
+        fos_userbundle:
+                    id: fos_user.user_provider.username_email
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
@@ -17,22 +14,17 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
-            anonymous: ~
-            user_checker: App\Security\UserChecker
+            pattern: ^/
             form_login:
-                login_path: login
-                check_path: login
+                provider: fos_userbundle
+                csrf_token_generator: security.csrf.token_manager
+                # if you are using Symfony < 2.8, use the following config instead:
+                # csrf_provider: form.csrf_provider
 
-            remember_me:
-                secret:   '%kernel.secret%'
-                lifetime: 604800 # 1 week in seconds
-                path:     /
-                remember_me_parameter: _remember_me
-
-            logout:
-                path: /logout
-                target: /
+            logout:       true
+            anonymous:    true
 
     access_control:
         # require ROLE_ADMIN for /admin*

@@ -2,14 +2,16 @@ easy_admin:
   design:
     menu:
       - User
-      - MenuAdmin
       - Event
+      - MenuAdmin
       - Activity
       - ActivityType
       - Round
       - Parrainer
       - ViewAdmin
       - { label: 'Admin' }
+      - Global
+      - Article
       - Menu
       - View
       - { label: 'Moderateur' }
@@ -17,18 +19,16 @@ easy_admin:
   entities:
     User:
       class: App\Entity\User
-      list:
-        fields:
-          - id
-          - username
-          - firstname
-          - lastname
-          - email
-          - sleep
-          - valid
 
     MenuAdmin:
       class: App\Entity\Menu
+      form:
+        fields:
+          - name
+          - { property: 'color', type: 'choice', type_options: { choices: { bleu: 'bd-bleu', orange: 'bd-orange' }}}
+          - active
+          - { property: 'imageFile', type: 'vich_image' }
+          - event
 
     Event:
       class: App\Entity\Event
@@ -72,13 +72,40 @@ easy_admin:
           - weight
           - link
 
+
+
+##############################
+#          MENU USER
+##############################
+
+    Global:
+      class: App\Entity\GlobalParam
+      disabled_actions: ['delete','new']
+      form:
+        fields:
+          - siteName
+          - { property: 'mainText', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+
+    Article:
+      class: App\Entity\Article
+      list:
+        fields:
+          - title
+          - { property: 'order', mapped: false, template: 'admin/field/field_weight_buttons.html.twig' }
+      form:
+        fields:
+          - title
+          - { property: 'imageFile', type: 'vich_image' }
+          - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+
+
     Menu:
       class: App\Entity\Menu
       disabled_actions: ['delete']
       list:
         actions:
           - explore
-        sort: ['weight', 'ASC']
+        sort: ['position', 'ASC']
         show_sort: false
         fields:
           - name
@@ -93,7 +120,7 @@ easy_admin:
       templates:
         list: '@EasyAdmin/view/list.html.twig'
       list:
-        sort: ['weight', 'ASC']
+#        sort: ['position', 'ASC']
         show_sort: false
         fields:
           - name

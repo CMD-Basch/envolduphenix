@@ -43,8 +43,12 @@ class View implements WeightableInterface
 
     public function isFirst() :bool
     {
-        dump($this->getParent()->getViews()->first()->getId());
-        return true;
+        return $this->getParent()->getViews()->first()->getId() == $this->getId();
+    }
+
+    public function isLast() :bool
+    {
+        return $this->getParent()->getViews()->last()->getId() == $this->getId();
     }
 
     /**
@@ -76,10 +80,6 @@ class View implements WeightableInterface
      */
     private $content;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $weight;
 
     /**
      * @ORM\Column(type="boolean")
@@ -119,8 +119,11 @@ class View implements WeightableInterface
      */
     private $deleted;
 
+
+
     public function __construct()
     {
+        $this->weight = 9999;
         $this->image = new EmbeddedFile();
     }
 
@@ -235,17 +238,6 @@ class View implements WeightableInterface
         return $this;
     }
 
-    public function getPicture(): ?string
-    {
-        return $this->picture;
-    }
-
-    public function setPicture(string $picture): self
-    {
-        $this->picture = $picture;
-
-        return $this;
-    }
 
     /**
      * @param File|UploadedFile $image

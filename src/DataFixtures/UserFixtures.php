@@ -10,7 +10,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserFixtures extends Fixture implements DependentFixtureInterface
+class UserFixtures extends Fixture
 {
 
     private $passwordEncoder;
@@ -33,6 +33,12 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
                 ->setPassword( $this->passwordEncoder->encodePassword( $user, $data['password'] ) )
                 ->setEMail( $data['email'] )
                 ->setRoles( $data['roles'] )
+                ->setFirstName( 'firstName' )
+                ->setLastName( 'lastName' )
+                ->setHash('lol')
+                ->setActive( true)
+                ->setRoles(['ROLE_ADMIN'])
+
             ;
 
             $manager->persist( $user );
@@ -45,10 +51,11 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     }
 
 
-    public function getDependencies()
+    /*public function getDependencies()
     {
+        return [];
 //        return array(
 //            GaranteeTypeFixtures::class,
 //        );
-    }
+    }*/
 }

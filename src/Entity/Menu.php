@@ -2,41 +2,56 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\WeightTrait;
-use App\Model\WeightableInterface;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MenuRepository")
+ * @Vich\Uploadable()
  */
-class Menu implements WeightableInterface
+class Menu
 {
 
-    use WeightTrait;
-
-    public function weightFilters(): array
-    {
-        return [];
-    }
-
-    public function getParentClass(): string
-    {
-        return '';
-    }
-
-    public function getParent()
-    {
-        return null;
-    }
-
-    public function setParent( $parent ) {}
-
-    public function isFirst() :bool
-    {
-        return true;
-    }
+//    use WeightTrait;
+//
+//    public function weightFilters(): array
+//    {
+//        return ['event'];
+//    }
+//
+//    public function getParentClass(): string
+//    {
+//        return Event::class;
+//    }
+//
+//    public function getParent()
+//    {
+//        return $this->getEvent();
+//    }
+//
+//    public function setParent( $parent ) {
+//        $this->setEvent( $parent );
+//    }
+//
+//    public function isFirst() :bool
+//    {
+//        return $this->getParent()->getMenus()->first()->getId() == $this->getId();
+//    }
+//
+//    public function isLast() :bool
+//    {
+//        return $this->getParent()->getMenus()->last()->getId() == $this->getId();
+//    }
 
     /**
      * @ORM\Id()
@@ -51,19 +66,28 @@ class Menu implements WeightableInterface
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=128, unique=true)
      */
     private $slug;
+
+    /**
+     * @Vich\UploadableField(mapping="view_image", fileNameProperty="image.name", size="image.size", mimeType="image.mimeType", originalName="image.originalName", dimensions="image.dimensions")
+     * @var File
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
+     * @var EmbeddedFile
+     */
+    private $image;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $color;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $pic;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\View", mappedBy="menu", orphanRemoval=true)
@@ -76,9 +100,24 @@ class Menu implements WeightableInterface
      */
     private $active;
 
+    /**
+     * @Gedmo\SortableGroup
+     * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="menus")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $event;
+
+    /**
+     * @Gedmo\SortablePosition
+     * @ORM\Column(type="integer")
+     */
+    private $position;
+
+
     public function __construct()
     {
         $this->views = new ArrayCollection();
+        $this->image = new EmbeddedFile();
     }
 
     public function __toString(){
@@ -110,6 +149,36 @@ class Menu implements WeightableInterface
     {
         $this->slug = $slug;
         return $this;
+    }
+
+
+    /**
+     * @param File|UploadedFile $image
+     */
+    public function setImageFile( ?File $image = null )
+    {
+        $this->imageFile = $image;
+
+        if ( null !== $image ) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImage(EmbeddedFile $image)
+    {
+        $this->image = $image;
+    }
+
+    public function getImage(): ?EmbeddedFile
+    {
+        return $this->image;
     }
 
     public function getColor(): ?string
@@ -175,5 +244,28 @@ class Menu implements WeightableInterface
 
         return $this;
     }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): self
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
 
 }

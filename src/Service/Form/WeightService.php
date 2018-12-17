@@ -29,14 +29,14 @@ class WeightService
         foreach( $item->weightFilters() as $wFilter ) {
             $function = 'get'.ucfirst( $wFilter );
             if( !is_callable( [ $item, $function ] )) {
-                throw new \Error("ERROR : Cannot call " . $this->sClass->getShortClass( $item ) . "::$function()" );
+                throw new \Error("ERROR : Cannot call " . $this->sClass->getCamelClassName( $item ) . "::$function()" );
             }
 
             $filters[ $wFilter ] = $item->$function();
         }
 
         /** @var WeightableInterface[] $list */
-        $list = $this->em->getRepository( $this->sClass->getClassName( $item) )->findBy( $filters, ['weight' => 'ASC'] );
+        $list = $this->em->getRepository( $this->sClass->getFullClassName( $item) )->findBy( $filters, ['weight' => 'ASC'] );
 
         foreach( $list as $key => $object ){
             $object->setWeight( $key );

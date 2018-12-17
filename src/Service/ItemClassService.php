@@ -19,7 +19,7 @@ class ItemClassService
 
     public function getObject( $item )
     {
-        return $this->container->get( $this->getClassName( $item ) );
+        return $this->container->get( $this->getFullClassName( $item ) );
     }
 
     public function getClass( $item ): \ReflectionClass
@@ -27,24 +27,24 @@ class ItemClassService
         return (new \ReflectionClass( $item ));
     }
 
-    public function getClassName( $item ): string
+    public function getFullClassName( $item ): string
     {
         return (new \ReflectionClass( $item ))->getName();
     }
 
-    public function getShortClass( $item ): string
+    public function getCamelClassName( $item ): string
     {
         return (new \ReflectionClass( $item ))->getShortName();
     }
 
-    public function getSnakeName( $item ): string
+    public function getSnakeClassName( $item ): string
     {
-        return $this->converter->normalize( $this->getShortClass( $item ) );
+        return $this->converter->normalize( $this->getCamelClassName( $item ) );
     }
 
     public function isClass( $item, string $class )
     {
-        return $this->getClassName( $item ) === $class;
+        return $this->getFullClassName( $item ) === $class;
     }
 
 }

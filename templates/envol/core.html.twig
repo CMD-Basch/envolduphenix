@@ -48,10 +48,10 @@
                     <ul>
                         <li><a href="#">Accueil</a></li>
                         <br/>
-                        {% for menu in menu_loader.list %}
+                        {% for menu in event().menus %}
                         <li><a href="#">{{ menu.name }}</a></li>
                         {% for view in menu.views %}
-                            <li><a href="{{ menu_loader.url( view ) }}">• {{ view.name }}</a></li>
+                            <li><a href="{{ view|view_url }}">• {{ view.name }}</a></li>
                         {% endfor %}
 
                         {% if loop.index == ( loop.length / 2 )|round(0, 'floor') %}
