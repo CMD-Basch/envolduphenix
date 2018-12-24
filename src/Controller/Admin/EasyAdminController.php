@@ -4,30 +4,37 @@ namespace App\Controller\Admin;
 
 use App\Service\Form\WeightService;
 use App\Service\ItemClassService;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Symfony\Component\HttpFoundation\Response;
+
+use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
 
 class EasyAdminController extends BaseAdminController
 {
 
     protected $sWeight;
     protected $sClass;
+    protected $em;
 
-    public function __construct( WeightService $sWeight, ItemClassService $sClass )
+    public function __construct( WeightService $sWeight, ItemClassService $sClass, EntityManagerInterface $em )
     {
        $this->sWeight = $sWeight;
        $this->sClass = $sClass;
+       $this->em = $em;
     }
 
     public function weightAction()
     {
         $referer = $this->request->query->get('referer');
-        /*$act = $this->request->query->get('w_act');
+        $act = $this->request->query->get('w_act');
         $easyadmin = $this->request->attributes->get('easyadmin');
         $entity = $easyadmin['item'];
 
-        $this->sWeight->changeWeight( $entity, $act );*/
+        $this->sWeight->changeWeight( $entity, $act );
 
         return $this->redirect( urldecode($referer) );
     }
@@ -84,6 +91,46 @@ class EasyAdminController extends BaseAdminController
         );
 
         return $this->executeDynamicMethod('render<EntityName>Template', array('list', $this->entity['templates']['list'], $parameters));
+    }
+
+    protected function createListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null)
+    {
+        dump($this->entity);
+        $classMetadata = $this->getDoctrine()->getManager()->getClassMetadata($this->entity['class']);
+
+        $queryBuilder= $this->em->createQueryBuilder();
+        $queryBuilder
+            ->select('entity')
+            ->from($this->entity['class'], 'entity')
+        ;
+
+        $isSortedByDoctrineAssociation = $this->isDoctrineAssociation($classMetadata, $sortField);
+
+        if ($isSortedByDoctrineAssociation) {
+            $sortFieldParts = explode('.', $sortField);
+            $queryBuilder->leftJoin('entity.'.$sortFieldParts[0], $sortFieldParts[0]);
+        }
+
+        if (!empty($dqlFilter)) {
+            $queryBuilder->andWhere($dqlFilter);
+        }
+
+        if (null !== $sortField) {
+            $queryBuilder->addOrderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : 'entity.', $sortField), $sortDirection);
+        }
+
+        return $queryBuilder;
+    }
+
+    protected function isDoctrineAssociation(ClassMetadata $classMetadata, $fieldName)
+    {
+        if (null === $fieldName) {
+            return false;
+        }
+
+        $fieldNameParts = explode('.', $fieldName);
+
+        return false !== strpos($fieldName, '.') && !array_key_exists($fieldNameParts[0], $classMetadata->embeddedClasses);
     }
 
 }

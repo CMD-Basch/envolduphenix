@@ -3,7 +3,7 @@
 namespace App\Service\Form;
 
 
-use App\Model\WeightableInterface;
+use App\Model\SortableInterface;
 use App\Service\ItemClassService;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -20,42 +20,49 @@ class WeightService
         $this->sClass = $sClass;
     }
 
-    public function changeWeight( WeightableInterface $item, string $act )
+    public function changeWeight( SortableInterface $item, string $act )
     {
         if( !in_array( $act , self::ACTIONS )){
             throw new \Error("ERROR : Invalid act parameter : '$act', valid parameters are : " . implode(', ', self::ACTIONS ));
         }
-        $filters = [];
-        foreach( $item->weightFilters() as $wFilter ) {
-            $function = 'get'.ucfirst( $wFilter );
-            if( !is_callable( [ $item, $function ] )) {
-                throw new \Error("ERROR : Cannot call " . $this->sClass->getCamelClassName( $item ) . "::$function()" );
-            }
 
-            $filters[ $wFilter ] = $item->$function();
-        }
-
-        /** @var WeightableInterface[] $list */
-        $list = $this->em->getRepository( $this->sClass->getFullClassName( $item) )->findBy( $filters, ['weight' => 'ASC'] );
-
-        foreach( $list as $key => $object ){
-            $object->setWeight( $key );
-        }
-        $key = array_search( $item, $list );
+        $position = $item->getPosition();
 
         switch ( $act ){
-            case 'add' : $key++; break;
-            case 'sub' : $key--; break;
+            case 'add' : $position++; break;
+            case 'sub' : $position--; break;
         }
 
-        $switch = $list[$key] ?? null;
-        if( !$switch ) {
-            throw new \Error("ERROR : Key '$key' out of bounds. Valid values are between 0 and ". ( count($list) -1 ).".\n Maybe you try to move up the first item or move down the last.");
-        }
-
-        $switch->setWeight( $item->getWeight() );
-        $item->setWeight( $key );
+        $item->setPosition( $position );
 
         $this->em->flush();
+    }
+
+    /**
+     * @param SortableInterface $item
+     * @param SortableInterface[] $list
+     */
+    public static function isFirst( SortableInterface $item, $list ) {
+        $smallest = null;
+        foreach ( $list as $list_item ){
+            if( $smallest === null || $list_item->getPosition() < $smallest ){
+                $smallest = $list_item->getPosition();
+            }
+        }
+        return $item->getPosition() == $smallest;
+    }
+
+    /**
+     * @param SortableInterface $item
+     * @param SortableInterface[] $list
+     */
+    public static function isLast( SortableInterface $item, $list ) {
+        $biggest = null;
+        foreach ( $list as $list_item ){
+            if( $biggest === null || $list_item->getPosition() > $biggest ){
+                $biggest = $list_item->getPosition();
+            }
+        }
+        return $item->getPosition() == $biggest;
     }
 }

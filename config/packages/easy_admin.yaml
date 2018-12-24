@@ -22,6 +22,17 @@ easy_admin:
 
     MenuAdmin:
       class: App\Entity\Menu
+      list:
+        sort: ['position', 'ASC']
+        show_sort: false
+        fields:
+          - id
+          - name
+          - event
+          - color
+          - active
+          - position
+          - { property: 'order', mapped: false, template: 'bundles/EasyAdminBundle/default/field_weight_buttons.html.twig' }
       form:
         fields:
           - name

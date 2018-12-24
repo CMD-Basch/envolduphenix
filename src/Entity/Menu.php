@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 
+use App\Model\SortableInterface;
+use App\Service\Form\WeightService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,39 +21,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass="App\Repository\MenuRepository")
  * @Vich\Uploadable()
  */
-class Menu
+class Menu implements SortableInterface
 {
 
-//    use WeightTrait;
-//
-//    public function weightFilters(): array
-//    {
-//        return ['event'];
-//    }
-//
-//    public function getParentClass(): string
-//    {
-//        return Event::class;
-//    }
-//
-//    public function getParent()
-//    {
-//        return $this->getEvent();
-//    }
-//
-//    public function setParent( $parent ) {
-//        $this->setEvent( $parent );
-//    }
-//
-//    public function isFirst() :bool
-//    {
-//        return $this->getParent()->getMenus()->first()->getId() == $this->getId();
-//    }
-//
-//    public function isLast() :bool
-//    {
-//        return $this->getParent()->getMenus()->last()->getId() == $this->getId();
-//    }
+    public function isFirst() :bool
+    {
+        return WeightService::isFirst( $this, $this->getEvent()->getMenus() );
+    }
+
+    public function isLast() :bool
+    {
+        return WeightService::isLast( $this, $this->getEvent()->getMenus() );
+    }
 
     /**
      * @ORM\Id()
