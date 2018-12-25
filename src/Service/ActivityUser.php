@@ -23,9 +23,9 @@ class ActivityUser
         $this->em = $em;
         $this->timezones = $timezones;
 
-        if( get_class($tokenStorage->getToken() ) == UsernamePasswordToken::class ) { // TODO : checker autrement
-            $this->user = $tokenStorage->getToken()->getUser();
-        }
+//        if( get_class($tokenStorage->getToken() ) == UsernamePasswordToken::class ) { // TODO : checker autrement
+//            $this->user = $tokenStorage->getToken()->getUser();
+//        }
 
     }
 

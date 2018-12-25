@@ -26,9 +26,9 @@ class TimeZones
     {
         $this->em = $em;
 
-        if( get_class($tokenStorage->getToken() ) == UsernamePasswordToken::class ) { // TODO : checker autrement
-            $this->user = $tokenStorage->getToken()->getUser();
-        }
+//        if( get_class($tokenStorage->getToken() ) == UsernamePasswordToken::class ) { // TODO : checker autrement
+//            $this->user = $tokenStorage->getToken()->getUser();
+//        }
 
         $this->days =  [
             1 => [

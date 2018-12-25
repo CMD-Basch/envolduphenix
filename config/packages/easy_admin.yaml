@@ -4,14 +4,14 @@ easy_admin:
       - User
       - Event
       - MenuAdmin
+      - ViewAdmin
+      - Article
       - Activity
       - ActivityType
       - Round
       - Parrainer
-      - ViewAdmin
       - { label: 'Admin' }
-      - Global
-      - Article
+
       - Menu
       - View
       - { label: 'Moderateur' }
@@ -26,8 +26,8 @@ easy_admin:
         sort: ['position', 'ASC']
         show_sort: false
         fields:
-          - id
           - name
+          - { property: 'image', type: 'image', base_path: 'uploads/menu' }
           - event
           - color
           - active
@@ -41,8 +41,63 @@ easy_admin:
           - { property: 'imageFile', type: 'vich_image' }
           - event
 
+    ViewAdmin:
+      class: App\Entity\View
+      list:
+        show_sort: false
+        fields:
+          - name
+          - { property: 'image', type: 'image', base_path: 'uploads/view' }
+          - menu
+          - title
+          - subtitle
+          - link
+          - active
+          - fixed
+          - deleted
+          - position
+          - { property: 'order', mapped: false, template: 'bundles/EasyAdminBundle/default/field_weight_buttons.html.twig' }
+
+      form:
+        fields:
+          - name
+          - menu
+          - title
+          - subtitle
+          - link
+          - { property: 'imageFile', type: 'vich_image' }
+          - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+          - active
+          - fixed
+          - deleted
+          - link
+
+    Article:
+      class: App\Entity\Article
+      list:
+        fields:
+          - title
+          - event
+          - active
+          - { property: 'image', type: 'image', base_path: 'uploads/article' }
+          - { property: 'order', mapped: false, template: 'bundles/EasyAdminBundle/default/field_weight_buttons.html.twig' }
+      form:
+        fields:
+          - title
+          - event
+          - active
+          - { property: 'imageFile', type: 'vich_image' }
+          - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+
     Event:
       class: App\Entity\Event
+      form:
+        fields:
+          - name
+          - start
+          - end
+          - active
+          - { property: 'description', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
 
     Activity:
       class: App\Entity\Activity
@@ -55,33 +110,23 @@ easy_admin:
 
     Parrainer:
       class: App\Entity\Parrainer
-
-    ViewAdmin:
-      class: App\Entity\View
       list:
         fields:
+          - { property: 'image', type: 'image', base_path: 'uploads/parrainer' }
           - name
-          - menu
-          - title
-          - subtitle
           - link
           - active
-          - fixed
-          - deleted
-          - weight
-
+          - event
+          - { property: 'order', mapped: false, template: 'bundles/EasyAdminBundle/default/field_weight_buttons.html.twig' }
       form:
         fields:
           - name
-          - menu
           - link
-          - content
           - active
-          - fixed
-          - deleted
-#          - { property: 'content', type: 'Hillrange\CKEditor\Form\CKEditorType', type_options: { trim: true } }
-          - weight
-          - link
+          - event
+          - { property: 'imageFile', type: 'vich_image' }
+
+
 
 
 
@@ -89,25 +134,7 @@ easy_admin:
 #          MENU USER
 ##############################
 
-    Global:
-      class: App\Entity\GlobalParam
-      disabled_actions: ['delete','new']
-      form:
-        fields:
-          - siteName
-          - { property: 'mainText', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
 
-    Article:
-      class: App\Entity\Article
-      list:
-        fields:
-          - title
-          - { property: 'order', mapped: false, template: 'admin/field/field_weight_buttons.html.twig' }
-      form:
-        fields:
-          - title
-          - { property: 'imageFile', type: 'vich_image' }
-          - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
 
 
     Menu:

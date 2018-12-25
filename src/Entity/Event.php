@@ -40,6 +40,7 @@ class Event
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Menu", mappedBy="event", orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $menus;
 
@@ -48,10 +49,29 @@ class Event
      */
     private $active;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Parrainer", mappedBy="event", orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
+     */
+    private $parrainers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="event", orphanRemoval=true)
+     * @ORM\OrderBy({"position" = "ASC"})
+     */
+    private $articles;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->menus = new ArrayCollection();
+        $this->parrainers = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function __toString()
@@ -167,6 +187,80 @@ class Event
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Parrainer[]
+     */
+    public function getParrainers(): Collection
+    {
+        return $this->parrainers;
+    }
+
+    public function addParrainer(Parrainer $parrainer): self
+    {
+        if (!$this->parrainers->contains($parrainer)) {
+            $this->parrainers[] = $parrainer;
+            $parrainer->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParrainer(Parrainer $parrainer): self
+    {
+        if ($this->parrainers->contains($parrainer)) {
+            $this->parrainers->removeElement($parrainer);
+            // set the owning side to null (unless already changed)
+            if ($parrainer->getEvent() === $this) {
+                $parrainer->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Article[]
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): self
+    {
+        if ($this->articles->contains($article)) {
+            $this->articles->removeElement($article);
+            // set the owning side to null (unless already changed)
+            if ($article->getEvent() === $this) {
+                $article->setEvent(null);
+            }
+        }
 
         return $this;
     }

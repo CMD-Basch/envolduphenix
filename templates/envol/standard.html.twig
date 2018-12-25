@@ -1,11 +1,14 @@
 {% extends "envol/core.html.twig" %}
 
 
+{% set image = 'images/title/blk.png' %}
+{% if title.pic %}
+    {% set image = 'uploads/menu/'~ title.pic %}
+{% endif %}
+
 
 {% block title %}
-
     {{ parent() }} - {{ title.name|default('Page') }}
-
 {% endblock %}
 
 
@@ -15,11 +18,11 @@
     <div class="row bd-titre {{ title.color|default('bd-orange') }}">
         <div class="container">
             <h2>
-                <img src="{{ asset( title.pic|default('images/title/blk.png') ) }}">
+                <img src="{{ asset( image ) }}">
                 {% block title_banner %}
                 {{ title.name|default('page')|upper }}
                 {% endblock %}
-                <img src="{{ asset( title.pic|default('images/title/blk.png') ) }}">
+                <img src="{{ asset( image ) }}">
             </h2>
         </div>
     </div>

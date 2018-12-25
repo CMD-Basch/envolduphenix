@@ -12,9 +12,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
-use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -53,26 +50,31 @@ class Menu implements SortableInterface
     private $slug;
 
     /**
-     * @Vich\UploadableField(mapping="view_image", fileNameProperty="image.name", size="image.size", mimeType="image.mimeType", originalName="image.originalName", dimensions="image.dimensions")
+     * @Vich\UploadableField(mapping="menu_image", fileNameProperty="image")
      * @var File
      */
     private $imageFile;
 
     /**
-     * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
-     * @var EmbeddedFile
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $image;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $color;
 
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\View", mappedBy="menu", orphanRemoval=true)
-     * @ORM\OrderBy({"weight" = "ASC"})
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $views;
 
@@ -98,7 +100,6 @@ class Menu implements SortableInterface
     public function __construct()
     {
         $this->views = new ArrayCollection();
-        $this->image = new EmbeddedFile();
     }
 
     public function __toString(){
@@ -133,31 +134,26 @@ class Menu implements SortableInterface
     }
 
 
-    /**
-     * @param File|UploadedFile $image
-     */
-    public function setImageFile( ?File $image = null )
+    public function setImageFile( File $image = null )
     {
         $this->imageFile = $image;
 
-        if ( null !== $image ) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
+        if ( $image ) {
             $this->updatedAt = new \DateTime('now');
         }
     }
 
-    public function getImageFile(): ?File
+    public function getImageFile()
     {
         return $this->imageFile;
     }
 
-    public function setImage(EmbeddedFile $image)
+    public function setImage( $image)
     {
         $this->image = $image;
     }
 
-    public function getImage(): ?EmbeddedFile
+    public function getImage()
     {
         return $this->image;
     }
@@ -170,17 +166,6 @@ class Menu implements SortableInterface
     public function setColor(string $color): self
     {
         $this->color = $color;
-        return $this;
-    }
-
-    public function getPic(): ?string
-    {
-        return $this->pic;
-    }
-
-    public function setPic(string $pic): self
-    {
-        $this->pic = $pic;
         return $this;
     }
 

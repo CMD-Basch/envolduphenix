@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\WeightTrait;
-use App\Model\WeightableInterface;
+use App\Model\SortableInterface;
+use App\Service\Form\WeightService;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -16,39 +17,17 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass="App\Repository\ViewRepository")
  * @Vich\Uploadable
  */
-class View implements WeightableInterface
+class View implements SortableInterface
 {
-
-    use WeightTrait;
-
-    public function weightFilters(): array
-    {
-        return ['menu'];
-    }
-
-    public function getParentClass(): string
-    {
-        return Menu::class;
-    }
-
-    public function getParent()
-    {
-        return $this->getMenu();
-    }
-
-    public function setParent( $parent )
-    {
-        $this->setMenu( $parent );
-    }
 
     public function isFirst() :bool
     {
-        return $this->getParent()->getViews()->first()->getId() == $this->getId();
+        return WeightService::isFirst( $this, $this->getMenu()->getViews() );
     }
 
     public function isLast() :bool
     {
-        return $this->getParent()->getViews()->last()->getId() == $this->getId();
+        return WeightService::isLast( $this, $this->getMenu()->getViews() );
     }
 
     /**
@@ -64,6 +43,20 @@ class View implements WeightableInterface
     private $name;
 
     /**
+    * @Gedmo\Slug(handlers={
+    *   @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
+    *       @Gedmo\SlugHandlerOption(name="relationField", value="menu"),
+    *       @Gedmo\SlugHandlerOption(name="relationSlugField", value="slug"),
+    *       @Gedmo\SlugHandlerOption(name="separator", value="--")
+    *   }),
+    *
+    *  }, fields={"name"}, updatable=true )
+    * @ORM\Column(length=128, unique=true)
+    */
+    private $slug;
+
+    /**
+     * @Gedmo\SortableGroup
      * @ORM\ManyToOne(targetEntity="App\Entity\Menu", inversedBy="views")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -92,22 +85,28 @@ class View implements WeightableInterface
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $subtitle;
 
 
     /**
-     * @Vich\UploadableField(mapping="view_image", fileNameProperty="image.name", size="image.size", mimeType="image.mimeType", originalName="image.originalName", dimensions="image.dimensions")
+     * @Vich\UploadableField(mapping="view_image", fileNameProperty="image")
      * @var File
      */
     private $imageFile;
 
     /**
-     * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
-     * @var EmbeddedFile
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $image;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="boolean")
@@ -119,12 +118,17 @@ class View implements WeightableInterface
      */
     private $deleted;
 
+    /**
+     * @Gedmo\SortablePosition
+     * @ORM\Column(type="integer")
+     */
+    private $position;
+
 
 
     public function __construct()
     {
-        $this->weight = 9999;
-        $this->image = new EmbeddedFile();
+
     }
 
     public function __toString(): string
@@ -151,6 +155,17 @@ class View implements WeightableInterface
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
         return $this;
     }
 
@@ -186,18 +201,6 @@ class View implements WeightableInterface
     public function setContent(?string $content): self
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function getWeight(): int
-    {
-        return $this->weight;
-    }
-
-    public function setWeight(int $weight): self
-    {
-        $this->weight = $weight;
 
         return $this;
     }
@@ -239,31 +242,26 @@ class View implements WeightableInterface
     }
 
 
-    /**
-     * @param File|UploadedFile $image
-     */
     public function setImageFile( ?File $image = null )
     {
         $this->imageFile = $image;
 
-        if ( null !== $image ) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
+        if ( $image ) {
             $this->updatedAt = new \DateTime('now');
         }
     }
 
-    public function getImageFile(): ?File
+    public function getImageFile()
     {
         return $this->imageFile;
     }
 
-    public function setImage(EmbeddedFile $image)
+    public function setImage($image)
     {
         $this->image = $image;
     }
 
-    public function getImage(): ?EmbeddedFile
+    public function getImage()
     {
         return $this->image;
     }
@@ -290,6 +288,16 @@ class View implements WeightableInterface
         $this->deleted = $deleted;
 
         return $this;
+    }
+
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    public function getPosition()
+    {
+        return $this->position;
     }
 
 }

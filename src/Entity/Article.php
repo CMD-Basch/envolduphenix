@@ -2,45 +2,29 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\WeightTrait;
-use App\Model\WeightableInterface;
+use App\Model\SortableInterface;
+use App\Service\Form\WeightService;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
-use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ViewArticleRepository")
  * @Vich\Uploadable
  */
-class Article implements WeightableInterface
+class Article implements SortableInterface
 {
-
-    use WeightTrait;
-
-    public function weightFilters(): array
-    {
-        return [];
-    }
-
-    public function getParentClass(): string
-    {
-        return '';
-    }
-
-    public function getParent()
-    {
-        return null;
-    }
-
-    public function setParent( $parent ) {}
 
     public function isFirst() :bool
     {
-        return true;
+        return WeightService::isFirst( $this, $this->getEvent()->getArticles() );
+    }
+
+    public function isLast() :bool
+    {
+        return WeightService::isLast( $this, $this->getEvent()->getArticles() );
     }
 
     /**
@@ -62,26 +46,49 @@ class Article implements WeightableInterface
     private $title;
 
     /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $active;
 
     /**
-     * @Vich\UploadableField(mapping="view_image", fileNameProperty="image.name", size="image.size", mimeType="image.mimeType", originalName="image.originalName", dimensions="image.dimensions")
+     * @Vich\UploadableField(mapping="article_image", fileNameProperty="image")
      * @var File
      */
     private $imageFile;
 
     /**
-     * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
-     * @var EmbeddedFile
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @Gedmo\SortableGroup
+     * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="articles")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $event;
+
+    /**
+     * @Gedmo\SortablePosition
+     * @ORM\Column(type="integer")
+     */
+    private $position;
+
     public function __construct()
     {
-        $this->image = new EmbeddedFile();
-        $this->weight = 9999;
         $this->setActive(false);
     }
 
@@ -119,6 +126,17 @@ class Article implements WeightableInterface
         return $this;
     }
 
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
     public function getActive(): ?bool
     {
         return $this->active;
@@ -131,32 +149,49 @@ class Article implements WeightableInterface
         return $this;
     }
 
-    /**
-     * @param File|UploadedFile $image
-     */
     public function setImageFile( ?File $image = null )
     {
         $this->imageFile = $image;
 
-        if ( null !== $image ) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
+        if ( $image ) {
             $this->updatedAt = new \DateTime('now');
         }
     }
 
-    public function getImageFile(): ?File
+    public function getImageFile()
     {
         return $this->imageFile;
     }
 
-    public function setImage(EmbeddedFile $image)
+    public function setImage( $image)
     {
         $this->image = $image;
     }
 
-    public function getImage(): ?EmbeddedFile
+    public function getImage()
     {
         return $this->image;
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): self
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    public function getPosition()
+    {
+        return $this->position;
     }
 }

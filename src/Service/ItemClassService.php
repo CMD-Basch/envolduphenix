@@ -3,6 +3,7 @@
 namespace App\Service;
 
 
+use Doctrine\Common\Annotations\Reader;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
@@ -10,11 +11,13 @@ class ItemClassService
 {
     private $converter;
     private $container;
+    private $reader;
 
-    public function __construct( ContainerInterface $container )
+    public function __construct( ContainerInterface $container, Reader $reader )
     {
         $this->converter = new CamelCaseToSnakeCaseNameConverter();
         $this->container = $container;
+        $this->reader = $reader;
     }
 
     public function getObject( $item )
@@ -25,6 +28,11 @@ class ItemClassService
     public function getClass( $item ): \ReflectionClass
     {
         return (new \ReflectionClass( $item ));
+    }
+
+    public function isSubclassOf( $item, string $class ): bool
+    {
+        return $this->getClass( $item )->isSubclassOf( $class );
     }
 
     public function getFullClassName( $item ): string
@@ -45,6 +53,14 @@ class ItemClassService
     public function isClass( $item, string $class )
     {
         return $this->getFullClassName( $item ) === $class;
+    }
+
+    public function getAnnotationProperty( $item, string $annotation ){
+        $properties = $this->getClass( $item )->getProperties();
+        foreach ( $properties as $property ){
+            if( $this->reader->getPropertyAnnotation($property , $annotation) )
+                return $property;
+        }
     }
 
 }

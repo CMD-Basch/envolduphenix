@@ -22,9 +22,9 @@ class ActivityButton
         $this->activityUser = $activityUser;
 
         $this->user = false;
-        if( get_class($tokenStorage->getToken() ) == UsernamePasswordToken::class ) { // TODO : checker autrement
-            $this->user = $tokenStorage->getToken()->getUser();
-        }
+//        if( get_class($tokenStorage->getToken() ) == UsernamePasswordToken::class ) { // TODO : checker autrement
+//            $this->user = $tokenStorage->getToken()->getUser();
+//        }
 
     }
 

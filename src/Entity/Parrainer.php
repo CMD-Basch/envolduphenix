@@ -2,13 +2,31 @@
 
 namespace App\Entity;
 
+use App\Model\SortableInterface;
+use App\Service\Form\WeightService;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ParrainerRepository")
+ * @Vich\Uploadable
  */
-class Parrainer
+class Parrainer implements SortableInterface
 {
+
+    public function isFirst() :bool
+    {
+        return WeightService::isFirst( $this, $this->getEvent()->getParrainers() );
+    }
+
+    public function isLast() :bool
+    {
+        return WeightService::isLast( $this, $this->getEvent()->getParrainers() );
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -26,15 +44,43 @@ class Parrainer
      */
     private $link;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $pictureLink;
 
     /**
+     * @Gedmo\SortablePosition
      * @ORM\Column(type="integer")
      */
-    private $weight;
+    private $position;
+
+
+    /**
+     * @Gedmo\SortableGroup
+     * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="parrainers")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $event;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
+    /**
+     * @Vich\UploadableField(mapping="parrainer_image", fileNameProperty="image")
+     * @var File
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $image;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $updatedAt;
 
     public function getId()
     {
@@ -65,26 +111,60 @@ class Parrainer
         return $this;
     }
 
-    public function getPictureLink(): ?string
+    public function getEvent(): ?Event
     {
-        return $this->pictureLink;
+        return $this->event;
     }
 
-    public function setPictureLink(string $pictureLink): self
+    public function setEvent(?Event $event): self
     {
-        $this->pictureLink = $pictureLink;
+        $this->event = $event;
 
         return $this;
     }
 
-    public function getWeight(): ?int
+    public function setImageFile( ?File $image = null )
     {
-        return $this->weight;
+        $this->imageFile = $image;
+
+        if ( $image ) {
+            $this->updatedAt = new \DateTime('now');
+        }
     }
 
-    public function setWeight(int $weight): self
+    public function getImageFile()
     {
-        $this->weight = $weight;
+        return $this->imageFile;
+    }
+
+    public function setImage( $image)
+    {
+        $this->image = $image;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

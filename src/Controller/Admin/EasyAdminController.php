@@ -2,16 +2,16 @@
 
 namespace App\Controller\Admin;
 
+use App\Model\SortableInterface;
 use App\Service\Form\WeightService;
 use App\Service\ItemClassService;
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
+use Gedmo\Mapping\Annotation\SortableGroup;
 use Symfony\Component\HttpFoundation\Response;
 
-use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
 
 class EasyAdminController extends BaseAdminController
 {
@@ -20,11 +20,32 @@ class EasyAdminController extends BaseAdminController
     protected $sClass;
     protected $em;
 
-    public function __construct( WeightService $sWeight, ItemClassService $sClass, EntityManagerInterface $em )
+    public function __construct(
+        WeightService $sWeight,
+        ItemClassService $sClass,
+        EntityManagerInterface $em )
     {
        $this->sWeight = $sWeight;
        $this->sClass = $sClass;
        $this->em = $em;
+    }
+
+    protected function listAction()
+    {
+        $this->dispatch(EasyAdminEvents::PRE_LIST);
+
+        $fields = $this->entity['list']['fields'];
+        $paginator = $this->findAll($this->entity['class'], $this->request->query->get('page', 1), $this->entity['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'), $this->entity['list']['dql_filter']);
+
+        $this->dispatch(EasyAdminEvents::POST_LIST, array('paginator' => $paginator));
+        dump($paginator);
+        $parameters = array(
+            'paginator' => $paginator,
+            'fields' => $fields,
+            'delete_form_template' => $this->createDeleteForm($this->entity['name'], '__id__')->createView(),
+        );
+
+        return $this->executeDynamicMethod('render<EntityName>Template', array('list', $this->entity['templates']['list'], $parameters));
     }
 
     public function weightAction()
@@ -95,7 +116,9 @@ class EasyAdminController extends BaseAdminController
 
     protected function createListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null)
     {
-        dump($this->entity);
+
+        $is_sortable = $this->sClass->isSubclassOf($this->entity['class'], SortableInterface::class);
+
         $classMetadata = $this->getDoctrine()->getManager()->getClassMetadata($this->entity['class']);
 
         $queryBuilder= $this->em->createQueryBuilder();
@@ -115,9 +138,16 @@ class EasyAdminController extends BaseAdminController
             $queryBuilder->andWhere($dqlFilter);
         }
 
-        if (null !== $sortField) {
+        if ( $is_sortable ){
+            $orderField = $this->sClass->getAnnotationProperty( $this->entity['class'], SortableGroup::class )->getName();
+            $queryBuilder->addOrderBy(sprintf('%s',  'entity.'.$orderField), 'ASC');
+            $queryBuilder->addOrderBy(sprintf('%s',  'entity.position'), 'ASC');
+        }
+        elseif (null !== $sortField) {
             $queryBuilder->addOrderBy(sprintf('%s%s', $isSortedByDoctrineAssociation ? '' : 'entity.', $sortField), $sortDirection);
         }
+
+
 
         return $queryBuilder;
     }

@@ -3,3 +3,6 @@ fos_user:
 
 logout:
     path: /logout
+
+login:
+    path: /login

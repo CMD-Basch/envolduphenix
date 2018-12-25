@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Entity\Event;
 use App\Entity\View;
+use App\Service\Event\EventService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
@@ -12,12 +13,12 @@ use Twig\TwigFunction;
 
 class EventExtension extends AbstractExtension
 {
-    private $em;
+    private $sEvent;
     private $router;
 
-    public function __construct( EntityManagerInterface $em, UrlGeneratorInterface $router )
+    public function __construct( EventService $sEvent, UrlGeneratorInterface $router )
     {
-        $this->em = $em;
+        $this->sEvent = $sEvent;
         $this->router = $router;
     }
 
@@ -39,7 +40,7 @@ class EventExtension extends AbstractExtension
 
     public function getEvent(): ?Event
     {
-        return $this->em->getRepository( Event::class )->findOneBy([ 'active' => true ],['start' => 'DESC']);
+        return $this->sEvent->getTheEvent();
     }
 
     public function viewUrl( View $view ) {
@@ -47,7 +48,7 @@ class EventExtension extends AbstractExtension
             return $this->router->generate( $view->getLink() );
         }
         else {
-            return $this->router->generate( 'page',[ 'id' => $view->getId() ] );
+            return $this->router->generate( 'page',[ 'slug' => $view->getSlug() ] );
         }
     }
 

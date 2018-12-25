@@ -1,4 +1,4 @@
-
+{% set event = event() %}
 <!-- NAV GENERALE -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light nav-gen">
     <div class="container">
@@ -11,16 +11,18 @@
 
         <div class="collapse navbar-collapse justify-content-end" id="site-nav-toggler">
             <ul class="nav navbar-nav" id="ul-nav-gen">
-                {% for menu in event().menus %}
+                {% if event %}
+                {% for menu in event.menus %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="site_navbar_{{ menu.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">{{ menu.name|upper }}<span class="caret"></span></a>
                     <div class="dropdown-menu" aria-labelledby="site_navbar_{{ menu.id }}">
                         {% for view in menu.views if view.active and not view.deleted %}
-                        <a class="dropdown-item" href="{{ menu_loader.url( view ) }}">{{ view.name }}</a>
+                        <a class="dropdown-item" href="{{ view|view_url }}">{{ view.name }}</a>
                         {% endfor %}
                     </div >
                 </li>
                 {% endfor %}
+                {% endif %}
 
             </ul>
         </div> <!-- collapse -->

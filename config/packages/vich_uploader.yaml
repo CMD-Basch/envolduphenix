@@ -5,12 +5,23 @@ vich_uploader:
         view_image:
             uri_prefix: /uploads/view
             upload_destination: '%kernel.project_dir%/public/uploads/view'
-            namer: App\Service\File\Namer
+            namer:
+                service: Vich\UploaderBundle\Naming\UniqidNamer
 
-            inject_on_load: true
-            delete_on_update: true
-            delete_on_remove: true
-    #mappings:
-    #    products:
-    #        uri_prefix: /images/products
-    #        upload_destination: '%kernel.project_dir%/public/images/products'
+        menu_image:
+            uri_prefix: /uploads/menu
+            upload_destination: '%kernel.project_dir%/public/uploads/menu'
+            namer:
+                service: Vich\UploaderBundle\Naming\UniqidNamer
+
+        article_image:
+            uri_prefix: /uploads/article
+            upload_destination: '%kernel.project_dir%/public/uploads/article'
+            namer:
+                service: Vich\UploaderBundle\Naming\UniqidNamer
+
+        parrainer_image:
+            uri_prefix: /uploads/parrainer
+            upload_destination: '%kernel.project_dir%/public/uploads/parrainer'
+            namer:
+                service: Vich\UploaderBundle\Naming\UniqidNamer

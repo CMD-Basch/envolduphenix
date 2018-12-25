@@ -1,43 +1,47 @@
 <?php
 
 namespace App\Controller;
-use App\Entity\Parrainer;
-use App\Entity\View;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class BaseController extends Controller
+use App\Entity\View;
+use App\Service\Event\EventService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+
+class BaseController extends AbstractController
 {
+
+    private $sEvent;
+
+    public function __construct( EventService $sEvent )
+    {
+        $this->sEvent = $sEvent;
+    }
+
     /**
      * @Route("/", name="home")
      */
-    public function home(AuthorizationCheckerInterface $authorizationChecker) {
+    public function home() {
 
-        $parrainers = $this->getDoctrine()->getRepository( Parrainer::class )->findBy([], ['weight' => 'ASC'] );
+        $event = $this->sEvent->getTheEvent();
 
         return $this->render('envol/home.html.twig', [
-            'parrainers' => $parrainers
+            'event' => $event
         ]);
     }
 
     /**
-     * @Route("/page/{id}", name="page")
+     * @Route("/page/{slug}", name="page")
      */
     public function textView( View $view ) {
 
-        $title = [
-            'color' =>  $view->getMenu()->getColor(),
-            'pic' => $view->getMenu()->getPic(),
-            'name' => $view->getMenu()->getName(),
-        ];
-
         $page = $this->container->get('twig')->createTemplate( $view->getContent() ?? '' )->render( [] );
 
-        $title['pic'] = 'images/title/'.$title['pic'].'.png';
-
         return $this->render('envol/pages/text.html.twig', array(
-            'title' => $title,
+            'title' => [
+                'pic' => $view->getMenu()->getImage(),
+                'name' => $view->getMenu()->getName(),
+                'color' => $view->getMenu()->getColor(),
+            ],
             'view' => $view,
             'page' => $page,
         ));
