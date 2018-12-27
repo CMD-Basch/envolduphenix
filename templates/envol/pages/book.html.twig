@@ -1,0 +1,23 @@
+{% extends "envol/standard.html.twig" %}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block container %}
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+            <h3 class="titre-page">Enregistrement pour l'évènement :<br>{{ event.name }}</h3>
+            <hr class="hr-titre">
+            <h5 class="sous-titre"> du {{ event.start|date("d/m/Y") }} au {{ event.end|date("d/m/Y") }}</h5>
+            <br>
+        </div>
+    </div> <!-- row -->
+
+    <div class="row justify-content-center">
+        <div class="col-sm-8 justi-txt mt-5">
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <input type="submit" class="btn btn-success" value="Je participe !" />
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

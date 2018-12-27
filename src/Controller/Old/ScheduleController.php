@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Old;
 
 use App\Entity\Activity;
 use App\Service\ActivityButton;

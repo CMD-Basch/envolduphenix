@@ -62,11 +62,10 @@ class Activity
      */
     private $style;
 
-  /**
-   * @ORM\ManyToOne(targetEntity="App\Entity\ActivityType", inversedBy="activities")
-   * @ORM\JoinColumn(nullable=true)
-   */
-    private $activityType;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Round", inversedBy="activities")
@@ -269,14 +268,14 @@ class Activity
         return $this;
     }
 
-    public function getActivityType(): ?ActivityType
+    public function getType(): ?string
     {
-        return $this->activityType;
+        return $this->type;
     }
 
-    public function setActivityType( ?ActivityType $activityType): self
+    public function setType(string $type): self
     {
-        $this->activityType = $activityType;
+        $this->type = $type;
 
         return $this;
     }
@@ -330,10 +329,5 @@ class Activity
         $this->tag = $tag;
 
         return $this;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->getActivityType()->getName();
     }
 }

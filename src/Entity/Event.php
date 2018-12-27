@@ -34,11 +34,6 @@ class Event
     private $end;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="events")
-     */
-    private $users;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Menu", mappedBy="event", orphanRemoval=true)
      * @ORM\OrderBy({"position" = "ASC"})
      */
@@ -66,12 +61,22 @@ class Event
      */
     private $articles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="event", orphanRemoval=true)
+     */
+    private $bookings;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $options = [];
+
     public function __construct()
     {
-        $this->users = new ArrayCollection();
         $this->menus = new ArrayCollection();
         $this->parrainers = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     public function __toString()
@@ -120,33 +125,6 @@ class Event
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->addEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
-            $user->removeEvent($this);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Menu[]
@@ -261,6 +239,49 @@ class Event
                 $article->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Booking[]
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->contains($booking)) {
+            $this->bookings->removeElement($booking);
+            // set the owning side to null (unless already changed)
+            if ($booking->getEvent() === $this) {
+                $booking->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    public function setOptions(?array $options): self
+    {
+        $this->options = $options;
 
         return $this;
     }

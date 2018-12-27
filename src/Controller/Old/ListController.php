@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Old;
 use App\Entity\Parrainer;
 use App\Entity\Round;
 use App\Entity\User;
@@ -55,10 +55,10 @@ class ListController extends Controller
             $bool_master = false;
 
             foreach ( $user->getActivities() as $activity ) {
-                if( $activity->getActivityType()->getName() == 'roleplay' ) {
+                if( $activity->getType()->getName() == 'roleplay' ) {
                     $bool_player = true;
                 }
-                if( $activity->getActivityType()->getName() == 'murder' ) {
+                if( $activity->getType()->getName() == 'murder' ) {
                     $stats['murder_player']++;
                 }
             }

@@ -33,15 +33,15 @@ class UserEditType extends AbstractType
                 'first_options'  => array('label' => 'Nouveau mot de passe'),
                 'second_options' => array('label' => 'Confirmez le nouveau mot de passe'),
             ])
-            ->add('sleep', ChoiceType::class, [
-                'label' => 'Voulez vous reserver une chambre : ',
-                'choices'  => [
-                    'Non merci' => 'nope',
-                    'Le vendredi soir uniquement ( 5€ )' => 'ven',
-                    'Le samedi soir uniquement. ( 5€ )' => 'sam',
-                    'Le vendredi et samedi soir. ( 10€ )' => 'ven & sam',
-                ]
-            ])
+//            ->add('sleep', ChoiceType::class, [
+//                'label' => 'Voulez vous reserver une chambre : ',
+//                'choices'  => [
+//                    'Non merci' => 'nope',
+//                    'Le vendredi soir uniquement ( 5€ )' => 'ven',
+//                    'Le samedi soir uniquement. ( 5€ )' => 'sam',
+//                    'Le vendredi et samedi soir. ( 10€ )' => 'ven & sam',
+//                ]
+//            ])
             ->add('confirm_password', PasswordType::class, [
                 'label' => 'Entrez votre mot de passe actuel :',
                 'mapped' => false,

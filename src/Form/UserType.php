@@ -31,15 +31,15 @@ class UserType extends AbstractType
                 'first_options'  => array('label' => 'Mot de passe'),
                 'second_options' => array('label' => 'Confirmez le mot de passe'),
             ])
-            ->add('sleep', ChoiceType::class, [
-                'label' => 'Voulez vous reserver une chambre : ',
-                'choices'  => [
-                    'Non merci' => 'nope',
-                    'Le vendredi soir uniquement ( 5€ )' => 'ven',
-                    'Le samedi soir uniquement. ( 5€ )' => 'sam',
-                    'Le vendredi et samedi soir. ( 10€ )' => 'ven & sam',
-                    ]
-            ])
+//            ->add('sleep', ChoiceType::class, [
+//                'label' => 'Voulez vous reserver une chambre : ',
+//                'choices'  => [
+//                    'Non merci' => 'nope',
+//                    'Le vendredi soir uniquement ( 5€ )' => 'ven',
+//                    'Le samedi soir uniquement. ( 5€ )' => 'sam',
+//                    'Le vendredi et samedi soir. ( 10€ )' => 'ven & sam',
+//                    ]
+//            ])
             ->add('save',SubmitType::class,      ['label' => 'S\'enregistrer :'] );
     }
 

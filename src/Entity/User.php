@@ -46,10 +46,10 @@ class User extends BaseUser
      */
     private $masteredActivities;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $sleep;
+//    /**
+//     * @ORM\Column(type="string", length=255, nullable=true)
+//     */
+//    private $sleep;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Menu")
@@ -57,9 +57,9 @@ class User extends BaseUser
     private $rights;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Event", inversedBy="users")
+     * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="user", orphanRemoval=true)
      */
-    private $events;
+    private $bookings;
 
 
 
@@ -70,7 +70,7 @@ class User extends BaseUser
         $this->activities = new ArrayCollection();
         $this->masteredActivities = new ArrayCollection();
         $this->rights = new ArrayCollection();
-        $this->events = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     public function  __toString() {
@@ -161,17 +161,17 @@ class User extends BaseUser
         return $this;
     }
 
-    public function getSleep(): ?string
-    {
-        return $this->sleep;
-    }
-
-    public function setSleep(?string $sleep): self
-    {
-        $this->sleep = $sleep;
-
-        return $this;
-    }
+//    public function getSleep(): ?string
+//    {
+//        return $this->sleep;
+//    }
+//
+//    public function setSleep(?string $sleep): self
+//    {
+//        $this->sleep = $sleep;
+//
+//        return $this;
+//    }
 
     /**
      * @return Collection|Menu[]
@@ -200,26 +200,31 @@ class User extends BaseUser
     }
 
     /**
-     * @return Collection|Event[]
+     * @return Collection|Booking[]
      */
-    public function getEvents(): Collection
+    public function getBookings(): Collection
     {
-        return $this->events;
+        return $this->bookings;
     }
 
-    public function addEvent( Event $event): self
+    public function addBooking(Booking $booking): self
     {
-        if (!$this->events->contains($event)) {
-            $this->events[] = $event;
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeEvent( Event $event): self
+    public function removeBooking(Booking $booking): self
     {
-        if ($this->events->contains($event)) {
-            $this->events->removeElement($event);
+        if ($this->bookings->contains($booking)) {
+            $this->bookings->removeElement($booking);
+            // set the owning side to null (unless already changed)
+            if ($booking->getUser() === $this) {
+                $booking->setUser(null);
+            }
         }
 
         return $this;

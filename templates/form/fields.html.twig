@@ -1,0 +1,158 @@
+{% use 'form_div_layout.html.twig' %}
+
+{% block key_value_row -%}
+    {% set _field_type = easyadmin.field.fieldType|default('default') %}
+    <div class="form-group {% if (not compound or force_error|default(false)) and not valid %}has-error{% endif %} field-{{ block_prefixes|slice(-2)|first }}">
+        {{- form_widget(form) -}}
+
+
+        {% if _field_type in ['datetime', 'datetime_immutable', 'date', 'date_immutable', 'dateinterval', 'time', 'time_immutable', 'birthday'] and easyadmin.field.nullable|default(false) %}
+            <div class="nullable-control">
+                <label>
+                    <input type="checkbox" {% if data is null %}checked="checked"{% endif %}>
+                    {{ 'label.nullable_field'|trans({}, 'EasyAdminBundle')}}
+                </label>
+            </div>
+        {% endif %}
+
+        {{- form_errors(form) -}}
+
+        {% if easyadmin.field.help|default('') != '' %}
+            <span class="help-block"><i class="fa fa-info-circle"></i> {{ easyadmin.field.help|trans(domain = easyadmin.entity.translation_domain)|raw }}</span>
+        {% endif %}
+    </div>
+{%- endblock key_value_row %}
+
+{% block key_value_widget -%}
+
+    {% if value is iterable and value is empty %}
+        {{ block('empty_collection') }}
+    {% endif %}
+    {% if value is iterable and value is empty or form.vars.prototype is defined %}
+        {% set attr = attr|merge({'data-empty-collection': block('empty_collection') }) %}
+    {% endif %}
+
+    <div {{ block('widget_container_attributes') }}>
+        {%- if form is rootform -%}
+            {{ form_errors(form) }}
+        {%- endif -%}
+
+        <div>
+            <div class="col-sm-5">{{ form_row(form.key) }}</div>
+            <div class="col-sm-5">{{ form_row(form.value) }}</div>
+
+            {% if form.parent.vars.allow_delete|default(false) %}
+                {% set remove_item_javascript %}
+                    $(function() {
+                    if (event.preventDefault) event.preventDefault(); else event.returnValue = false;
+
+                    var containerDiv = $('#{{ id }}').parents('.form-group:first');
+                    var parentDiv = containerDiv.parents('[data-prototype]:first');
+                    containerDiv.remove();
+                    parentDiv.trigger('easyadmin.collection.item-deleted');
+
+                    var hasCountAttr = parentDiv.data('count');
+
+                    if (hasCountAttr === undefined) {
+                    var numItems = parentDiv.children('div.form-group').length;
+                    parentDiv.data('count', ++numItems)
+                    }
+
+                    if (0 == parentDiv.children().length && 'undefined' !== parentDiv.attr('data-empty-collection')) {
+                    $(parentDiv.attr('data-empty-collection')).insertBefore(parentDiv);
+                    }
+                    });
+                {% endset %}
+            <div class="col-sm-2">
+                <div class="text-left field-collection-item-action">
+                    <a href="#" onclick="{{ remove_item_javascript|raw }}" class="text-danger">
+                        <i class="fa fa-remove"></i>
+                        {{ 'action.remove_item'|trans({}, 'EasyAdminBundle') }}
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {#{% dump form %}#}
+{%- endblock key_value_widget %}
+
+{% block key_value_options_row -%}
+    {% set _field_type = easyadmin.field.fieldType|default('default') %}
+    <div class="form-group {% if (not compound or force_error|default(false)) and not valid %}has-error{% endif %} field-{{ block_prefixes|slice(-2)|first }}">
+        {{- form_widget(form) -}}
+
+
+        {% if _field_type in ['datetime', 'datetime_immutable', 'date', 'date_immutable', 'dateinterval', 'time', 'time_immutable', 'birthday'] and easyadmin.field.nullable|default(false) %}
+            <div class="nullable-control">
+                <label>
+                    <input type="checkbox" {% if data is null %}checked="checked"{% endif %}>
+                    {{ 'label.nullable_field'|trans({}, 'EasyAdminBundle')}}
+                </label>
+            </div>
+        {% endif %}
+
+        {{- form_errors(form) -}}
+
+        {% if easyadmin.field.help|default('') != '' %}
+            <span class="help-block"><i class="fa fa-info-circle"></i> {{ easyadmin.field.help|trans(domain = easyadmin.entity.translation_domain)|raw }}</span>
+        {% endif %}
+    </div>
+{%- endblock key_value_options_row %}
+
+{% block key_value_options_widget -%}
+
+    {% if value is iterable and value is empty %}
+        {{ block('empty_collection') }}
+    {% endif %}
+    {% if value is iterable and value is empty or form.vars.prototype is defined %}
+        {% set attr = attr|merge({'data-empty-collection': block('empty_collection') }) %}
+    {% endif %}
+
+    <div {{ block('widget_container_attributes') }}>
+        {%- if form is rootform -%}
+            {{ form_errors(form) }}
+        {%- endif -%}
+
+        <div>
+            <div class="col-sm-3">{{ form_row(form.key) }}</div>
+            <div class="col-sm-2">{{ form_row(form.value) }}</div>
+            <div class="col-sm-3">{{ form_row(form.options) }}</div>
+
+            {% if form.parent.vars.allow_delete|default(false) %}
+                {% set remove_item_javascript %}
+                    $(function() {
+                    if (event.preventDefault) event.preventDefault(); else event.returnValue = false;
+
+                    var containerDiv = $('#{{ id }}').parents('.form-group:first');
+                    var parentDiv = containerDiv.parents('[data-prototype]:first');
+                    containerDiv.remove();
+                    parentDiv.trigger('easyadmin.collection.item-deleted');
+
+                    var hasCountAttr = parentDiv.data('count');
+
+                    if (hasCountAttr === undefined) {
+                    var numItems = parentDiv.children('div.form-group').length;
+                    parentDiv.data('count', ++numItems)
+                    }
+
+                    if (0 == parentDiv.children().length && 'undefined' !== parentDiv.attr('data-empty-collection')) {
+                    $(parentDiv.attr('data-empty-collection')).insertBefore(parentDiv);
+                    }
+                    });
+                {% endset %}
+                <div class="col-sm-2">
+                    <div class="text-left field-collection-item-action">
+                        <a href="#" onclick="{{ remove_item_javascript|raw }}" class="text-danger">
+                            <i class="fa fa-remove"></i>
+                            {{ 'action.remove_item'|trans({}, 'EasyAdminBundle') }}
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {#{% dump form %}#}
+{%- endblock key_value_options_widget %}

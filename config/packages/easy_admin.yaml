@@ -7,7 +7,6 @@ easy_admin:
       - ViewAdmin
       - Article
       - Activity
-      - ActivityType
       - Round
       - Parrainer
       - { label: 'Admin' }
@@ -97,13 +96,11 @@ easy_admin:
           - start
           - end
           - active
+          - { property: 'options', type: 'collection', type_options: { entry_type: 'App\Form\Field\KeyValueOptionsType' } }
           - { property: 'description', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
 
     Activity:
       class: App\Entity\Activity
-
-    ActivityType:
-      class: App\Entity\ActivityType
 
     Round:
       class: App\Entity\Round

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Old;
 
 use App\Entity\Activity;
 use App\Entity\ActivityType;
@@ -15,12 +15,14 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 
-class ActivityController extends Controller
+class RoleplayController extends Controller
 {
 
     private $timezones;
     private $activityUser;
     private $user;
+
+    public const ACTIVITY_TYPE_NAME = 'roleplay';
 
     public function __construct( TimeZones $timeZones, TokenStorageInterface $tokenStorage, ActivityUser $activityUser)
     {
@@ -33,11 +35,25 @@ class ActivityController extends Controller
     }
 
     /**
-     * @Route("/activite/ajax/{act}/{id}", name="activity.join")
+     * @Route("/jeu-de-roles/ajax/{act}/{id}", name="roleplay.join")
      */
     public function ajax( $act, Activity $activity ) {
 
         $this->denyAccessUnlessGranted( 'IS_AUTHENTICATED_REMEMBERED' );
+
+        $activityType = $this->getDoctrine()->getRepository(ActivityType::class )->findOneBy( ['name' => self::ACTIVITY_TYPE_NAME] );
+        $round = $activity->getRound();
+        $activities = $this->getDoctrine()->getRepository(Activity::class )
+            ->findBy( [
+                'round' => $round,
+                'activityType' => $activityType,
+            ] );
+
+
+        $arguments = [
+            'activities' => $activities,
+            'active_round' => $round,
+        ];
 
         switch( $act ){
             case 'join' :
@@ -46,24 +62,24 @@ class ActivityController extends Controller
                     $activity->addPlayer( $this->user );
                     $this->getDoctrine()->getManager()->flush();
 
-                    //return $this->render( 'roleplay-activities.html.twig', $arguments );
+                    return $this->render( 'roleplay-activities.html.twig', $arguments );
                 }
                 break;
             case 'leave' :
                 $activity->removePlayer( $this->user );
                 $this->getDoctrine()->getManager()->flush();
 
-                //return $this->render( 'roleplay-activities.html.twig', $arguments );
+                return $this->render( 'roleplay-activities.html.twig', $arguments );
                 break;
         }
 
-        //return $this->render( 'roleplay-activities.html.twig', $arguments );
+        return $this->render( 'roleplay-activities.html.twig', $arguments );
     }
 
     /**
-     * @Route("/activite/ajouter/{type}", name="activity.add")
+     * @Route("/jeu-de-roles/ajouter/{time}", name="roleplay.add")
      */
-    public function add( $type ,  Request $request ) {
+    public function add( $time = false,  Request $request ) {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
@@ -81,7 +97,7 @@ class ActivityController extends Controller
                 $activityType = $this->getDoctrine()->getRepository(ActivityType::class )->findOneBy( ['name' => self::ACTIVITY_TYPE_NAME] );
 
                 $activity
-                    ->setActivityType( $activityType )
+                    ->setType( $activityType )
                     ->setMaster( $this->getUser() );
 
                 $entityManager = $this->getDoctrine()->getManager();
@@ -106,7 +122,7 @@ class ActivityController extends Controller
     }
 
     /**
-     * @Route("/activite/{time}", name="activity.time")
+     * @Route("/jeu-de-roles/{time}", name="roleplay")
      */
     public function home( $time = false ) {
 

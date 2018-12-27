@@ -1,17 +1,62 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Booking;
+use App\Form\Entity\BookingType;
 use App\Form\UserType;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use App\Service\Event\EventService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class RegistrationController extends Controller
+class RegistrationController extends AbstractController
 {
+
     /**
+     * @route("/book", name="book")
+     */
+    public function bookAction( Request $request, EventService $sEvent )
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $event = $sEvent->getNextOpenEvent();
+
+        if( !$event ) return $this->redirectToRoute( 'home' );
+
+        foreach( $user->getBookings() as $booking ){
+            if( $booking->getEvent() === $event ){
+                return $this->redirectToRoute( 'home' );
+            }
+        }
+        $booking = new Booking();
+        $booking->setUser( $user )
+                ->setEvent( $event )
+                ->setBooked( true );
+
+        $form = $this->createForm(BookingType::class, $booking );
+        $form->handleRequest( $request );
+        if ( $form->isSubmitted() && $form->isValid() ) {
+
+            $this->getDoctrine()->getManager()->persist( $booking );
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute( 'home' );
+        }
+
+
+
+        return $this->render('envol/pages/book.html.twig', array(
+            'title' => [
+                'name' => 'Réservation',
+            ],
+            'event' => $event,
+            'form' => $form->createView(),
+        ));
+    }
+
+        /**
      * @Route("/enregistrement", name="subscribe")
      */
     public function registerAction( Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer ) {
@@ -25,11 +70,6 @@ class RegistrationController extends Controller
 
             $user
                 ->setPassword( $passwordEncoder->encodePassword( $user, $user->getPassword() ) )
-                ->setHash( $passwordEncoder->encodePassword( $user, $user->getEmail() ))
-                ->setValid(false )
-                ->setActive( false )
-                ->setCreated( new \DateTime('now') )
-                ->setUpdated( new \DateTime('now') )
                 ->setRoles(['ROLE_USER']);
 
             $em = $this->getDoctrine()->getManager();
@@ -42,7 +82,7 @@ class RegistrationController extends Controller
                 ->setBody(
                     $this->renderView('email/registration.html.twig', [
                         'name' => $user->getUsername(),
-                        'hash' => $user->getHash(),
+                        'hash' => 'hash',
                         ]
                     ),
                     'text/html'

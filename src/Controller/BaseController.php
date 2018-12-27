@@ -36,7 +36,7 @@ class BaseController extends AbstractController
 
         $page = $this->container->get('twig')->createTemplate( $view->getContent() ?? '' )->render( [] );
 
-        return $this->render('envol/pages/text.html.twig', array(
+        return $this->render('envol/pages/page.html.twig', array(
             'title' => [
                 'pic' => $view->getMenu()->getImage(),
                 'name' => $view->getMenu()->getName(),

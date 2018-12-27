@@ -2,25 +2,22 @@
 
 namespace App\Controller;
 
-use App\Entity\Parrainer;
-use App\Entity\View;
-use App\Service\SiteGlobals;
+use App\Service\Event\EventService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class TestController extends Controller
+class TestController extends AbstractController
 {
     /**
      * @Route("/test", name="test")
      */
-    public function home(SiteGlobals $siteGlobals) {
+    public function home( EventService $sEvent ) {
 
-        dump($siteGlobals->getEventsToCome());
+        $event = $sEvent->getTheEvent();
 
-        $parrainers = $this->getDoctrine()->getRepository( Parrainer::class )->findBy([], ['weight' => 'ASC'] );
-
-        return $this->render('envol/home.html.twig', ['parrainers' => $parrainers]);
+        return $this->render('envol/home.html.twig', [
+            'event' => $event,
+        ]);
     }
 
 }

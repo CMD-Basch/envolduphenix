@@ -108,7 +108,7 @@ class SecurityController extends Controller
 
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->render('envol/pages/text.html.twig', array(
+        return $this->render('envol/pages/page.html.twig', array(
             'page' => '',
         ));
     }*/

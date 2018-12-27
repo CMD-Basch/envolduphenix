@@ -41,8 +41,7 @@ class Round
     private $end;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ActivityType", inversedBy="rounds")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $activityType;
 
@@ -119,12 +118,12 @@ class Round
         return $this;
     }
 
-    public function getActivityType(): ?ActivityType
+    public function getActivityType(): ?string
     {
         return $this->activityType;
     }
 
-    public function setActivityType( ?ActivityType $activityType): self
+    public function setActivityType( ?string $activityType): self
     {
         $this->activityType = $activityType;
 

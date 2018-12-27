@@ -6,5 +6,7 @@ twig:
         timezones: '@App\Service\TimeZones'
         activityuser: '@App\Service\ActivityUser'
         button: '@App\Service\ActivityButton'
-    form_themes: ['bootstrap_4_layout.html.twig']
+    form_themes:
+        - 'form/fields.html.twig'
+        - 'bootstrap_4_layout.html.twig'
 #    form_themes: ['bootstrap_4_layout.html.twig']

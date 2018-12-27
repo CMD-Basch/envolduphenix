@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Old;
 
 use App\Entity\Activity;
 use App\Entity\ActivityType;
@@ -103,7 +103,7 @@ class BoradgameController extends Controller
 
             $activityType = $this->getDoctrine()->getRepository(ActivityType::class )->findOneBy( ['name' => self::ACTIVITY_TYPE_NAME] );
 
-            $activity->setActivityType( $activityType );
+            $activity->setType( $activityType );
 
             $entityManager = $this->getDoctrine()->getManager();
             //$entityManager->persist( $activity );
@@ -156,7 +156,7 @@ class BoradgameController extends Controller
             $activityType = $this->getDoctrine()->getRepository(ActivityType::class )->findOneBy( ['name' => self::ACTIVITY_TYPE_NAME] );
 
             $activity
-                ->setActivityType( $activityType );
+                ->setType( $activityType );
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist( $activity );
