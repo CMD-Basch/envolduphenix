@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ViewArticleRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
  * @Vich\Uploadable
  */
 class Article implements SortableInterface

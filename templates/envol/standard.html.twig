@@ -2,7 +2,7 @@
 
 
 {% set image = 'images/title/blk.png' %}
-{% if title.pic is defined %}
+{% if title.pic is defined and title.pic != '' %}
     {% set image = 'uploads/menu/'~ title.pic %}
 {% endif %}
 

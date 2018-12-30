@@ -71,12 +71,18 @@ class Event
      */
     private $options = [];
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="event", orphanRemoval=true)
+     */
+    private $activities;
+
     public function __construct()
     {
         $this->menus = new ArrayCollection();
         $this->parrainers = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     public function __toString()
@@ -282,6 +288,37 @@ class Event
     public function setOptions(?array $options): self
     {
         $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Activity[]
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(Activity $activity): self
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities[] = $activity;
+            $activity->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(Activity $activity): self
+    {
+        if ($this->activities->contains($activity)) {
+            $this->activities->removeElement($activity);
+            // set the owning side to null (unless already changed)
+            if ($activity->getEvent() === $this) {
+                $activity->setEvent(null);
+            }
+        }
 
         return $this;
     }

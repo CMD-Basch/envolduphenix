@@ -11,10 +11,12 @@ class BaseController extends AbstractController
 {
 
     private $sEvent;
+    private $theEvent;
 
     public function __construct( EventService $sEvent )
     {
         $this->sEvent = $sEvent;
+        $this->theEvent = $sEvent->getTheEvent();
     }
 
     /**
@@ -22,10 +24,8 @@ class BaseController extends AbstractController
      */
     public function home() {
 
-        $event = $this->sEvent->getTheEvent();
-
         return $this->render('envol/home.html.twig', [
-            'event' => $event
+            'event' => $this->theEvent
         ]);
     }
 

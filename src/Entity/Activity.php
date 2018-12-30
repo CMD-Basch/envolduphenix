@@ -5,15 +5,15 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ActivityRepository")
- * @UniqueEntity("tag", message="Ce tag est déjà utilisé")
  */
 
 class Activity
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -27,14 +27,20 @@ class Activity
     private $name;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=128, unique=true)
      */
-    private $localStart;
+    private $slug;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
      */
-    private $localEnd;
+    private $start;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $end;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="activities")
@@ -62,25 +68,24 @@ class Activity
      */
     private $style;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $type;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Round", inversedBy="activities")
-     */
-    private $round;
 
     /**
      * @ORM\Column(type="integer")
      */
     private $slots;
 
+
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="activities")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $tag;
+    private $event;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ActivityType", inversedBy="activities")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $type;
 
     public function __construct()
     {
@@ -109,79 +114,45 @@ class Activity
         return $this;
     }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getLocalStart()
+    public function getSlug(): ?string
     {
-        return $this->localStart;
+        return $this->slug;
     }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getStart()
+    public function setSlug(string $slug): self
     {
-        if( $this->localStart == null ) {
-            return $this->getRound()->getStart();
-        }
-        return $this->localStart;
-    }
-
-    public function setStart( $start ): self
-    {
-        $this->localStart = $start;
+        $this->slug = $slug;
 
         return $this;
     }
 
-    public function setLocalStart( $start ): self
+
+    public function getStart():? \DateTimeInterface
     {
-        $this->localStart = $start;
+        return $this->start;
+    }
+
+    public function setStart($start ): self
+    {
+        $this->start = $start;
 
         return $this;
     }
 
-    public function toStringStart() {
-        return $this->getStart()->format('H\Hi');
+
+    public function getEnd():? \DateTimeInterface
+    {
+        return $this->end;
     }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getLocalEnd()
-    {
-        return $this->localEnd;
-    }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getEnd()
+    public function setEnd($end): self
     {
-        if( $this->localEnd == null ) {
-            return $this->getRound()->getEnd();
-        }
-        return $this->localEnd;
-    }
-
-    public function setEnd( $end): self
-    {
-        $this->localEnd = $end;
+        $this->end = $end;
 
         return $this;
     }
 
-    public function setLocalEnd( $end): self
-    {
-        $this->localEnd = $end;
-
-        return $this;
-    }
-
-    public function toStringEnd() {
-        return $this->getEnd()->format('H\Hi');
-    }
 
     /**
      * @return Collection|User[]
@@ -268,30 +239,6 @@ class Activity
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getRound(): ?Round
-    {
-        return $this->round;
-    }
-
-    public function setRound(?Round $round): self
-    {
-        $this->round = $round;
-
-        return $this;
-    }
-
     public function getSlots(): ?int
     {
         return $this->slots;
@@ -319,14 +266,26 @@ class Activity
         return $this->getStart()->diff( $this->getEnd() )->h ;
     }
 
-    public function getTag(): ?string
+    public function getEvent(): ?Event
     {
-        return $this->tag;
+        return $this->event;
     }
 
-    public function setTag(?string $tag): self
+    public function setEvent(?Event $event): self
     {
-        $this->tag = $tag;
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function getType(): ?ActivityType
+    {
+        return $this->type;
+    }
+
+    public function setType(?ActivityType $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

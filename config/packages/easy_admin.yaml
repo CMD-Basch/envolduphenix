@@ -6,6 +6,7 @@ easy_admin:
       - MenuAdmin
       - ViewAdmin
       - Article
+      - ActivityType
       - Activity
       - Round
       - Parrainer
@@ -50,7 +51,7 @@ easy_admin:
           - menu
           - title
           - subtitle
-          - link
+          - module
           - active
           - fixed
           - deleted
@@ -63,7 +64,7 @@ easy_admin:
           - menu
           - title
           - subtitle
-          - link
+          - module
           - { property: 'imageFile', type: 'vich_image' }
           - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
           - active
@@ -101,6 +102,25 @@ easy_admin:
 
     Activity:
       class: App\Entity\Activity
+      form:
+        fields:
+          - name
+          - event
+          - type
+          - start
+          - end
+          - description
+          - game
+          - style
+          - slots
+          - players
+          - master
+
+    ActivityType:
+      class: App\Entity\ActivityType
+      form:
+        fields:
+          - name
 
     Round:
       class: App\Entity\Round

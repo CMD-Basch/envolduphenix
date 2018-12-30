@@ -1,6 +1,5 @@
 <?php
-// src/Form/UserType.php
-namespace App\Form;
+namespace App\Form\Entity;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
@@ -18,29 +17,20 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username',   TextType::class,        ['label' => 'Pseudo :'] )
-            ->add('firstname',  TextType::class,        ['label' => 'Prénom :'] )
-            ->add('lastname',   TextType::class,        ['label' => 'Nom :'] )
+            ->add('username',   TextType::class,        ['label' => 'Pseudo'] )
+            ->add('firstname',  TextType::class,        ['label' => 'Prénom'] )
+            ->add('lastname',   TextType::class,        ['label' => 'Nom'] )
             ->add('email',      RepeatedType::class, [
                 'type' => EmailType::class,
-                'first_options'  => array('label' => 'E-mail :'),
-                'second_options' => array('label' => 'Confirmez l\'e-mail :'),
+                'first_options'  => array('label' => 'E-mail'),
+                'second_options' => array('label' => 'Confirmez l\'e-mail'),
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options'  => array('label' => 'Mot de passe'),
                 'second_options' => array('label' => 'Confirmez le mot de passe'),
             ])
-//            ->add('sleep', ChoiceType::class, [
-//                'label' => 'Voulez vous reserver une chambre : ',
-//                'choices'  => [
-//                    'Non merci' => 'nope',
-//                    'Le vendredi soir uniquement ( 5€ )' => 'ven',
-//                    'Le samedi soir uniquement. ( 5€ )' => 'sam',
-//                    'Le vendredi et samedi soir. ( 10€ )' => 'ven & sam',
-//                    ]
-//            ])
-            ->add('save',SubmitType::class,      ['label' => 'S\'enregistrer :'] );
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

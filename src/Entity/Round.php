@@ -2,14 +2,11 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RoundRepository")
- * @UniqueEntity("code", message="Ce code est déjà utilisé")
  */
 class Round
 {
@@ -23,12 +20,13 @@ class Round
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $code;
+    private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=128, unique=true)
      */
-    private $name;
+    private $slug;
 
     /**
      * @ORM\Column(type="datetime")
@@ -45,19 +43,8 @@ class Round
      */
     private $activityType;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="round")
-     */
-    private $activities;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $slug;
-
     public function __construct()
     {
-        $this->activities = new ArrayCollection();
     }
 
     public function __toString()
@@ -68,18 +55,6 @@ class Round
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getCode(): ?string
-    {
-        return $this->code;
-    }
-
-    public function setCode(string $code): self
-    {
-        $this->code = $code;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -130,36 +105,6 @@ class Round
         return $this;
     }
 
-    /**
-     * @return Collection|Activity[]
-     */
-    public function getActivities(): Collection
-    {
-        return $this->activities;
-    }
-
-    public function addActivity( Activity $activity): self
-    {
-        if (!$this->activities->contains($activity)) {
-            $this->activities[] = $activity;
-            $activity->setRound($this);
-        }
-
-        return $this;
-    }
-
-    public function removeActivity( Activity $activity): self
-    {
-        if ($this->activities->contains($activity)) {
-            $this->activities->removeElement($activity);
-            // set the owning side to null (unless already changed)
-            if ($activity->getRound() === $this) {
-                $activity->setRound(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getSlug(): ?string
     {

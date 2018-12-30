@@ -65,7 +65,7 @@ class View implements SortableInterface
     /**
      * @ORM\Column(type="string", length=255,  nullable=true)
      */
-    private $link;
+    private $module;
 
 
     /**
@@ -181,14 +181,14 @@ class View implements SortableInterface
         return $this;
     }
 
-    public function getLink()
+    public function getModule()
     {
-        return $this->link;
+        return $this->module;
     }
 
-    public function setLink($link): self
+    public function setModule($module): self
     {
-        $this->link = $link;
+        $this->module = $module;
 
         return $this;
     }

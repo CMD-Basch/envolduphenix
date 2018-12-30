@@ -3,8 +3,8 @@ namespace App\Controller;
 
 use App\Entity\Booking;
 use App\Form\Entity\BookingType;
-use App\Form\UserType;
 use App\Entity\User;
+use App\Form\RegistrationType;
 use App\Repository\UserRepository;
 use App\Service\Event\EventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class RegistrationController extends AbstractController
+class AccountController extends AbstractController
 {
 
     /**
@@ -47,7 +47,7 @@ class RegistrationController extends AbstractController
 
 
 
-        return $this->render('envol/pages/book.html.twig', array(
+        return $this->render('envol/pages/register/book.html.twig', array(
             'title' => [
                 'name' => 'Réservation',
             ],
@@ -56,14 +56,19 @@ class RegistrationController extends AbstractController
         ));
     }
 
-        /**
+    /**
      * @Route("/enregistrement", name="subscribe")
      */
     public function registerAction( Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer ) {
 
 
         $user = new User();
-        $form = $this->createForm(UserType::class, $user );
+        $booking = new Booking();
+        $form = $this->createForm(RegistrationType::class, null, [
+            'user' => $user,
+            'booking' => $booking,
+        ] );
+//        $form = $this->createForm(UserType::class, $user );
 
         $form->handleRequest( $request );
         if ( $form->isSubmitted() && $form->isValid() ) {
@@ -72,30 +77,36 @@ class RegistrationController extends AbstractController
                 ->setPassword( $passwordEncoder->encodePassword( $user, $user->getPassword() ) )
                 ->setRoles(['ROLE_USER']);
 
+            $booking
+                ->setUser( $user )
+                ->setBooked( $form->getData()['book'] );
+
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
+            $em->persist($booking);
 
 
-            $message = (new \Swift_Message('L\'envol du Phénix : Validation de votre inscription' ))
-                ->setFrom('lephenixcadurcien@live.fr' )
-                ->setTo( $user->getEmail() )
-                ->setBody(
-                    $this->renderView('email/registration.html.twig', [
-                        'name' => $user->getUsername(),
-                        'hash' => 'hash',
-                        ]
-                    ),
-                    'text/html'
-                );
-
-            $mailer->send($message);
+//            $message = (new \Swift_Message('L\'envol du Phénix : Validation de votre inscription' ))
+//                ->setFrom('lephenixcadurcien@live.fr' )
+//                ->setTo( $user->getEmail() )
+//                ->setBody(
+//                    $this->renderView('email/registration.html.twig', [
+//                        'name' => $user->getUsername(),
+//                        'hash' => 'hash',
+//                        ]
+//                    ),
+//                    'text/html'
+//                );
+//
+//            $mailer->send($message);
 
             $em->flush();
 
             return $this->redirectToRoute('subscribe.done');
         }
 
-        return $this->render('security/register.html.twig', [
+        return $this->render('envol/pages/register/register.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -104,7 +115,7 @@ class RegistrationController extends AbstractController
      * @Route("/enregistrement/fini", name="subscribe.done")
      */
     public function registerDoneAction(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
-        return $this->render('security/register-done.html.twig');
+        return $this->render('envol/pages/register/register-done.html.twig');
     }
 
     /**
@@ -145,6 +156,37 @@ class RegistrationController extends AbstractController
             ]);
         }
 
+    }
+
+    /**
+     * @Route("/profil/editer", name="profile.edit")
+     */
+    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder ) {
+
+        $form = $this->createForm(UserEditType::class, $this->getUser() );
+
+
+        $form->handleRequest( $request );
+        if ( $form->isSubmitted() && $form->isValid() ) {
+
+            /** @var User $user */
+            $user = $this->getUser();
+
+            $password = $form->get('confirm_password')->getData();
+
+            if( $passwordEncoder->isPasswordValid( $user, $password ) ){
+                if ( $password = $form->get('change_password')->getData() ) {
+                    $user->setPassword( $passwordEncoder->encodePassword( $user, $password ) );
+                }
+                $this->getDoctrine()->getManager()->flush();
+            }
+
+
+        }
+
+        return $this->render('security/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
 
