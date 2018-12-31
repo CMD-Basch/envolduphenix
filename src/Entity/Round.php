@@ -39,9 +39,17 @@ class Round
     private $end;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="rounds")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $event;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ActivityType", inversedBy="rounds")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $activityType;
+
 
     public function __construct()
     {
@@ -93,19 +101,6 @@ class Round
         return $this;
     }
 
-    public function getActivityType(): ?string
-    {
-        return $this->activityType;
-    }
-
-    public function setActivityType( ?string $activityType): self
-    {
-        $this->activityType = $activityType;
-
-        return $this;
-    }
-
-
     public function getSlug(): ?string
     {
         return $this->slug;
@@ -114,6 +109,30 @@ class Round
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): self
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function getActivityType(): ?ActivityType
+    {
+        return $this->activityType;
+    }
+
+    public function setActivityType(?ActivityType $activityType): self
+    {
+        $this->activityType = $activityType;
 
         return $this;
     }

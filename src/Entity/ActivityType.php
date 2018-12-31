@@ -35,9 +35,20 @@ class ActivityType
      */
     private $activities;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $module;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Round", mappedBy="activityType", orphanRemoval=true)
+     */
+    private $rounds;
+
     public function __construct()
     {
         $this->activities = new ArrayCollection();
+        $this->rounds = new ArrayCollection();
     }
 
     public function __toString()
@@ -99,6 +110,49 @@ class ActivityType
             // set the owning side to null (unless already changed)
             if ($activity->getType() === $this) {
                 $activity->setType(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getModule(): ?string
+    {
+        return $this->module;
+    }
+
+    public function setModule(string $module): self
+    {
+        $this->module = $module;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Round[]
+     */
+    public function getRounds(): Collection
+    {
+        return $this->rounds;
+    }
+
+    public function addRound(Round $round): self
+    {
+        if (!$this->rounds->contains($round)) {
+            $this->rounds[] = $round;
+            $round->setActivityType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRound(Round $round): self
+    {
+        if ($this->rounds->contains($round)) {
+            $this->rounds->removeElement($round);
+            // set the owning side to null (unless already changed)
+            if ($round->getActivityType() === $this) {
+                $round->setActivityType(null);
             }
         }
 

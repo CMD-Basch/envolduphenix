@@ -76,6 +76,11 @@ class Event
      */
     private $activities;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Round", mappedBy="event", orphanRemoval=true)
+     */
+    private $rounds;
+
     public function __construct()
     {
         $this->menus = new ArrayCollection();
@@ -83,6 +88,7 @@ class Event
         $this->articles = new ArrayCollection();
         $this->bookings = new ArrayCollection();
         $this->activities = new ArrayCollection();
+        $this->rounds = new ArrayCollection();
     }
 
     public function __toString()
@@ -317,6 +323,47 @@ class Event
             // set the owning side to null (unless already changed)
             if ($activity->getEvent() === $this) {
                 $activity->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Round[]
+     */
+    public function getRounds(): Collection
+    {
+        return $this->rounds;
+    }
+
+    /**
+     * @return Collection|Round[]
+     */
+    public function getRoundsByActivityType(ActivityType $activityType): Collection
+    {
+        return $this->rounds->filter( function ( Round $r ) use ( $activityType ) {
+            return $r->getActivityType() == $activityType;
+        });
+    }
+
+    public function addRound(Round $round): self
+    {
+        if (!$this->rounds->contains($round)) {
+            $this->rounds[] = $round;
+            $round->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRound(Round $round): self
+    {
+        if ($this->rounds->contains($round)) {
+            $this->rounds->removeElement($round);
+            // set the owning side to null (unless already changed)
+            if ($round->getEvent() === $this) {
+                $round->setEvent(null);
             }
         }
 

@@ -1,0 +1,22 @@
+{% extends "envol/standard.html.twig" %}
+
+{% block container %}
+    <div class="row justify-content-center">
+        <div class="col-sm-8">
+            <h3 class="titre-page">Nouvelle partie de JDR</h3>
+            <hr class="hr-titre">
+        </div> <!-- col -->
+    </div> <!-- row -->
+
+
+
+    <div class="row justify-content-center">
+        <div class="col-sm-4 form-ic">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input type="submit" class="btn btn-success" value="Ajouter" />
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+{% endblock %}

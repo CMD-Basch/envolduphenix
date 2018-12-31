@@ -5,11 +5,13 @@ namespace App\Controller\Admin;
 use App\Model\SortableInterface;
 use App\Service\Form\WeightService;
 use App\Service\ItemClassService;
+use App\Service\Module\ModuleService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Gedmo\Mapping\Annotation\SortableGroup;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -28,6 +30,18 @@ class EasyAdminController extends BaseAdminController
        $this->sWeight = $sWeight;
        $this->sClass = $sClass;
        $this->em = $em;
+    }
+
+    public function createActivityTypeEntityFormBuilder($entity, $view)
+    {
+        $formBuilder = parent::createEntityFormBuilder($entity, $view);
+
+        // get the list of choices from your application and add the form field for them
+        $formBuilder->add('module', ChoiceType::class, [
+            'choices' => ModuleService::ModulesList(),
+        ]);
+
+        return $formBuilder;
     }
 
     protected function listAction()

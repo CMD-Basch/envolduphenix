@@ -1,0 +1,30 @@
+{% extends "envol/standard.html.twig" %}
+
+{% block container %}
+    <div class="row justify-content-center">
+        <div class="col-sm-8">
+            <h3 class="titre-page">Liste des parties de JDR</h3>
+            <hr class="hr-titre">
+        </div> <!-- col -->
+    </div> <!-- row -->
+
+    {#<div class="row">#}
+        {#<div class="col">#}
+            {#<ul class="nav nav-tabs nav-fill w-100">#}
+                {# class="active" #}
+                {#{% for key, round in rounds %}#}
+                    {#<li class="nav-item" data-toggle="tooltip" title=""><a class="nav-link {% if key == active_round.code %} active{% endif %}" href="{{ path('roleplay', {'time': key}) }}">{{ round.name }}</a></li>#}
+                    {#<li class="nav-item" data-toggle="tooltip" title=""><a class="nav-link active" href="#">Yolo</a></li>#}
+                {#{% endfor %}#}
+            {#</ul>#}
+        {#</div>#}
+    {#</div>#}
+
+    <div class="text-left">
+        {# @var activity \App\Entity\Activity #}
+        {% for activity in activities %}
+             - {{ activity.name }}<br>
+        {% endfor %}
+    </div>
+
+{% endblock %}

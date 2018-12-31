@@ -94,8 +94,8 @@ easy_admin:
       form:
         fields:
           - name
-          - start
-          - end
+          - { property: 'start', type: 'datetime', type_options: { widget: 'single_text' } }
+          - { property: 'end', type: 'datetime', type_options: { widget: 'single_text' } }
           - active
           - { property: 'options', type: 'collection', type_options: { entry_type: 'App\Form\Field\KeyValueOptionsType' } }
           - { property: 'description', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
@@ -107,8 +107,8 @@ easy_admin:
           - name
           - event
           - type
-          - start
-          - end
+          - { property: 'start', type: 'datetime', type_options: { widget: 'single_text' } }
+          - { property: 'end', type: 'datetime', type_options: { widget: 'single_text' } }
           - description
           - game
           - style
@@ -121,9 +121,23 @@ easy_admin:
       form:
         fields:
           - name
+          - module
+      list:
+        fields:
+          - id
+          - name
+          - slug
+          - module
 
     Round:
       class: App\Entity\Round
+      form:
+        fields:
+          - name
+          - { property: 'start', type: 'datetime', type_options: { widget: 'single_text' } }
+          - { property: 'end', type: 'datetime', type_options: { widget: 'single_text' } }
+          - event
+          - activityType
 
     Parrainer:
       class: App\Entity\Parrainer
