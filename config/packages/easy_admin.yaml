@@ -113,6 +113,7 @@ easy_admin:
           - game
           - style
           - slots
+          - round
           - players
           - master
 
@@ -131,6 +132,16 @@ easy_admin:
 
     Round:
       class: App\Entity\Round
+      list:
+        fields:
+          - id
+          - name
+          - slug
+          - start
+          - end
+          - event
+          - activityType
+
       form:
         fields:
           - name

@@ -21,10 +21,10 @@ class ModuleService
         $this->container = $container;
     }
 
-    public function load( ActivityType $activityType ): ?ModuleInterface {
+    public function load( ActivityType $activityType, array $arguments = [] ): ?ModuleInterface {
         /** @var ModuleInterface $module */
         $module =  $this->container->get( $activityType->getModule() );
-        $module->init( $activityType );
+        $module->init( $activityType, $arguments );
         return $module;
     }
 

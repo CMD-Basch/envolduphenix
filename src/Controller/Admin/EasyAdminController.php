@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Round;
 use App\Model\SortableInterface;
 use App\Service\Form\WeightService;
 use App\Service\ItemClassService;
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Gedmo\Mapping\Annotation\SortableGroup;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,9 +38,22 @@ class EasyAdminController extends BaseAdminController
     {
         $formBuilder = parent::createEntityFormBuilder($entity, $view);
 
-        // get the list of choices from your application and add the form field for them
         $formBuilder->add('module', ChoiceType::class, [
             'choices' => ModuleService::ModulesList(),
+        ]);
+
+        return $formBuilder;
+    }
+
+    public function createActivityEntityFormBuilder($entity, $view)
+    {
+        $formBuilder = parent::createEntityFormBuilder($entity, $view);
+
+        $formBuilder->add('round', EntityType::class, [
+            'class' => Round::class,
+            'choice_label' => function (Round $r = null) {
+                return $r ? $r->getActivityType().' - '.$r->getName() : '';
+            },
         ]);
 
         return $formBuilder;
@@ -52,7 +67,7 @@ class EasyAdminController extends BaseAdminController
         $paginator = $this->findAll($this->entity['class'], $this->request->query->get('page', 1), $this->entity['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'), $this->entity['list']['dql_filter']);
 
         $this->dispatch(EasyAdminEvents::POST_LIST, array('paginator' => $paginator));
-        dump($paginator);
+
         $parameters = array(
             'paginator' => $paginator,
             'fields' => $fields,

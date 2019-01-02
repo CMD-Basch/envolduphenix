@@ -16,9 +16,35 @@ class RoleplayModule extends DefaultModule
     const SLUG = 'roleplay';
 
     public function getList() {
-        return $this->sEvent->getTheEvent()->getActivities()->filter( function (Activity $a ){
-            return $a->getType() == $this->activityType;
+        $roundSlug = $this->arguments[0] ?? null;
+
+        $criteria = [
+          'activityType' => $this->getActivityType()->getId(),
+          'event' => $this->getActivity()->getEvent()->getId(),
+        ];
+
+        if( $roundSlug ){
+            $criteria['slug'] = $roundSlug;
+        }
+
+        $round = $this->em->getRepository( Round::class )->findOneBy( $criteria );
+
+        return $this->sEvent->getTheEvent()->getActivities()->filter( function ( Activity $a ) use ( $round ) {
+            return $a->getType() == $this->activityType
+                && $a->getRound() == $round;
         });
+    }
+
+    public function getOptions(): array
+    {
+        $rounds = $this->em->getRepository( Round::class )->findBy( [
+            'activityType' => $this->getActivityType()->getId(),
+            'event' => $this->getActivity()->getEvent()->getId(),
+        ] );
+
+        return [
+            'rounds' => $rounds,
+        ];
     }
 
     protected function generateNewActivity(): Activity {

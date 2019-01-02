@@ -8,17 +8,19 @@
         </div> <!-- col -->
     </div> <!-- row -->
 
-    {#<div class="row">#}
-        {#<div class="col">#}
-            {#<ul class="nav nav-tabs nav-fill w-100">#}
-                {# class="active" #}
-                {#{% for key, round in rounds %}#}
-                    {#<li class="nav-item" data-toggle="tooltip" title=""><a class="nav-link {% if key == active_round.code %} active{% endif %}" href="{{ path('roleplay', {'time': key}) }}">{{ round.name }}</a></li>#}
-                    {#<li class="nav-item" data-toggle="tooltip" title=""><a class="nav-link active" href="#">Yolo</a></li>#}
-                {#{% endfor %}#}
-            {#</ul>#}
-        {#</div>#}
-    {#</div>#}
+    <div class="row">
+        <div class="col">
+            <ul class="nav nav-tabs nav-fill w-100">
+                 {#class="active"#}
+                {# @var round \App\Entity\Round #}
+                {% for key, round in options.rounds %}
+                    <li class="nav-item" data-toggle="tooltip" title="">
+                        <a class="nav-link {% if arguments[0] == round.slug %}active{% endif %}" href="{{ path('activity.module.list', {'slug': activityType.slug, 'arguments': round.slug } ) }}">{{ round.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 
     <div class="text-left">
         {# @var activity \App\Entity\Activity #}

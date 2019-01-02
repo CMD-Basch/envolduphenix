@@ -87,6 +87,11 @@ class Activity
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Round", inversedBy="activities")
+     */
+    private $round;
+
     public function __construct()
     {
         $this->players = new ArrayCollection();
@@ -286,6 +291,18 @@ class Activity
     public function setType(?ActivityType $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getRound(): ?Round
+    {
+        return $this->round;
+    }
+
+    public function setRound(?Round $round): self
+    {
+        $this->round = $round;
 
         return $this;
     }

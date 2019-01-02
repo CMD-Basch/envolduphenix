@@ -28,6 +28,7 @@ class DefaultModule implements ModuleInterface
     protected $activityType;
     protected $activity;
     protected $form;
+    protected $arguments;
 
     public function __construct( EventService $sEvent, FormFactoryInterface $formFactory, EntityManagerInterface $em )
     {
@@ -36,8 +37,9 @@ class DefaultModule implements ModuleInterface
         $this->em = $em;
     }
 
-    public function init( ActivityType $activityType ) {
+    public function init( ActivityType $activityType, array $arguments = [] ) {
         $this->activityType = $activityType;
+        $this->arguments = $arguments;
     }
 
     public function getSlug(): string {
@@ -46,6 +48,10 @@ class DefaultModule implements ModuleInterface
 
     public function getList() {
         return $this->sEvent->getTheEvent()->getActivities();
+    }
+
+    public function getActivityType(): ActivityType {
+        return $this->activityType;
     }
 
     protected function generateNewActivity(): Activity {
@@ -80,6 +86,8 @@ class DefaultModule implements ModuleInterface
         }
         return $this->form;
     }
+
+    public function getOptions(): array { return []; }
 
     public function preSubmit(Request $request) {}
 

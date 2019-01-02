@@ -29,18 +29,30 @@ class ActivityController extends AbstractController
         $this->theEvent = $sEvent->getTheEvent();
     }
 
+    private function fetchArguments( string $arguments = null ): array{
+        if( $arguments != null )
+            return explode('/', $arguments ?? '');
+
+        return [];
+    }
+
 
     /**
-     * @Route("/activites/{slug}/liste", name="activity.module.list")
+     * @Route("/activites/{slug}/liste/{arguments}", name="activity.module.list", requirements={"arguments"=".*"})
      */
-    public function listActionModule(ActivityType $activityType) {
+    public function listActionModule(ActivityType $activityType, $arguments = null) {
 
-        $module = $this->sModule->load( $activityType );
+        $arguments = $this->fetchArguments( $arguments );
+        dump($arguments);
+        $module = $this->sModule->load( $activityType, $arguments );
         if( !$module ) return $this->redirectToRoute( 'home');
 
         return $this->render( $this->loadTemplate( 'list.html.twig', $module ), [
             'event' => $this->theEvent,
+            'activityType' => $activityType,
             'activities' => $module->getList(),
+            'options' => $module->getOptions(),
+            'arguments' => $arguments,
         ]);
     }
 
