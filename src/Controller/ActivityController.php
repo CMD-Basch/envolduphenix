@@ -7,6 +7,7 @@ use App\Entity\ActivityType;
 use App\Model\ModuleInterface;
 use App\Service\Event\EventService;
 use App\Service\Module\ModuleService;
+use App\Service\User\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,15 +17,18 @@ class ActivityController extends AbstractController
 {
     private $sEvent;
     private $sModule;
+    private $sUser;
 
     private $twig;
 
     private $theEvent;
 
-    public function __construct( EventService $sEvent, ModuleService $sModule, Environment $twig )
+    public function __construct( EventService $sEvent, ModuleService $sModule, UserService $sUser, Environment $twig )
     {
         $this->sEvent = $sEvent;
         $this->sModule = $sModule;
+        $this->sUser = $sUser;
+
         $this->twig = $twig;
         $this->theEvent = $sEvent->getTheEvent();
     }
@@ -43,7 +47,6 @@ class ActivityController extends AbstractController
     public function listActionModule(ActivityType $activityType, $arguments = null) {
 
         $arguments = $this->fetchArguments( $arguments );
-        dump($arguments);
         $module = $this->sModule->load( $activityType, $arguments );
         if( !$module ) return $this->redirectToRoute( 'home');
 
@@ -57,11 +60,14 @@ class ActivityController extends AbstractController
     }
 
     /**
-     * @Route("/activites/{slug}/nouveau", name="activity.module.new")
+     * @Route("/activites/{slug}/nouveau/{arguments}", name="activity.module.new", requirements={"arguments"=".*"})
      */
-    public function newActionModule(ActivityType $activityType, Request $request) {
+    public function newActionModule(ActivityType $activityType, Request $request, $arguments = null ) {
 
-        $module = $this->sModule->load( $activityType );
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $arguments = $this->fetchArguments( $arguments );
+        $module = $this->sModule->load( $activityType, $arguments );
         if( !$module ) return $this->redirectToRoute( 'home');
 
         $form = $module->getForm();
@@ -69,13 +75,60 @@ class ActivityController extends AbstractController
         if ( $form->isSubmitted() && $form->isValid() ) {
             $module->preSubmit( $request );
             $module->submit();
-            return $this->redirectToRoute('activity.module.list', ['slug' => $activityType->getSlug() ] );
+            return $this->redirectToRoute('activity.module.list', ['slug' => $activityType->getSlug(), 'arguments' => implode('/' ,$arguments ) ] );
         }
 
         return $this->render($this->loadTemplate( 'new.html.twig', $module ), [
             'event' => $this->theEvent,
             'form' => $form->createView(),
+            'activity' => $module->getActivity(),
+            'activityType' => $activityType,
+            'options' => $module->getOptions(),
         ]);
+    }
+
+    /**
+     * @Route("/activity/{slug}/rejoindre/{arguments}", name="activity.module.join", requirements={"arguments"=".*"})
+     */
+    public function joinActionModule(Activity $activity, $arguments = null ) {
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $return_route = $this->redirectToRoute( 'activity.module.list', [
+            'slug' => $activity->getType()->getSlug(),
+            'arguments' => implode('/' ,[$activity->getRound()->getSlug()] )
+        ]);
+
+
+        if( !$this->sUser->canJoin( $activity ) )
+            return $return_route;
+
+        $activity->addPlayer( $this->sUser->getUser() );
+        $this->getDoctrine()->getManager()->flush();
+
+        return $return_route;
+    }
+
+    /**
+     * @Route("/activity/{slug}/quitter/{arguments}", name="activity.module.leave", requirements={"arguments"=".*"})
+     */
+    public function leaveActionModule(Activity $activity, $arguments = null ) {
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $return_route = $this->redirectToRoute( 'activity.module.list', [
+            'slug' => $activity->getType()->getSlug(),
+            'arguments' => implode('/' ,[$activity->getRound()->getSlug()] )
+        ]);
+
+
+        if( !$this->sUser->canLeave( $activity ) )
+            return $return_route;
+
+        $activity->removePlayer( $this->sUser->getUser() );
+        $this->getDoctrine()->getManager()->flush();
+
+        return $return_route;
     }
 
 

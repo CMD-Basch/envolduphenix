@@ -1,0 +1,40 @@
+{% if activity.isMaster(app.user) %}
+    {% set slotted = 'master' %}
+    {% set panel_color = 'card-invites' %}
+{% elseif activity.isPlayer( app.user ) %}
+    {% set slotted = 'player' %}
+    {% set panel_color = 'card-invites' %}
+{% else %}
+    {% set slotted = false %}
+    {% set panel_color = 'card-blue' %}
+{% endif %}
+
+
+{% if buttons is not defined %}
+    {% set buttons = true %}
+{% endif %}
+
+<div class="card {{ panel_color }}">
+    <div class="card-header">
+        <h4>{{ activity.name }}</h4>
+    </div>
+    <div class="card-body">
+        <p><strong>Meneur :</strong> {{ activity.master }}
+            <br>
+            <strong>Jeu :</strong> {{ activity.game }}<br>
+            <strong>Style :</strong> {{ activity.style }}<br>
+            <strong>Description :</strong><br>
+            {{ activity.description }}<br>
+            <strong>Places libres:</strong> {{ activity.freeSlots }} / {{ activity.slots }}<br>
+            <strong>Joueurs :</strong><br>
+            {% for player in activity.players %}
+                {{ player.username }}{% if loop.last != true %}, {% endif %}
+            {% endfor %}
+        </p>
+        <p>
+            {% if app.user and buttons %}
+                {{ activity|aButton|raw }}
+            {% endif %}
+        </p>
+    </div>
+</div>

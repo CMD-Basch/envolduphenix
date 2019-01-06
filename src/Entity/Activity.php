@@ -89,6 +89,7 @@ class Activity
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Round", inversedBy="activities")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $round;
 
@@ -170,7 +171,6 @@ class Activity
     public function isPlayer( ?User $user ): bool
     {
         return $this->getPlayers()->contains( $user );
-
     }
 
     public function isUser( User $user ): bool
@@ -230,6 +230,11 @@ class Activity
         $this->master = $master;
 
         return $this;
+    }
+
+    public function isMaster( ?User $user ): bool
+    {
+        return $this->getMaster() === $user;
     }
 
     public function getStyle(): ?string

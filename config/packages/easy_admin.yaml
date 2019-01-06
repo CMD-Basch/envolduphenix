@@ -70,7 +70,6 @@ easy_admin:
           - active
           - fixed
           - deleted
-          - link
 
     Article:
       class: App\Entity\Article
@@ -116,6 +115,15 @@ easy_admin:
           - round
           - players
           - master
+
+      list:
+        fields:
+          - name
+          - event
+          - type
+          - round
+          - start
+          - end
 
     ActivityType:
       class: App\Entity\ActivityType

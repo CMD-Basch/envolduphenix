@@ -161,6 +161,15 @@ class User extends BaseUser
         return $this;
     }
 
+    /**
+     * @return Collection|Activity[]
+     */
+    public function getAllActivities(): Collection {
+        $played = $this->getActivities();
+        $mastered = $this->getMasteredActivities();
+        return new ArrayCollection( array_merge( $played->toArray(), $mastered->toArray()));
+    }
+
 //    public function getSleep(): ?string
 //    {
 //        return $this->sleep;

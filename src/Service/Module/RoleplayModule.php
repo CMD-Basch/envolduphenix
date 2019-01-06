@@ -17,7 +17,6 @@ class RoleplayModule extends DefaultModule
 
     public function getList() {
         $roundSlug = $this->arguments[0] ?? null;
-
         $criteria = [
           'activityType' => $this->getActivityType()->getId(),
           'event' => $this->getActivity()->getEvent()->getId(),
@@ -39,21 +38,33 @@ class RoleplayModule extends DefaultModule
     {
         $rounds = $this->em->getRepository( Round::class )->findBy( [
             'activityType' => $this->getActivityType()->getId(),
-            'event' => $this->getActivity()->getEvent()->getId(),
+            'event' => $this->sEvent->getTheEvent()->getId(),
         ] );
+
+        $search_arguments = [
+            'activityType' => $this->getActivityType()->getId(),
+        ];
+
+        if( $round_slug = $this->arguments[0] ?? null ) {
+            $search_arguments['slug'] = $round_slug;
+        }
+        $round = $this->em->getRepository( Round::class )->findOneBy($search_arguments);
 
         return [
             'rounds' => $rounds,
+            'round' => $round,
+            'activityType' => $this->getActivityType(),
         ];
     }
 
     protected function generateNewActivity(): Activity {
         $event = $this->sEvent->getTheEvent();
+        $round = $this->getOptions()['round'];
         $activity = New Activity();
         $activity
+            ->setMaster( $this->sUser->getUser() )
             ->setEvent( $event )
-            /*->setStart( $event->getStart() )
-            ->setEnd( $event->getStart() )*/
+            ->setRound( $round )
             ->setType( $this->activityType )
         ;
 
@@ -61,12 +72,14 @@ class RoleplayModule extends DefaultModule
     }
 
     protected function generateNewForm(): FormInterface {
-        return $this->formFactory->create( ActivityRoleplayType::class , $this->getActivity() );
+        $a = $this->getActivity();
+        dump($a);
+        return $this->formFactory->create( ActivityRoleplayType::class , $a );
     }
 
     public function preSubmit( Request $request ) {
-        /** @var Round $round */
-        $round = $this->getForm()->get('round')->getData();
+
+        $round = $this->getActivity()->getRound();
         $this->getActivity()
             ->setStart( $round->getStart() )
             ->setEnd( $round->getEnd() )

@@ -24,11 +24,10 @@ class ActivityRoleplayType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Nom',
             ])
-            ->add('round', EntityType::class, [
+            /*->add('round', EntityType::class, [
                 'class' => Round::class,
                 'choices' => $activity->getEvent()->getRoundsByActivityType( $activity->getType() ),
-                'mapped' => false,
-            ])
+            ])*/
             ->add('game', TextType::class, [
                 'label' => 'Jeu',
             ])

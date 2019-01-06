@@ -36,6 +36,10 @@ class BaseController extends AbstractController
 
         $page = $this->container->get('twig')->createTemplate( $view->getContent() ?? '' )->render( [] );
 
+        if( $view->getModule() ){
+            return $this->redirectToRoute( 'activity.module.list', [ 'slug' => $view->getModule()->getSlug() ] );
+        }
+
         return $this->render('envol/pages/page.html.twig', array(
             'title' => [
                 'pic' => $view->getMenu()->getImage(),

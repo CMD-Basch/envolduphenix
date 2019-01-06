@@ -51,6 +51,7 @@ class EasyAdminController extends BaseAdminController
 
         $formBuilder->add('round', EntityType::class, [
             'class' => Round::class,
+            'required' => false,
             'choice_label' => function (Round $r = null) {
                 return $r ? $r->getActivityType().' - '.$r->getName() : '';
             },

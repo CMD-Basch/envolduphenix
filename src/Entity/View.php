@@ -62,10 +62,6 @@ class View implements SortableInterface
      */
     private $menu;
 
-    /**
-     * @ORM\Column(type="string", length=255,  nullable=true)
-     */
-    private $module;
 
 
     /**
@@ -124,6 +120,11 @@ class View implements SortableInterface
      */
     private $position;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ActivityType")
+     */
+    private $module;
+
 
 
     public function __construct()
@@ -181,17 +182,7 @@ class View implements SortableInterface
         return $this;
     }
 
-    public function getModule()
-    {
-        return $this->module;
-    }
 
-    public function setModule($module): self
-    {
-        $this->module = $module;
-
-        return $this;
-    }
 
     public function getContent(): ?string
     {
@@ -298,6 +289,18 @@ class View implements SortableInterface
     public function getPosition()
     {
         return $this->position;
+    }
+
+    public function getModule(): ?ActivityType
+    {
+        return $this->module;
+    }
+
+    public function setModule(?ActivityType $module): self
+    {
+        $this->module = $module;
+
+        return $this;
     }
 
 }

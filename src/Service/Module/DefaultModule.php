@@ -9,6 +9,7 @@ use App\Entity\ActivityType;
 use App\Form\Entity\Activity\ActivityDefaultType;
 use App\Model\ModuleInterface;
 use App\Service\Event\EventService;
+use App\Service\User\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -21,6 +22,7 @@ class DefaultModule implements ModuleInterface
     const SLUG = 'default';
 
     protected $sEvent;
+    protected $sUser;
 
     protected $formFactory;
     protected $em;
@@ -30,9 +32,10 @@ class DefaultModule implements ModuleInterface
     protected $form;
     protected $arguments;
 
-    public function __construct( EventService $sEvent, FormFactoryInterface $formFactory, EntityManagerInterface $em )
+    public function __construct( UserService $sUser, EventService $sEvent, FormFactoryInterface $formFactory, EntityManagerInterface $em )
     {
         $this->sEvent = $sEvent;
+        $this->sUser = $sUser;
         $this->formFactory = $formFactory;
         $this->em = $em;
     }

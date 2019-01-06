@@ -5,7 +5,6 @@ namespace App\Twig;
 use App\Entity\Event;
 use App\Entity\View;
 use App\Service\Event\EventService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -45,7 +44,7 @@ class EventExtension extends AbstractExtension
 
     public function viewUrl( View $view ) {
         if( $view->getModule() ) {
-            return $this->router->generate( $view->getModule() );
+            return $this->router->generate( 'activity.module.list', [ 'slug' => $view->getModule()->getSlug() ] );
         }
         else {
             return $this->router->generate( 'page',[ 'slug' => $view->getSlug() ] );
