@@ -47,7 +47,7 @@ class View implements SortableInterface
     *   @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\RelativeSlugHandler", options={
     *       @Gedmo\SlugHandlerOption(name="relationField", value="menu"),
     *       @Gedmo\SlugHandlerOption(name="relationSlugField", value="slug"),
-    *       @Gedmo\SlugHandlerOption(name="separator", value="--")
+    *       @Gedmo\SlugHandlerOption(name="separator", value="/")
     *   }),
     *
     *  }, fields={"name"}, updatable=true )
@@ -61,8 +61,6 @@ class View implements SortableInterface
      * @ORM\JoinColumn(nullable=false)
      */
     private $menu;
-
-
 
     /**
      * @ORM\Column(type="text", nullable=true)

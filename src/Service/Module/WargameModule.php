@@ -10,10 +10,10 @@ use App\Form\Entity\Activity\ActivityRoleplayType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class RoleplayModule extends DefaultModule
+class WargameModule extends DefaultModule
 {
-    const NAME = 'Jeu de rôle';
-    const SLUG = 'roleplay';
+    const NAME = 'Wargames';
+    const SLUG = 'wargame';
 
     public function getList() {
         $roundSlug = $this->arguments[0] ?? null;
@@ -54,12 +54,6 @@ class RoleplayModule extends DefaultModule
             'rounds' => $rounds,
             'round' => $round,
             'activityType' => $this->getActivityType(),
-        ];
-    }
-
-    public function getArgumentsAfterAjaxAction(): array {
-        return [
-            $this->getActivity()->getRound()->getSlug(),
         ];
     }
 

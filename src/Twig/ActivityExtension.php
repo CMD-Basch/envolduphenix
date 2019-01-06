@@ -43,14 +43,14 @@ class ActivityExtension extends AbstractExtension
             return '';
         }
         elseif( $activity->isPlayer( $user ) ) {
-            $url = $this->router->generate('activity.module.leave',['slug' => $activity->getSlug()] );
+            $url = $this->router->generate('activity.module.act',['slug' => $activity->getSlug(), 'action' => 'quitter'] );
             return '<a class="btn btn-outline-primary btn-table" role="button" data-ajax-button="true" href="'. $url .'">Quitter</a>';
         }
         elseif( !$activity->isFreeSlots() ) {
             return '<a class="btn btn-outline-secondary disabled" role="button" tabindex="-1" aria-disabled="true" href="#">Partie pleine</a>';
         }
         elseif( $this->sUser->isFreeTimeActivity($activity) ) {
-            $url = $this->router->generate('activity.module.join',['slug' => $activity->getSlug()] );
+            $url = $this->router->generate('activity.module.act',['slug' => $activity->getSlug(), 'action' => 'rejoindre'] );
             return '<a class="btn btn-outline-primary btn-table" role="button" data-ajax-button="true" href="'. $url .'">Rejoindre</a>';
         }
         else {

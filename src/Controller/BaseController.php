@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Menu;
 use App\Entity\View;
 use App\Service\Event\EventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,9 +31,15 @@ class BaseController extends AbstractController
     }
 
     /**
-     * @Route("/page/{slug}", name="page")
+     * @Route("/page/{slug}/{viewSlug}", name="page" )
      */
-    public function textView( View $view ) {
+    public function textView( Menu $menu, string $viewSlug ) {
+
+        $view = $this->getDoctrine()->getRepository( View::class )->findOneBy(['menu' => $menu, 'slug' => $viewSlug ]);
+
+        if( !$view ){
+            return $this->redirectToRoute('home');
+        }
 
         $page = $this->container->get('twig')->createTemplate( $view->getContent() ?? '' )->render( [] );
 

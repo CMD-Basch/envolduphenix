@@ -21,9 +21,11 @@ interface ModuleInterface
      */
     public function getList();
 
+    public function setActivity( Activity $activity );
     public function getActivity(): Activity;
     public function getForm(): FormInterface;
     public function getOptions(): array;
+    public function getArgumentsAfterAjaxAction(): array;
 
     public function preSubmit( Request $request );
     public function submit();

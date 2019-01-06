@@ -12,6 +12,8 @@ class ModuleService
     const MODULES = [
         DefaultModule::class,
         RoleplayModule::class,
+        WargameModule::class,
+        AllModule::class,
     ];
 
     private $container;

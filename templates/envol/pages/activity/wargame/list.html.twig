@@ -1,0 +1,51 @@
+{% extends "envol/standard.html.twig" %}
+
+{% block container %}
+    <div class="row justify-content-center">
+        <div class="col-sm-8">
+            <h3 class="titre-page">Liste des parties de JDR</h3>
+            <hr class="hr-titre">
+        </div> <!-- col -->
+    </div> <!-- row -->
+
+    <div id="list-wrapper">
+
+        <div class="row">
+            <div class="col-11">
+                <ul class="nav nav-tabs nav-fill w-100">
+                     {#class="active"#}
+                    {# @var round \App\Entity\Round #}
+                    {% for key, round in options.rounds %}
+                        <li class="nav-item" data-toggle="tooltip" title="">
+                            <a class="nav-link {% if options.round.slug == round.slug %}active{% endif %}" href="{{ path('activity.module.list', {'slug': activityType.slug, 'arguments': round.slug } ) }}">{{ round.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-1">
+                <ul class="nav nav-fill w-100">
+                    <li class="nav-item" data-toggle="tooltip" title="">
+                        {% if sUser().isFreeTimeRound( options.round ) %}
+                        <a class="nav-link" href="{{ path('activity.module.new', {'slug': activityType.slug, 'arguments': options.round.slug } ) }}"><i class="fas fa-plus"></i></a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="d-flex flex-wrap mt-5" >
+            {# @var activity \App\Entity\Activity #}
+            {% for activity in activities %}
+                <div class="col-lg-6 col-xl-4 mb-4">
+                 {% include 'envol/pages/activity/roleplay/block/activity.block.html.twig'  with {'activity': activity } only %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/ajax/ajax.activity.list.js') }}"></script>
+{% endblock %}

@@ -45,7 +45,7 @@ class ActivityController extends AbstractController
      * @Route("/activites/{slug}/liste/{arguments}", name="activity.module.list", requirements={"arguments"=".*"})
      */
     public function listActionModule(ActivityType $activityType, $arguments = null) {
-
+        dump($activityType);
         $arguments = $this->fetchArguments( $arguments );
         $module = $this->sModule->load( $activityType, $arguments );
         if( !$module ) return $this->redirectToRoute( 'home');
@@ -88,61 +88,44 @@ class ActivityController extends AbstractController
     }
 
     /**
-     * @Route("/activity/{slug}/rejoindre/{arguments}", name="activity.module.join", requirements={"arguments"=".*"})
+     * @Route("/activity/{slug}/{action}/{arguments}", name="activity.module.act", requirements={"arguments"=".*"})
      */
-    public function joinActionModule(Activity $activity, Request $request, $arguments = null ) {
+    public function joinActionModule(Activity $activity, string $action, Request $request, $arguments = null ) {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $typeSlug = $activity->getType()->getSlug();
+        $arguments = $this->fetchArguments( $arguments );
+
 
         if($request->isXmlHttpRequest() && $requestType = $request->request->get('type')){
             $typeSlug = $requestType;
         }
 
+        $activityType = $this->getDoctrine()->getManager()->getRepository( ActivityType::class )->findOneBy(['slug' => $typeSlug ]);
+
+        $module = $this->sModule->load( $activityType, $arguments );
+        $module->setActivity( $activity );
+
         $return_route = $this->redirectToRoute( 'activity.module.list', [
             'slug' => $typeSlug,
-            'arguments' => implode('/' ,[$activity->getRound()->getSlug()] )
+            'arguments' => implode('/' ,$module->getArgumentsAfterAjaxAction() )
         ]);
 
-
-        if( !$this->sUser->canJoin( $activity ) )
-            return $return_route;
-
-        $activity->addPlayer( $this->sUser->getUser() );
-        $this->getDoctrine()->getManager()->flush();
-
-        return $return_route;
-    }
-
-    /**
-     * @Route("/activity/{slug}/quitter/{arguments}", name="activity.module.leave", requirements={"arguments"=".*"})
-     */
-    public function leaveActionModule(Activity $activity, Request $request, $arguments = null ) {
-
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $typeSlug = $activity->getType()->getSlug();
-
-        if($request->isXmlHttpRequest() && $requestType = $request->request->get('type')){
-            $typeSlug = $requestType;
+        switch($action){
+            case 'rejoindre' :
+                if( $this->sUser->canJoin( $activity ) )
+                    $activity->addPlayer( $this->sUser->getUser() );
+                break;
+            case 'quitter' :
+                $activity->removePlayer( $this->sUser->getUser() );
+                break;
         }
 
-        $return_route = $this->redirectToRoute( 'activity.module.list', [
-            'slug' => $typeSlug,
-            'arguments' => implode('/' ,[$activity->getRound()->getSlug()] )
-        ]);
-
-
-        if( !$this->sUser->canLeave( $activity ) )
-            return $return_route;
-
-        $activity->removePlayer( $this->sUser->getUser() );
         $this->getDoctrine()->getManager()->flush();
 
         return $return_route;
     }
-
 
     private function loadTemplate( string $name, ModuleInterface $module ):string {
         $path = 'envol/pages/activity/';

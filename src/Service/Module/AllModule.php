@@ -6,6 +6,7 @@ namespace App\Service\Module;
 
 use App\Entity\Activity;
 use App\Entity\ActivityType;
+use App\Entity\Event;
 use App\Form\Entity\Activity\ActivityDefaultType;
 use App\Model\ModuleInterface;
 use App\Service\Date\DateFrService;
@@ -16,37 +17,11 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class DefaultModule implements ModuleInterface
+class AllModule extends DefaultModule
 {
 
-    const NAME = 'Par défaut';
-    const SLUG = 'default';
-
-    protected $sEvent;
-    protected $sUser;
-    protected $sDateFr;
-
-    protected $formFactory;
-    protected $em;
-
-    protected $activityType;
-    protected $activity;
-    protected $form;
-    protected $arguments;
-
-    public function __construct(
-        UserService $sUser,
-        EventService $sEvent,
-        FormFactoryInterface $formFactory,
-        EntityManagerInterface $em,
-        DateFrService $sDateFr)
-    {
-        $this->sEvent = $sEvent;
-        $this->sUser = $sUser;
-        $this->formFactory = $formFactory;
-        $this->em = $em;
-        $this->sDateFr = $sDateFr;
-    }
+    const NAME = 'Toutes les activités';
+    const SLUG = 'all';
 
     public function init( ActivityType $activityType, array $arguments = [] ) {
         $this->activityType = $activityType;
@@ -57,10 +32,30 @@ class DefaultModule implements ModuleInterface
         return $this::SLUG;
     }
 
+    private function getDayFromSlug(Event $event, string $slug): ?\DateTime{
+        $day = null;
+        $week = $this->sEvent->getDays($event);
+        foreach ( $week as $checkDay ) if( $slug == $this->sDateFr->dayAndNbSlug( $checkDay )){
+            $day = $checkDay;
+            break;
+        }
+        return $day;
+    }
+
     public function getList() {
 
-        return $this->sEvent->getTheEvent()->getActivities()->filter( function( Activity $a ) {
-            return $a->getType() === $this->getActivityType();
+        $event = $this->sEvent->getTheEvent();
+        $week = $this->sEvent->getDays( $event );
+        $daySlug = $this->arguments[0] ?? '';
+
+        $day = $this->getDayFromSlug( $event, $daySlug );
+
+        if(!$day) {
+            $day = current($week);
+        }
+
+        return $event->getActivities()->filter( function( Activity $a ) use ( $day ) {
+            return $a->getStart()->format('z') == $day->format('z');
         });
     }
 
@@ -78,10 +73,6 @@ class DefaultModule implements ModuleInterface
         ;
 
         return $activity;
-    }
-
-    public function setActivity( Activity $activity ){
-        $this->activity = $activity;
     }
 
     public function getActivity(): Activity
@@ -106,11 +97,22 @@ class DefaultModule implements ModuleInterface
     }
 
     public function getOptions(): array {
-        return [];
+        $event = $this->sEvent->getTheEvent();
+        $week = $this->sEvent->getDays( $event );
+        $daySlug = $this->arguments[0] ?? '';
+
+        $day = $this->getDayFromSlug( $event, $daySlug );
+
+        return [
+            'week' => $week,
+            'day' => $day,
+        ];
     }
 
     public function getArgumentsAfterAjaxAction(): array {
-        return [];
+        return [
+            $this->sDateFr->dayAndNbSlug( $this->getActivity()->getStart() )
+        ];
     }
 
     public function preSubmit(Request $request) {}

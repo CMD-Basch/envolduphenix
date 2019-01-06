@@ -47,7 +47,7 @@ class EventExtension extends AbstractExtension
             return $this->router->generate( 'activity.module.list', [ 'slug' => $view->getModule()->getSlug() ] );
         }
         else {
-            return $this->router->generate( 'page',[ 'slug' => $view->getSlug() ] );
+            return $this->router->generate( 'page',[ 'slug' => $view->getMenu()->getSlug(), 'viewSlug' => $view->getSlug() ] );
         }
     }
 
