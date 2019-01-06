@@ -8,23 +8,34 @@
         </div> <!-- col -->
     </div> <!-- row -->
 
-    {#<div class="row">#}
-        {#<div class="col">#}
-            {#<ul class="nav nav-tabs nav-fill w-100">#}
-                {# class="active" #}
-                {#{% for key, round in rounds %}#}
-                    {#<li class="nav-item" data-toggle="tooltip" title=""><a class="nav-link {% if key == active_round.code %} active{% endif %}" href="{{ path('roleplay', {'time': key}) }}">{{ round.name }}</a></li>#}
-                    {#<li class="nav-item" data-toggle="tooltip" title=""><a class="nav-link active" href="#">Yolo</a></li>#}
-                {#{% endfor %}#}
-            {#</ul>#}
-        {#</div>#}
-    {#</div>#}
+    <div id="list-wrapper" data-type="{{ activityType.slug }}">
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav nav-tabs nav-fill w-100">
+                    {#class="active"#}
+                    {# @var round \App\Entity\Round #}
+                    {% for day in options.week %}
+                        <li class="nav-item" data-toggle="tooltip" title="">
+                            <a class="nav-link {% if options.day == day %}active{% endif %}" href="{{ path('activity.module.list', {'slug': activityType.slug, 'arguments': day|dayAndNbSlug } ) }}">{{ day|dayAndNb }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
 
-    <div class="text-left">
-        {# @var activity \App\Entity\Activity #}
-        {% for activity in event.activities %}
-             - {{ activity.name }}<br>
-        {% endfor %}
+        <div class="d-flex flex-wrap mt-5" >
+            {# @var activity \App\Entity\Activity #}
+            {% for activity in activities %}
+                <div class="col-12 mb-4">
+                    {% include 'envol/pages/activity/default/block/activity.block.html.twig'  with {'activity': activity } only %}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/ajax/ajax.activity.list.js') }}"></script>
 {% endblock %}

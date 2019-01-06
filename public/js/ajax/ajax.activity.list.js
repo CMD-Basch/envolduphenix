@@ -3,14 +3,15 @@ $(document).ready( function() {
     function bindAjaxRoleplay () {
         $('[data-ajax-button="true"]').off().on('click', function (event) {
             event.preventDefault();
-
+            const type = $( '#list-wrapper' ).data('type');
             $.ajax({
                 url: $(this).attr('href'),
                 type: "POST",
+                data:{ type:type },
                 async: true,
                 success: function (data) {
                     console.log(data);
-                    $( '#roleplay-wrapper' ).replaceWith( $(data).find('#roleplay-wrapper') );
+                    $( '#list-wrapper' ).replaceWith( $(data).find('#list-wrapper') );
                     bindAjaxRoleplay();
                 }
             });

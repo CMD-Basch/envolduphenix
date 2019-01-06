@@ -90,12 +90,18 @@ class ActivityController extends AbstractController
     /**
      * @Route("/activity/{slug}/rejoindre/{arguments}", name="activity.module.join", requirements={"arguments"=".*"})
      */
-    public function joinActionModule(Activity $activity, $arguments = null ) {
+    public function joinActionModule(Activity $activity, Request $request, $arguments = null ) {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
+        $typeSlug = $activity->getType()->getSlug();
+
+        if($request->isXmlHttpRequest() && $requestType = $request->request->get('type')){
+            $typeSlug = $requestType;
+        }
+
         $return_route = $this->redirectToRoute( 'activity.module.list', [
-            'slug' => $activity->getType()->getSlug(),
+            'slug' => $typeSlug,
             'arguments' => implode('/' ,[$activity->getRound()->getSlug()] )
         ]);
 
@@ -112,12 +118,18 @@ class ActivityController extends AbstractController
     /**
      * @Route("/activity/{slug}/quitter/{arguments}", name="activity.module.leave", requirements={"arguments"=".*"})
      */
-    public function leaveActionModule(Activity $activity, $arguments = null ) {
+    public function leaveActionModule(Activity $activity, Request $request, $arguments = null ) {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
+        $typeSlug = $activity->getType()->getSlug();
+
+        if($request->isXmlHttpRequest() && $requestType = $request->request->get('type')){
+            $typeSlug = $requestType;
+        }
+
         $return_route = $this->redirectToRoute( 'activity.module.list', [
-            'slug' => $activity->getType()->getSlug(),
+            'slug' => $typeSlug,
             'arguments' => implode('/' ,[$activity->getRound()->getSlug()] )
         ]);
 
