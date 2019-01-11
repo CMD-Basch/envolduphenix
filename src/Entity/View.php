@@ -53,7 +53,14 @@ class View implements SortableInterface
     *  }, fields={"name"}, updatable=true )
     * @ORM\Column(length=128, unique=true)
     */
+    private $longSlug;
+
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=128, unique=false)
+     */
     private $slug;
+
 
     /**
      * @Gedmo\SortableGroup
@@ -157,12 +164,23 @@ class View implements SortableInterface
         return $this;
     }
 
+    public function getLongSlug(): ?string
+    {
+        return $this->longSlug;
+    }
+
+    public function setLongSlug( string $longSlug): self
+    {
+        $this->longSlug = $longSlug;
+        return $this;
+    }
+
     public function getSlug(): ?string
     {
         return $this->slug;
     }
 
-    public function setSlug(string $slug): self
+    public function setSlug( string $slug): self
     {
         $this->slug = $slug;
         return $this;
@@ -180,7 +198,13 @@ class View implements SortableInterface
         return $this;
     }
 
-
+    public function generateTitle():array {
+        return [
+            'pic' => $this->getMenu()->getImage(),
+            'name' => $this->getMenu()->getName(),
+            'color' => $this->getMenu()->getColor(),
+        ];
+    }
 
     public function getContent(): ?string
     {

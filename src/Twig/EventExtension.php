@@ -44,10 +44,10 @@ class EventExtension extends AbstractExtension
 
     public function viewUrl( View $view ) {
         if( $view->getModule() ) {
-            return $this->router->generate( 'activity.module.list', [ 'slug' => $view->getModule()->getSlug() ] );
+            return $this->router->generate( 'activity.module.list', [ 'longSlug' => $view->getLongSlug() ] );
         }
         else {
-            return $this->router->generate( 'page',[ 'slug' => $view->getMenu()->getSlug(), 'viewSlug' => $view->getSlug() ] );
+            return $this->router->generate( 'page',[ 'longSlug' => $view->getLongSlug() ] );
         }
     }
 

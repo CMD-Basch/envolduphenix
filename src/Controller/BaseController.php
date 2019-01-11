@@ -31,15 +31,9 @@ class BaseController extends AbstractController
     }
 
     /**
-     * @Route("/page/{slug}/{viewSlug}", name="page" )
+     * @Route("/page/{longSlug}", name="page", requirements={"longSlug"="[^\/]+\/[^\/]+"} )
      */
-    public function textView( Menu $menu, string $viewSlug ) {
-
-        $view = $this->getDoctrine()->getRepository( View::class )->findOneBy(['menu' => $menu, 'slug' => $viewSlug ]);
-
-        if( !$view ){
-            return $this->redirectToRoute('home');
-        }
+    public function textView( View $view ) {
 
         $page = $this->container->get('twig')->createTemplate( $view->getContent() ?? '' )->render( [] );
 
@@ -48,11 +42,7 @@ class BaseController extends AbstractController
         }
 
         return $this->render('envol/pages/page.html.twig', array(
-            'title' => [
-                'pic' => $view->getMenu()->getImage(),
-                'name' => $view->getMenu()->getName(),
-                'color' => $view->getMenu()->getColor(),
-            ],
+            'title' => $view->generateTitle(),
             'view' => $view,
             'page' => $page,
         ));

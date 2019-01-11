@@ -14,6 +14,6 @@ class Namer implements NamerInterface
     {
         /** @var View $object */
         $ext = $object->getImageFile()->guessExtension();
-        return $object->getSlug().'.'.$ext;
+        return $object->getLongSlug().'.'.$ext;
     }
 }

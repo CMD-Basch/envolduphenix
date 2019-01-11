@@ -17,7 +17,7 @@
                     {# @var round \App\Entity\Round #}
                     {% for key, round in options.rounds %}
                         <li class="nav-item" data-toggle="tooltip" title="">
-                            <a class="nav-link {% if options.round.slug == round.slug %}active{% endif %}" href="{{ path('activity.module.list', {'slug': activityType.slug, 'arguments': round.slug } ) }}">{{ round.name }}</a>
+                            <a class="nav-link {% if options.round.slug == round.slug %}active{% endif %}" href="{{ path('activity.module.list', {'longSlug': view.longSlug, 'arguments': round.slug } ) }}">{{ round.name }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -26,7 +26,7 @@
                 <ul class="nav nav-fill w-100">
                     <li class="nav-item" data-toggle="tooltip" title="">
                         {% if sUser().isFreeTimeRound( options.round ) %}
-                        <a class="nav-link" href="{{ path('activity.module.new', {'slug': activityType.slug, 'arguments': options.round.slug } ) }}"><i class="fas fa-plus"></i></a>
+                        <a class="nav-link" href="{{ path('activity.module.new', {'longSlug': view.longSlug, 'arguments': options.round.slug } ) }}"><i class="fas fa-plus"></i></a>
                         {% endif %}
                     </li>
                 </ul>
@@ -37,7 +37,7 @@
             {# @var activity \App\Entity\Activity #}
             {% for activity in activities %}
                 <div class="col-lg-6 col-xl-4 mb-4">
-                 {% include 'envol/pages/activity/roleplay/block/activity.block.html.twig'  with {'activity': activity } only %}
+                 {% include 'envol/pages/activity/roleplay/block/activity.block.html.twig' with {'activity': activity } only %}
                 </div>
             {% endfor %}
         </div>

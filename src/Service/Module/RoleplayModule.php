@@ -79,7 +79,6 @@ class RoleplayModule extends DefaultModule
 
     protected function generateNewForm(): FormInterface {
         $a = $this->getActivity();
-        dump($a);
         return $this->formFactory->create( ActivityRoleplayType::class , $a );
     }
 

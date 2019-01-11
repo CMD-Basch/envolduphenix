@@ -16,7 +16,7 @@
                     {# @var round \App\Entity\Round #}
                     {% for day in options.week %}
                         <li class="nav-item" data-toggle="tooltip" title="">
-                            <a class="nav-link {% if options.day == day %}active{% endif %}" href="{{ path('activity.module.list', {'slug': activityType.slug, 'arguments': day|dayAndNbSlug } ) }}">{{ day|dayAndNb }}</a>
+                            <a class="nav-link {% if options.day == day %}active{% endif %}" href="{{ path('activity.module.list', {'longSlug': view.longSlug, 'arguments': day|dayAndNbSlug } ) }}">{{ day|dayAndNb }}</a>
                         </li>
                     {% endfor %}
                 </ul>

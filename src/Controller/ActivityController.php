@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Activity;
 use App\Entity\ActivityType;
+use App\Entity\View;
 use App\Model\ModuleInterface;
 use App\Service\Event\EventService;
 use App\Service\Module\ModuleService;
@@ -42,15 +43,18 @@ class ActivityController extends AbstractController
 
 
     /**
-     * @Route("/activites/{slug}/liste/{arguments}", name="activity.module.list", requirements={"arguments"=".*"})
+     * @Route("/activite/{longSlug}/liste/{arguments}", name="activity.module.list", requirements={"longSlug"="[^\/]+\/[^\/]+","arguments"=".*"})
      */
-    public function listActionModule(ActivityType $activityType, $arguments = null) {
-        dump($activityType);
+    public function listActionModule(View $view, $arguments = null) {
+        $activityType = $view->getModule();
+        if( !$activityType )return $this->redirectToRoute('home');
         $arguments = $this->fetchArguments( $arguments );
         $module = $this->sModule->load( $activityType, $arguments );
         if( !$module ) return $this->redirectToRoute( 'home');
 
         return $this->render( $this->loadTemplate( 'list.html.twig', $module ), [
+            'title' => $view->generateTitle(),
+            'view' => $view,
             'event' => $this->theEvent,
             'activityType' => $activityType,
             'activities' => $module->getList(),
@@ -60,12 +64,14 @@ class ActivityController extends AbstractController
     }
 
     /**
-     * @Route("/activites/{slug}/nouveau/{arguments}", name="activity.module.new", requirements={"arguments"=".*"})
+     * @Route("/activites/{longSlug}/nouveau/{arguments}", name="activity.module.new", requirements={"longSlug"="[^\/]+\/[^\/]+","arguments"=".*"})
      */
-    public function newActionModule(ActivityType $activityType, Request $request, $arguments = null ) {
+    public function newActionModule(View $view, Request $request, $arguments = null ) {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
+        $activityType = $view->getModule();
+        if( !$activityType )return $this->redirectToRoute('home');
         $arguments = $this->fetchArguments( $arguments );
         $module = $this->sModule->load( $activityType, $arguments );
         if( !$module ) return $this->redirectToRoute( 'home');
@@ -79,6 +85,8 @@ class ActivityController extends AbstractController
         }
 
         return $this->render($this->loadTemplate( 'new.html.twig', $module ), [
+            'title' => $view->generateTitle(),
+            'view' => $view,
             'event' => $this->theEvent,
             'form' => $form->createView(),
             'activity' => $module->getActivity(),

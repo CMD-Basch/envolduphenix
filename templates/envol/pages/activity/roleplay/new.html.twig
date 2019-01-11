@@ -14,7 +14,7 @@
             {{ form_start(form) }}
             {{ form_widget(form) }}
             <input type="submit" class="btn btn-success" value="Ajouter" />
-            <a class="btn btn-secondary float-right" href="{{ path('activity.module.list', {'slug': activityType.slug, 'arguments': options.round.slug } ) }}">Retour</a>
+            <a class="btn btn-secondary float-right" href="{{ path('activity.module.list', {'longSlug': view.longSlug, 'arguments': options.round.slug } ) }}">Retour</a>
             {{ form_end(form) }}
         </div>
     </div>
