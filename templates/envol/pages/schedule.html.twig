@@ -15,14 +15,54 @@
 
     <div class="row">
         {% set days = sEvent().getDays(event) %}
+
+        {% if days|length is divisible by(3) %}
+            {% set col = 4 %}
+            {% set div = 3 %}
+        {% elseif days|length == 2 or days|length == 4 %}
+            {% set col = 6 %}
+            {% set div = 2 %}
+        {% elseif days|length == 1 %}
+            {% set col = 12 %}
+            {% set div = 3 %}
+        {% else %}
+            {% set col = 4 %}
+            {% set div = 3 %}
+        {% endif %}
+
         {% for day in days %}
-        <div class="col-sm-12 col-md-4">
-            {{ day|dayAndNb }}
-            {% for hour in 1..24 %}
-                <div style="height: 60px; border-bottom: 1px solid lightgray">
-                    {{ hour }}
+        <div class="col-sm-12 col-md-{{ col }} mb-5">
+            <h5>{{ day|dayAndNb }}</h5>
+
+            <div class="d-flex" >
+
+                <div style="position:relative"{% if loop.index == 1 or ( loop.index0 is divisible by(div) ) %}  {% else %} class="d-md-none" {% endif %}>
+                    {% for hour in 0..24 %}
+                    <div class="mr-1 schedule-cell-hour text-right">
+                        {{ hour }} H
+                    </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+
+
+                <div style="position: relative" class="flex-grow-1">
+                    {% for activity in sUser().getActivitiesForDay(day) %}
+                    {# @var activity \App\Entity\Activity #}
+                        <div style="top: {{ activity.startHour(day) * 45 + 45 }}px;
+                                height: {{ activity.duration(day) * 45 }}px; "
+                                class="schedule-cell-activity">
+                            <strong>{{ activity.name }}</strong><br>
+                            {{ activity.type.name }}
+                        </div>
+                    {% endfor %}
+
+                    {% for hour in 0..24 %}
+                    <div class="schedule-cell-time" ></div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
         </div>
         {% endfor %}
 

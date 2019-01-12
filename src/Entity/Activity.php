@@ -145,6 +145,32 @@ class Activity
         return $this;
     }
 
+    public function getStartHour(\DateTime $day = null): int {
+
+        if( !$day || $this->getStart()->format('z') == $day->format('z'))
+            return intval($this->getStart()->format('H'));
+
+        return 0;
+    }
+
+    public function getEndHour(): int {
+        return intval($this->getEnd()->format('H'));
+    }
+
+    public function getDuration(\DateTime $day = null):int {
+        $start = $this->getStartHour();
+        $end = $this->getEndHour();
+
+        if( !$day || $this->getStart()->format('z') == $day->format('z')) {
+            if ($start > $end) {
+                return 24 - $start;
+            }
+            return $end - $start;
+        }
+        return $end;
+
+    }
+
 
     public function getEnd():? \DateTimeInterface
     {

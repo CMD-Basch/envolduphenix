@@ -32,7 +32,6 @@ class AccountController extends AbstractController
         $this->activityUser = $activityUser;
         $this->activityButton = $activityButton;
 
-
         if( get_class($tokenStorage->getToken() ) == UsernamePasswordToken::class ) { // TODO : checker autrement
             $this->user = $tokenStorage->getToken()->getUser();
         }
@@ -44,7 +43,6 @@ class AccountController extends AbstractController
     public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder ) {
 
         $form = $this->createForm(UserEditType::class, $this->getUser() );
-
 
         $form->handleRequest( $request );
         if ( $form->isSubmitted() && $form->isValid() ) {
@@ -60,7 +58,6 @@ class AccountController extends AbstractController
                 }
                 $this->getDoctrine()->getManager()->flush();
             }
-
 
         }
 

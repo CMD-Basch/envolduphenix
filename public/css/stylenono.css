@@ -523,40 +523,34 @@ body a:hover {
 
 /*---------EDT--------*/
 
-.table-custom th{
-	border-top: none !important;
+
+
+
+.schedule-cell-time {
+	height: 45px;
+	border-bottom: 1px solid lightgray;
 }
-.table-custom tr {
-	height: 40px;
+.schedule-cell-hour {
 	position: relative;
+	top: 32px;
+	height: 45px;
+	width: 50px;
 }
 
-.table-custom td {
-	padding : 8px;
-}
+.schedule-cell-activity {
 
-
-
-.cell-time {
-	border : none !important;
-}
-.cell-time span{
-	position: relative;
-	top : -18px;
-}
-
-.card-light {
-	margin: 0;
-	font-size: 15px;
-	background-image: url("../images/bandeau-orange.png");
 	color: #fff;
+	background-color: #1A5E94;
+	border-color: #0B3754;
 
+	padding-top: 5px;
+
+	position: absolute;
+	right: 0;
+	left: 0;
+	z-index: 20;
 }
 
-.card-light h4 {
-	font-size: 17px;
-	font-weight: bold;
-}
 
 
 

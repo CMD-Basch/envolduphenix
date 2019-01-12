@@ -3,8 +3,8 @@
 namespace App\Service\Event;
 
 
+use App\Entity\Activity;
 use App\Entity\Event;
-use App\Service\Date\DateFrService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class EventService
@@ -48,6 +48,12 @@ class EventService
         }
 
         return $this->week;
+    }
+
+    public function getActivitiesForDay( \DateTime $day ){
+        return $this->getTheEvent()->getActivities()->filter( function ( Activity $a ) use ( $day ) {
+            return $day->format('z') == $a->getStart()->format('z');
+        });
     }
 
 }

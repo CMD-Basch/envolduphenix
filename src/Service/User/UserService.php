@@ -6,6 +6,7 @@ namespace App\Service\User;
 use App\Entity\Activity;
 use App\Entity\Round;
 use App\Entity\User;
+use App\Service\Event\EventService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -16,9 +17,12 @@ class UserService
     private $user;
     private $tokenStorage;
 
-    public function __construct( TokenStorageInterface $token )
+    private $sEvent;
+
+    public function __construct( TokenStorageInterface $token, EventService $sEvent )
     {
         $this->tokenStorage = $token;
+        $this->sEvent = $sEvent;
     }
 
     public function getUser(): ?User {
@@ -42,8 +46,6 @@ class UserService
             && $activity->getEnd() > $start ){
                 $overlap->add( $activity );
             }
-
-
         }
 
         return $overlap;
@@ -67,5 +69,18 @@ class UserService
     public function canLeave( Activity $activity ): bool {
         if( $activity->isPlayer( $this->getUser() ) ) return true;
         return false;
+    }
+
+    public function getActivitiesForDay( \DateTime $day ){
+        return $this->getUser()->getAllActivities()->filter( function ( Activity $a ) use ( $day ) {
+            return $day->format('z') == $a->getStart()->format('z') ||
+                $day->format('z') == $a->getEnd()->format('z');
+        });
+    }
+
+    public function getActivitiesForDayAndHour( \DateTime $day, int $hour ){
+        return $this->getUser()->getAllActivities()->filter( function ( Activity $a ) use ( $day, $hour ) {
+            return $day->format('z') == $a->getStart()->format('z') && $day->format('h') == $hour;
+        });
     }
 }

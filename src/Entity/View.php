@@ -200,7 +200,7 @@ class View implements SortableInterface
 
     public function generateTitle():array {
         return [
-            'pic' => $this->getMenu()->getImage(),
+            'pic' => $this->getMenu()->getImage() ? 'uploads/menu/'.$this->getMenu()->getImage() : null,
             'name' => $this->getMenu()->getName(),
             'color' => $this->getMenu()->getColor(),
         ];

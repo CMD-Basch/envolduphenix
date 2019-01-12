@@ -38,6 +38,11 @@ class Booking
      */
     private $booked;
 
+    public function __toString()
+    {
+        return $this->getEvent()->getName(). ' - '.$this->getUser()->getUsername();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

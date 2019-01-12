@@ -40,14 +40,15 @@ class DateFrService
         $dayFrom = $from->format('z');
         $dayTo = $to->format('z');
 
-
         if( $dayFrom == $dayTo || $to->format('h') < 5 ){
-            return $this->getDayShort( $from ) . ' de '.$from->format('H\hm'). ' à '.$to->format('H\hm');
+            return $this->getDayShort( $from ) . ' de ' . $from->format('H\hi') . ' à '. $to->format('H\hi');
         }
         else {
-            return 'du ' . $this->getDayShort( $from ) . ' à '.$from->format('H\hm').
-                ' au '.$this->getDayShort( $to ) . ' à '.$to->format('H\hm');
+            return 'du ' . $this->getDayShort( $from ) . ' à '.$from->format('H\hi').
+                ' au '.$this->getDayShort( $to ) . ' à '.$to->format('H\hi');
         }
+
+
 
     }
 
