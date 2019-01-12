@@ -7,6 +7,7 @@ use App\Entity\View;
 use App\Service\Event\EventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 class BaseController extends AbstractController
 {
@@ -33,9 +34,9 @@ class BaseController extends AbstractController
     /**
      * @Route("/page/{longSlug}", name="page", requirements={"longSlug"="[^\/]+\/[^\/]+"} )
      */
-    public function textView( View $view ) {
+    public function textView( View $view, Environment $twig ) {
 
-        $page = $this->container->get('twig')->createTemplate( $view->getContent() ?? '' )->render( [] );
+        $page = $twig->createTemplate( $view->getContent() ?? '' )->render( [] );
 
         if( $view->getModule() ){
             return $this->redirectToRoute( 'activity.module.list', [ 'slug' => $view->getModule()->getSlug() ] );

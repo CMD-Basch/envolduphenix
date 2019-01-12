@@ -32,7 +32,7 @@
         </p>
         <p>
             {% if app.user and buttons %}
-                {{ activity|aButton|raw }}
+                {{ activity|aButton(view)|raw }}
             {% endif %}
         </p>
     </div>

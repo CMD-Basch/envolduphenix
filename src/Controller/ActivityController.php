@@ -9,6 +9,7 @@ use App\Model\ModuleInterface;
 use App\Service\Event\EventService;
 use App\Service\Module\ModuleService;
 use App\Service\User\UserService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,6 +49,7 @@ class ActivityController extends AbstractController
     public function listActionModule(View $view, $arguments = null) {
         $activityType = $view->getModule();
         if( !$activityType )return $this->redirectToRoute('home');
+
         $arguments = $this->fetchArguments( $arguments );
         $module = $this->sModule->load( $activityType, $arguments );
         if( !$module ) return $this->redirectToRoute( 'home');
@@ -96,15 +98,16 @@ class ActivityController extends AbstractController
     }
 
     /**
-     * @Route("/activity/{slug}/{action}/{arguments}", name="activity.module.act", requirements={"arguments"=".*"})
+     * @Route("/activity/{v_slug}/{a_slug}/{action}/{arguments}", name="activity.module.act", requirements={"v_slug"="[^\/]+\/[^\/]+","arguments"=".*"})
+     * @ParamConverter("view", options={"mapping": {"v_slug": "longSlug"}})
+     * @ParamConverter("activity", options={"mapping": {"a_slug": "slug"}})
      */
-    public function joinActionModule(Activity $activity, string $action, Request $request, $arguments = null ) {
+    public function joinActionModule(View $view, Activity $activity, string $action, Request $request, $arguments = null ) {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $typeSlug = $activity->getType()->getSlug();
         $arguments = $this->fetchArguments( $arguments );
-
 
         if($request->isXmlHttpRequest() && $requestType = $request->request->get('type')){
             $typeSlug = $requestType;
@@ -116,9 +119,10 @@ class ActivityController extends AbstractController
         $module->setActivity( $activity );
 
         $return_route = $this->redirectToRoute( 'activity.module.list', [
-            'slug' => $typeSlug,
+            'longSlug' => $view->getLongSlug(),
             'arguments' => implode('/' ,$module->getArgumentsAfterAjaxAction() )
         ]);
+
 
         switch($action){
             case 'rejoindre' :

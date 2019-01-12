@@ -37,7 +37,7 @@
             {# @var activity \App\Entity\Activity #}
             {% for activity in activities %}
                 <div class="col-lg-6 col-xl-4 mb-4">
-                 {% include 'envol/pages/activity/roleplay/block/activity.block.html.twig'  with {'activity': activity } only %}
+                 {% include 'envol/pages/activity/roleplay/block/activity.block.html.twig' with {'activity': activity, 'view': view } only %}
                 </div>
             {% endfor %}
         </div>
