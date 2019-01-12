@@ -17,38 +17,12 @@
         {% set days = sEvent().getDays(event) %}
         {% for day in days %}
         <div class="col-sm-12 col-md-4">
-            <table class="table table-custom">
-                <tr>
-                    <th width="1%"{% if loop.index > 1 %} class="d-sm-block d-md-none"{% endif %} ></th>
-                    <th width="99%" class="text-center">{{ day|dayAndNb }}</th>
-                </tr>
-            {% set gap = 0 %}
+            {{ day|dayAndNb }}
             {% for hour in 1..24 %}
-                <tr>
-                    <td class="cell-time{% if loop.index > 1 %} d-sm-block d-md-none{% endif %}" ><span>{{ hour }}H</span></td>
-                    <td></td>
-                    {#{% set event = activityuser.getEventStartAt( hour, day ) %}#}
-                    {#{% set event = false %}#}
-                    {#{% if gap < 1 %}#}
-
-                        {#{% if event %}#}
-                            {#<td rowspan="{{ event.getLength }}" class="card-light" >#}
-                                {#{% include 'envol/block/generic-activity.html.twig' with {'event': event} %}#}
-                            {#</td>#}
-                            {#{% set gap = event.getLength %}#}
-                        {#{% else %}#}
-                            {#<td></td>#}
-                        {#{% endif %}#}
-
-
-                    {#{% endif %}#}
-
-                    {#{% set gap = gap - 1 %}#}
-
-                </tr>
+                <div style="height: 60px; border-bottom: 1px solid lightgray">
+                    {{ hour }}
+                </div>
             {% endfor %}
-            </table>
-
         </div>
         {% endfor %}
 
