@@ -66,7 +66,7 @@ easy_admin:
           - subtitle
           - module
           - { property: 'imageFile', type: 'vich_image' }
-          - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+          - { property: 'content', type: 'fos_ckeditor' }
           - active
           - fixed
           - deleted
@@ -86,7 +86,7 @@ easy_admin:
           - event
           - active
           - { property: 'imageFile', type: 'vich_image' }
-          - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+          - { property: 'content', type: 'fos_ckeditor' }
 
     Event:
       class: App\Entity\Event
@@ -110,9 +110,9 @@ easy_admin:
           - openToPlayers
           - openToMasters
           - { property: 'options', type: 'collection', type_options: { entry_type: 'App\Form\Field\KeyValueOptionsType' } }
-          - { property: 'description', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+          - { property: 'description', type: 'fos_ckeditor' }
           - { property: 'topLinks', type: 'collection', type_options: { entry_type: 'App\Form\Field\TopLinkType' } }
-          - { property: 'footerText', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+          - { property: 'footerText', type: 'fos_ckeditor' }
           - facebookLink
 
     Activity:
@@ -238,4 +238,4 @@ easy_admin:
         fields:
           - name
           - { property: 'imageFile', type: 'vich_image' }
-          - { property: 'content', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+          - { property: 'content', type: 'fos_ckeditor' }
