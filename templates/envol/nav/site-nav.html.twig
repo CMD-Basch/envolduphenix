@@ -16,11 +16,13 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="site_navbar_{{ menu.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">{{ menu.name|upper }}<span class="caret"></span></a>
                     <div class="dropdown-menu" aria-labelledby="site_navbar_{{ menu.id }}">
-                        {% for view in menu.views if view.active and not view.deleted %}
-                        <a class="dropdown-item"
-                           href="{{ view|view_url }}">
-                            {{ view.name }}</a>
-                        {% endfor %}
+                    {% for view in menu.views if not view.deleted %}
+                        {% if view.active %}
+                            <a class="dropdown-item" href="{{ view|view_url }}"> {{ view.name }}</a>
+                        {% elseif is_granted('ROLE_ADMIN') %}
+                            <a class="dropdown-item" href="{{ view|view_url }}"><span class="text-warning">{{ view.name }}</span></a>
+                        {% endif %}
+                    {% endfor %}
                     </div >
                 </li>
                 {% endfor %}
