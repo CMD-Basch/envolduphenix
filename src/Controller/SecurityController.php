@@ -79,7 +79,7 @@ class SecurityController extends AbstractController
 
             $booking
                 ->setUser( $user )
-                ->setBooked( $form->getData()['book'] );
+                ->setBooked( $form->getData()['book'] || false );
 
 
             $em = $this->getDoctrine()->getManager();
