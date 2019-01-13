@@ -72,9 +72,16 @@ class ActivityController extends AbstractController
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
+
         $activityType = $view->getModule();
         if( !$activityType )return $this->redirectToRoute('home');
+
         $arguments = $this->fetchArguments( $arguments );
+
+        if( !$this->theEvent->isMasterCanRegister() ) {
+            return $this->redirectToRoute( 'activity.module.list', ['longSlug' => $view->getLongSlug(), 'arguments' => implode('/' ,$arguments ) ] );
+        }
+
         $module = $this->sModule->load( $activityType, $arguments );
         if( !$module ) return $this->redirectToRoute( 'home');
 
@@ -83,7 +90,7 @@ class ActivityController extends AbstractController
         if ( $form->isSubmitted() && $form->isValid() ) {
             $module->preSubmit( $request );
             $module->submit();
-            return $this->redirectToRoute('activity.module.list', ['slug' => $activityType->getSlug(), 'arguments' => implode('/' ,$arguments ) ] );
+            return $this->redirectToRoute('activity.module.list', ['longSlug' => $view->getLongSlug(), 'arguments' => implode('/' ,$arguments ) ] );
         }
 
         return $this->render($this->loadTemplate( 'new.html.twig', $module ), [
@@ -123,6 +130,7 @@ class ActivityController extends AbstractController
             'arguments' => implode('/' ,$module->getArgumentsAfterAjaxAction() )
         ]);
 
+        if( !$activity->getEvent()->isPlayerCanRegister() ) return $return_route;
 
         switch($action){
             case 'rejoindre' :
