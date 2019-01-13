@@ -59,7 +59,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/enregistrement", name="subscribe")
      */
-    public function registerAction( Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer ) {
+    public function registerAction( Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer, EventService $sEvent) {
 
 
         $user = new User();
@@ -77,14 +77,16 @@ class SecurityController extends AbstractController
                 ->setPassword( $passwordEncoder->encodePassword( $user, $user->getPassword() ) )
                 ->setRoles(['ROLE_USER']);
 
-            $booking
-                ->setUser( $user )
-                ->setBooked( $form->getData()['book'] ?? false );
-
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
-            $em->persist($booking);
+
+            if( $sEvent->getTheEvent() ) {
+                $booking
+                    ->setUser($user)
+                    ->setBooked($form->getData()['book'] ?? false);
+                $em->persist($booking);
+            }
 
 
 //            $message = (new \Swift_Message('L\'envol du Phénix : Validation de votre inscription' ))
