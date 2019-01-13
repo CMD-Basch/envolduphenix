@@ -43,7 +43,7 @@
 <footer>
     <div class="container">
         <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-2 footer-navigation">
                 <h3>NAVIGATION</h3>
                 <nav>
                     <ul>
@@ -59,7 +59,7 @@
                     </ul>
                 </nav>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-2 footer-navigation">
                 <h3 id="nav-hidden">NAVIGATION</h3>
                 <nav>
                     <ul>
@@ -74,23 +74,21 @@
             </div> <!-- col -->
             <div class="col-sm-4">
                 <h3>QUI SOMMES-NOUS ?</h3>
-                <div class="media">
-                    <div class="media-body">
-                        <p>Le Phénix Cadurcien est un club de jeux hébergé au sein de la MJC de Cahors. Animé par des passionnés depuis 2002, le club n'a eu de cesse d'évoluer et de se diversifier, afin de proposer aujourd'hui un maximum d'activités ludiques.<br />Pour toutes questions, n'hésitez pas à <a href="#" class="lien-contact">nous contacter.</a></p>
+                    <div class="footer-text">
+                        <p>{{ sEvent().theEvent.footerText|raw }}</a></p>
                     </div>
-                </div>
             </div> <!-- col -->
             <div class="col-md-4">
                 <div class="fb-page"
-                     data-href="https://www.facebook.com/phenix.cadurcien/"
+                     data-href="{{ sEvent().theEvent.facebookLink }}"
                      data-tabs=""
                      data-small-header="true"
                      data-adapt-container-width="true"
                      data-hide-cover="false"
                      data-height="830"
                      data-show-facepile="true">
-                    <blockquote cite="https://www.facebook.com/phenix.cadurcien/" class="fb-xfbml-parse-ignore">
-                        <a href="https://www.facebook.com/phenix.cadurcien/">Phénix cadurcien</a>
+                    <blockquote cite="{{ sEvent().theEvent.facebookLink }}" class="fb-xfbml-parse-ignore">
+                        <a href="{{ sEvent().theEvent.facebookLink }}">Evenement</a>
                     </blockquote>
                 </div>
             </div> <!-- col -->

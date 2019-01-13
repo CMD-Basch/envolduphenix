@@ -1,8 +1,9 @@
 <!-- NAV TOP -->
 <div class="row nav-top">
     <div class="container">
-        <a href="https://www.facebook.com/phenix.cadurcien/"><img src="{{ asset('/images/facebook.png') }}"></a>
-        <a href="mailto:lephenixcadurcien@live.fr"><img src="{{ asset('/images/email.png') }}"></a>
+        {% for item in sEvent().theEvent.topLinks %}
+            <a href="{{ item.link }}" class="top-link mr-1"><i class="{{ item.icon }}"></i></a>
+        {% endfor %}
 
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <li class="dropdown link-nav-top"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ app.user.username }} <span class="caret"></span></a>

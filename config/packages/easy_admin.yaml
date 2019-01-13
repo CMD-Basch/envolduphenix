@@ -98,6 +98,9 @@ easy_admin:
           - active
           - { property: 'options', type: 'collection', type_options: { entry_type: 'App\Form\Field\KeyValueOptionsType' } }
           - { property: 'description', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+          - { property: 'topLinks', type: 'collection', type_options: { entry_type: 'App\Form\Field\TopLinkType' } }
+          - { property: 'footerText', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
+          - facebookLink
 
     Activity:
       class: App\Entity\Activity

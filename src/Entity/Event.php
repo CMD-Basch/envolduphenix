@@ -81,6 +81,21 @@ class Event
      */
     private $rounds;
 
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $topLinks = [];
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $footerText;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $facebookLink;
+
     public function __construct()
     {
         $this->menus = new ArrayCollection();
@@ -366,6 +381,42 @@ class Event
                 $round->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTopLinks(): ?array
+    {
+        return $this->topLinks;
+    }
+
+    public function setTopLinks(?array $topLinks): self
+    {
+        $this->topLinks = $topLinks;
+
+        return $this;
+    }
+
+    public function getFooterText(): ?string
+    {
+        return $this->footerText;
+    }
+
+    public function setFooterText(string $footerText): self
+    {
+        $this->footerText = $footerText;
+
+        return $this;
+    }
+
+    public function getFacebookLink(): ?string
+    {
+        return $this->facebookLink;
+    }
+
+    public function setFacebookLink(string $facebookLink): self
+    {
+        $this->facebookLink = $facebookLink;
 
         return $this;
     }
