@@ -96,6 +96,21 @@ class Event
      */
     private $facebookLink;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $open;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $openToPlayers;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $openToMasters;
+
     public function __construct()
     {
         $this->menus = new ArrayCollection();
@@ -109,6 +124,14 @@ class Event
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function isPlayerCanRegister() {
+        return $this->getOpen() && $this->getOpenToPlayers();
+    }
+
+    public function isMasterCanRegister() {
+        return $this->getOpen() && $this->getOpenToMasters();
     }
 
     public function getId(): ?int
@@ -417,6 +440,42 @@ class Event
     public function setFacebookLink(string $facebookLink): self
     {
         $this->facebookLink = $facebookLink;
+
+        return $this;
+    }
+
+    public function getOpen(): ?bool
+    {
+        return $this->open;
+    }
+
+    public function setOpen(bool $open): self
+    {
+        $this->open = $open;
+
+        return $this;
+    }
+
+    public function getOpenToPlayers(): ?bool
+    {
+        return $this->openToPlayers;
+    }
+
+    public function setOpenToPlayers(bool $openToPlayers): self
+    {
+        $this->openToPlayers = $openToPlayers;
+
+        return $this;
+    }
+
+    public function getOpenToMasters(): ?bool
+    {
+        return $this->openToMasters;
+    }
+
+    public function setOpenToMasters(bool $openToMasters): self
+    {
+        $this->openToMasters = $openToMasters;
 
         return $this;
     }

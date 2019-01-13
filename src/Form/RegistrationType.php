@@ -28,12 +28,12 @@ class RegistrationType extends AbstractType
         /** @var Booking $booking */
         $booking = $options['booking'];
 
-        $event = $this->sEvent->getNextOpenEvent();
+        $event = $this->sEvent->getTheEvent();
         $builder->add('user', UserType::class, [
             'data' => $user,
             'label' => false,
         ] );
-        if( $event ) {
+        if( $event && $event->getOpen() ) {
             $booking->setEvent( $event );
             $builder->add('book', CheckboxType::class, [
                 'label' => 'Je m\'enregistre au prochain évènement : '. $event->getName(),

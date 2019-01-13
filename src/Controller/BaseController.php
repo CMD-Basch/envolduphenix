@@ -26,8 +26,11 @@ class BaseController extends AbstractController
      */
     public function home() {
 
+        $event  = $this->theEvent;
+        if( !$event ) return $this->render('envol/no_event.html.twig' );
+
         return $this->render('envol/home.html.twig', [
-            'event' => $this->theEvent
+            'event' => $event
         ]);
     }
 

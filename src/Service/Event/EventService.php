@@ -23,14 +23,6 @@ class EventService
         return $this->em->getRepository( Event::class )->findOneBy(['active' => true], ['start' => 'DESC']);
     }
 
-    public function getNextOpenEvent(): ?Event {
-        $event = $this->em->getRepository( Event::class )->findOneBy(['active' => true], ['start' => 'DESC']);
-        if( $event->getStart() > new \DateTime() ){
-            return $event;
-        }
-        return null;
-    }
-
     /**
      * @return \DateTime[]
      */

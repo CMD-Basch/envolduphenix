@@ -40,17 +40,20 @@ class ActivityExtension extends AbstractExtension
     {
         $user = $this->sUser->getUser();
 
+        if( !$activity->getEvent()->isPlayerCanRegister() ){
+            return'';
+        }
         if( $activity->isMaster( $user ) ){
             return '';
         }
-        elseif( $activity->isPlayer( $user ) ) {
+        if( $activity->isPlayer( $user ) ) {
             $url = $this->router->generate('activity.module.act',['v_slug'=> $view->getLongSlug(), 'a_slug' => $activity->getSlug(), 'action' => 'quitter'] );
             return '<a class="btn btn-outline-primary btn-table" role="button" data-ajax-button="true" href="'. $url .'">Quitter</a>';
         }
-        elseif( !$activity->isFreeSlots() ) {
+        if( !$activity->isFreeSlots() ) {
             return '<a class="btn btn-outline-secondary disabled" role="button" tabindex="-1" aria-disabled="true" href="#">Partie pleine</a>';
         }
-        elseif( $this->sUser->isFreeTimeActivity($activity) ) {
+        if( $this->sUser->isFreeTimeActivity($activity) ) {
             $url = $this->router->generate('activity.module.act',['v_slug'=> $view->getLongSlug(), 'a_slug' => $activity->getSlug(), 'action' => 'rejoindre'] );
             return '<a class="btn btn-outline-primary btn-table" role="button" data-ajax-button="true" href="'. $url .'">Rejoindre</a>';
         }

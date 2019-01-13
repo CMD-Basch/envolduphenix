@@ -90,12 +90,25 @@ easy_admin:
 
     Event:
       class: App\Entity\Event
+      list:
+        fields:
+          - name
+          - start
+          - end
+          - active
+          - open
+          - openToPlayers
+          - openToMasters
+
       form:
         fields:
           - name
           - { property: 'start', type: 'datetime', type_options: { widget: 'single_text' } }
           - { property: 'end', type: 'datetime', type_options: { widget: 'single_text' } }
           - active
+          - open
+          - openToPlayers
+          - openToMasters
           - { property: 'options', type: 'collection', type_options: { entry_type: 'App\Form\Field\KeyValueOptionsType' } }
           - { property: 'description', type: 'FOS\CKEditorBundle\Form\Type\CKEditorType' }
           - { property: 'topLinks', type: 'collection', type_options: { entry_type: 'App\Form\Field\TopLinkType' } }

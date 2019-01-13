@@ -25,7 +25,7 @@
             <div class="col-1">
                 <ul class="nav nav-fill w-100">
                     <li class="nav-item" data-toggle="tooltip" title="">
-                        {% if sUser().isFreeTimeRound( options.round ) %}
+                        {% if sUser().isFreeTimeRound( options.round ) and sEvent().theEvent.isMasterCanRegister %}
                         <a class="nav-link" href="{{ path('activity.module.new', {'longSlug': view.longSlug, 'arguments': options.round.slug } ) }}"><i class="fas fa-plus"></i></a>
                         {% endif %}
                     </li>

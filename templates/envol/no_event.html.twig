@@ -39,43 +39,10 @@
         <div class="row">
             <img src="{{ asset('images/phenix-trans.png') }}" class="d-sm-none d-md-block float-right phenix-trans">
             <div class="intro col-sm-8 col-sm-push-2">
-                {{ event.description|raw }}
+                Aucun évènement enregistré actuellement
             </div>
         </div> <!-- row -->
 
-        <!-- Présentation Catégories -->
-        <div class="row pres-cate">
-            {% for article in event.articles if article.active %}
-            <div class="col-md-4">
-                <div  id="bulle1" class="flip-container">
-                    <a href="#" id="toggler1">
-                        <div ontouchstart="this.classList.toggle('hover');">
-                            <div class="flipper">
-                                <div class="front"><img src="{{ asset( 'uploads/article/' ~ article.image ) }}"></div>
-                                <div class="back"><img src="{{ asset( 'uploads/article/' ~ article.image ) }}"></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <h4>{{ article.title }}</h4>
-                <div class="text-left">
-                {{ article.content|raw }}
-                </div>
-            </div>
-            {% endfor %}
-        </div> <!-- row -->
-
-        <!-- Partenaires -->
-        {% if event.parrainers|length > 0 %}
-        <div class="row part">
-            <div class="col-12">
-                <h3 class="text-center" ><hr>NOS PARTENAIRES<hr></h3>
-                {% for parrainer in event.parrainers if parrainer.active %}
-                    <a target="_blank" href="{{ parrainer.link }}"><img src="{{ asset('uploads/parrainer/' ~ parrainer.image ) }}" alt="{{ parrainer.name }}"></a>
-                {% endfor %}
-            </div> <!-- col -->
-        </div> <!-- row -->
-        {% endif %}
     </div> <!-- container -->
 
 

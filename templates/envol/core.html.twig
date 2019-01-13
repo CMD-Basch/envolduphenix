@@ -42,6 +42,7 @@
 
 <footer>
     <div class="container">
+        {% if sEvent().theEvent %}
         <div class="row">
             <div class="col-sm-2 footer-navigation">
                 <h3>NAVIGATION</h3>
@@ -49,7 +50,7 @@
                     <ul>
                         <li><a href="#">Accueil</a></li>
                         <br/>
-                        {% for menu in event().menus %}
+                        {% for menu in sEvent().theEvent.menus %}
                         <li><a href="#">{{ menu.name }}</a></li>
                         {% for view in menu.views %}
                             <li><a href="{{ view|view_url }}">• {{ view.name }}</a></li>
@@ -93,6 +94,7 @@
                 </div>
             </div> <!-- col -->
         </div> <!-- row -->
+        {% endif %}
     </div> <!-- container -->
 </footer>
 
