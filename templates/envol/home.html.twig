@@ -12,15 +12,17 @@
     <!-- CAROUSEL -->
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{{ asset('images/slide2.png') }}" class="img-fluid w-100" alt="Slide 1">
+            {% for slide in 1..3 %}
+            <div class="carousel-item {% if slide == 1 %}active{% endif %}">
+                <img src="{{ asset('images/slide/slide' ~ slide ~'.png') }}" class="img-fluid w-100" alt="Slide {{ slide }}">
             </div>
-            <div class="carousel-item">
-                <img src="{{ asset('images/slide3.png') }}" class="img-fluid w-100" alt="Slide 2">
-            </div>
-            <div class="carousel-item">
-                <img src="{{ asset('images/slide4.png') }}" class="img-fluid w-100" alt="Slide 3">
-            </div>
+            {% endfor %}
+            {#<div class="carousel-item">#}
+                {#<img src="{{ asset('images/slide3.png') }}" class="img-fluid w-100" alt="Slide 2">#}
+            {#</div>#}
+            {#<div class="carousel-item">#}
+                {#<img src="{{ asset('images/slide4.png') }}" class="img-fluid w-100" alt="Slide 3">#}
+            {#</div>#}
         </div>
         <!-- Left and right controls -->
         <a class="left carousel-control" href="#myCarousel" data-slide="prev">
