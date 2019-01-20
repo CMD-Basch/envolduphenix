@@ -55,7 +55,8 @@ class UserService
     }
 
     public function getOverlapActivities( \DateTimeInterface $start, \DateTimeInterface $end ): Collection {
-        $activities = $this->getUser()->getAllActivities();
+        if(!$user = $this->getUser()) return new ArrayCollection();
+        $activities = $user->getAllActivities();
         $overlap = new ArrayCollection();
 
         foreach ( $activities as $activity ){
