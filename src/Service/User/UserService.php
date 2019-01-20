@@ -49,7 +49,7 @@ class UserService
         })->first();
 
         if(!$lastBook) return false;
-
+dump($lastBook);
         return $lastBook->getBooked();
 
     }

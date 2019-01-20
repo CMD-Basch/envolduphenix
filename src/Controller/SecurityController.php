@@ -26,22 +26,33 @@ class SecurityController extends AbstractController
 
         if( !$event ) return $this->redirectToRoute( 'home' );
 
-        foreach( $user->getBookings() as $booking ){
-            if( $booking->getEvent() === $event ){
-                return $this->redirectToRoute( 'home' );
+        $booking = new Booking();
+        $booking->setUser($user)
+            ->setEvent($event)
+            ->setOptions([])
+            ->setBooked(true);
+
+        $edit = false;
+
+        foreach( $user->getBookings() as $user_booking ){
+            if( $user_booking->getEvent() === $event ){
+                $booking = $user_booking;
+                $edit = true;
             }
         }
-        $booking = new Booking();
-        $booking->setUser( $user )
-                ->setEvent( $event )
-                ->setBooked( true );
 
-        $form = $this->createForm(BookingType::class, $booking );
+        $form = $this->createForm(BookingType::class, $booking, [ 'edit' => $edit ] );
+
         $form->handleRequest( $request );
         if ( $form->isSubmitted() && $form->isValid() ) {
 
-            $this->getDoctrine()->getManager()->persist( $booking );
-            $this->getDoctrine()->getManager()->flush();
+            $em = $this->getDoctrine()->getManager();
+
+            if( $booking->getBooked() )     $em->persist( $booking );
+            else                            $em->remove( $booking );
+
+            $em->flush();
+
             return $this->redirectToRoute( 'home' );
         }
 
@@ -51,6 +62,7 @@ class SecurityController extends AbstractController
             'title' => [
                 'name' => 'Réservation',
             ],
+            'edit' => $edit,
             'event' => $event,
             'form' => $form->createView(),
         ));

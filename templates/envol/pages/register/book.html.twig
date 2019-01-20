@@ -16,8 +16,14 @@
         <div class="col-sm-8 justi-txt mt-5">
             {{ form_start(form) }}
                 {{ form_widget(form) }}
+
+            {% if edit %}
+                <input type="submit" class="btn btn-success" value="Modifier mon inscription" />
+                <a class="btn btn-secondary float-right" href="{{ path('home' ) }}">Retour</a>
+            {% else %}
                 <input type="submit" class="btn btn-success" value="Je participe !" />
                 <a class="btn btn-secondary float-right" href="{{ path('home' ) }}">Non merci</a>
+            {% endif %}
             {{ form_end(form) }}
         </div>
     </div>
