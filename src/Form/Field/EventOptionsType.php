@@ -14,7 +14,6 @@ class EventOptionsType extends AbstractType
     {
         /** @var Event $event */
         $event  = $options['event'];
-        $editable  = $options['editable'];
 
         foreach( $event->getOptions() as $key => $option ){
             $field_options = [

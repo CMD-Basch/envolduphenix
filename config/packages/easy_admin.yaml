@@ -94,7 +94,10 @@ easy_admin:
 
     Event:
       class: App\Entity\Event
+      controller: App\Controller\Admin\EventController
       list:
+        actions:
+          - { name: 'booking', label: 'Inscriptions', target: '-blank' }
         fields:
           - name
           - start
