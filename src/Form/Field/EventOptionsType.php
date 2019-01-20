@@ -14,6 +14,7 @@ class EventOptionsType extends AbstractType
     {
         /** @var Event $event */
         $event  = $options['event'];
+        $editable  = $options['editable'];
 
         foreach( $event->getOptions() as $key => $option ){
             $field_options = [
@@ -33,7 +34,7 @@ class EventOptionsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'event' => null
+            'event' => null,
         ]);
     }
 

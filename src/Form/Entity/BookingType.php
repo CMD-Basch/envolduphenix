@@ -18,7 +18,7 @@ class BookingType extends AbstractType
         $edit = $options['edit'];
 
         $builder
-            ->add('options', EventOptionsType::class , [
+            ->add('options', EventOptionsType::class, [
                 'event' => $booking->getEvent(),
                 'label' => false,
             ]);

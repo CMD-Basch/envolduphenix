@@ -41,7 +41,9 @@ class SecurityController extends AbstractController
             }
         }
 
-        $form = $this->createForm(BookingType::class, $booking, [ 'edit' => $edit ] );
+        $form = $this->createForm(BookingType::class, $booking, [
+            'edit' => $edit,
+        ] );
 
         $form->handleRequest( $request );
         if ( $form->isSubmitted() && $form->isValid() ) {
@@ -55,8 +57,6 @@ class SecurityController extends AbstractController
 
             return $this->redirectToRoute( 'home' );
         }
-
-
 
         return $this->render('envol/pages/register/book.html.twig', array(
             'title' => [
