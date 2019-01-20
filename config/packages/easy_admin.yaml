@@ -11,11 +11,11 @@ easy_admin:
       - Activity
       - Round
       - Parrainer
-      - { label: 'Admin' }
-
-      - Menu
-      - View
-      - { label: 'Moderateur' }
+#      - { label: 'Admin' }
+#
+#      - Menu
+#      - View
+#      - { label: 'Moderateur' }
 
   entities:
     User:
