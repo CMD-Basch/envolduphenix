@@ -28,7 +28,7 @@ class RegistrationType extends AbstractType
         /** @var Booking $booking */
         $booking = $options['booking'];
 
-        $event = $this->sEvent->getTheEvent();
+        $event = $this->sEvent->getNextOpenEvent();
         $builder->add('user', UserType::class, [
             'data' => $user,
             'label' => false,

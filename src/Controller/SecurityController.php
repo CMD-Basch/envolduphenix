@@ -22,9 +22,9 @@ class SecurityController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $event = $sEvent->getTheEvent();
+        $event = $sEvent->getNextOpenEvent();
 
-        if( !$event || !$event->getOpen() ) return $this->redirectToRoute( 'home' );
+        if( !$event ) return $this->redirectToRoute( 'home' );
 
         foreach( $user->getBookings() as $booking ){
             if( $booking->getEvent() === $event ){
@@ -82,7 +82,9 @@ class SecurityController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
 
-            if( $sEvent->getTheEvent() ) {
+            $event = $sEvent->getNextOpenEvent();
+
+            if( $event ) {
                 $booking
                     ->setUser($user)
                     ->setBooked($form->getData()['book'] ?? false);

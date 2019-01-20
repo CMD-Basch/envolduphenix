@@ -48,4 +48,13 @@ class EventService
         });
     }
 
+    public function getNextOpenEvent(): ?Event {
+        $event = $this->getTheEvent();
+        $now  = new \DateTime();
+        if( $event->getStart() < $now ) return null;
+        if( !$event->getOpen() ) return null;
+
+        return $event;
+    }
+
 }

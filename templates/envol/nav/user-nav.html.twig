@@ -10,13 +10,17 @@
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         <li class="dropdown link-nav-top"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ app.user.username }} <span class="caret"></span></a>
             <ul class="dropdown-menu">
+            {% if sUser().isBookOnNextOpenEvent() %}
                 <li><a href="{{ path('schedule') }}">Emploi du temps</a></li>
+            {% elseif sEvent().getNextOpenEvent() %}
+                <li><a href="{{ path('book') }}">M'inscrire au prochain évènement</a></li>
+            {% endif %}
                 <li><a href="{{ path('profile.edit') }}">Mon profil</a></li>
                 <li><a href="{{ path('logout') }}">Déconnexion</a></li>
 
-                {% if is_granted('ROLE_SUPER_ADMIN') %}
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <li><a href="{{ path('admin') }}">Admin</a></li>
-                {% endif %}
+            {% endif %}
             </ul>
         </li>
         {% else %}

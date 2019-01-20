@@ -4,6 +4,7 @@ namespace App\Service\User;
 
 
 use App\Entity\Activity;
+use App\Entity\Booking;
 use App\Entity\Round;
 use App\Entity\User;
 use App\Service\Event\EventService;
@@ -35,6 +36,22 @@ class UserService
             return $this->user;
         }
         return null;
+    }
+
+    public function isBookOnNextOpenEvent(): ?bool {
+
+        $event = $this->sEvent->getNextOpenEvent();
+        if(!$event) return null;
+
+        /** @var Booking $lastBook */
+        $lastBook = $this->getUser()->getBookings()->filter( function ( Booking $b ) use ( $event ) {
+           return $b->getEvent() === $event;
+        })->first();
+
+        if(!$lastBook) return false;
+
+        return $lastBook->getBooked();
+
     }
 
     public function getOverlapActivities( \DateTimeInterface $start, \DateTimeInterface $end ): Collection {
