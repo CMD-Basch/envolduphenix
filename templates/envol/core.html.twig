@@ -50,9 +50,9 @@
                     <ul>
                         <li><a href="#">Accueil</a></li>
                         <br/>
-                        {% for menu in sEvent().theEvent.menus %}
+                        {% for menu in sEvent().theEvent.activeMenus %}
                         <li><a href="#">{{ menu.name }}</a></li>
-                        {% for view in menu.views %}
+                        {% for view in menu.views if view.active and not view.deleted %}
                             <li><a href="{{ view|view_url }}">• {{ view.name }}</a></li>
                         {% endfor %}
 

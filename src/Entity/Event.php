@@ -184,6 +184,16 @@ class Event
         return $this->menus;
     }
 
+    /**
+     * @return Collection|Menu[]
+     */
+    public function getActiveMenus(): Collection
+    {
+        return $this->getMenus()->filter( function ( Menu $m ) {
+            return $m->getActive();
+        });
+    }
+
     public function addMenu(Menu $menu): self
     {
         if (!$this->menus->contains($menu)) {

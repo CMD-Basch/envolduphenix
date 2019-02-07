@@ -12,7 +12,7 @@
         <div class="collapse navbar-collapse justify-content-end" id="site-nav-toggler">
             <ul class="nav navbar-nav" id="ul-nav-gen">
                 {% if event %}
-                {% for menu in event.menus %}
+                {% for menu in event.menus if menu.active %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="site_navbar_{{ menu.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">{{ menu.name|upper }}<span class="caret"></span></a>
                     <div class="dropdown-menu" aria-labelledby="site_navbar_{{ menu.id }}">
