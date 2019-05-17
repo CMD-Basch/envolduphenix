@@ -6,32 +6,36 @@
 
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/slick.css') }}">
+
+{% endblock %}
+
 {% block body %}
 
-    <div class="container mt-5">
-        <h1>{{ round.name }} <small>nombre de tables : {{ round.activities.count }}</small></h1>
-        <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="15000">
-            <div class="carousel-inner">
-                {% for activity in round.activities %}
-                    <div  class="carousel-item {% if loop.first %}active{% endif %}">
-                        {% include 'envol/pages/activity/roleplay/block/activity.block.html.twig' with {'activity': activity, 'buttons': false, 'index': loop.index } only %}
-                    </div>
-                {% endfor %}
+
+    <div class="container-fluid pl-0 pr-0 mt-5">
+        <h1>{{ round.name }} <small>nombre de tables : {{ round.activities.count }}</small></h1> <a href="#" id="btn-refresh" class="btn btn-primary" role="button" aria-disabled="true">Refresh</a>
+
+        <div id="carousel">
+            {% for activity in round.activities %}
+            <div id="activity-{{ activity.id }}" class="ml-3">
+            {% include 'envol/pages/activity/roleplay/block/activity.block.html.twig' with {'activity': activity, 'buttons': false, 'index': loop.index } only %}
             </div>
+            {% endfor %}
         </div>
     </div>
+
+
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('js/slick.min.js') }}"></script>
+    <script src="{{ asset('js/ajax/advert.js') }}"></script>
 
-    <script>
-        $(document).ready( function() {
-            $('#myCarousel').on('slide.bs.carousel', function () {
-                console.log('ok');
-            })
-        });
-
-    </script>
-
+    <div id="global"
+         data-round-id="{{ round.id }}"
+    ></div>
 {% endblock %}

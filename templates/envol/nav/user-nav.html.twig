@@ -21,7 +21,8 @@
                 <li><a href="{{ path('logout') }}">Déconnexion</a></li>
 
             {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <li><a href="{{ path('admin') }}">Admin</a></li>
+                <li><a href="{{ path('advert') }}" target="_blank">Affichage</a></li>
+                <li><a href="{{ path('admin') }}" target="_blank">Admin</a></li>
             {% endif %}
             </ul>
         </li>
