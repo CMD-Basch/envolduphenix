@@ -31,6 +31,11 @@ $(document).ready( function() {
 
                 if( data.status !== 'ok') return;
 
+                // let $slides = $('.slick-slide');
+                // console.log( $slides );
+
+
+
                 for( let key in data.blocks ) {
                     let block =  data.blocks[ key ];
                     $find = $( '#activity-' + block.id );
