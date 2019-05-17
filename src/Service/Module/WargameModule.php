@@ -73,7 +73,7 @@ class WargameModule extends DefaultModule
 
     protected function generateNewForm(): FormInterface {
         $a = $this->getActivity();
-        dump($a);
+//        dump($a);
         return $this->formFactory->create( ActivityRoleplayType::class , $a );
     }
 

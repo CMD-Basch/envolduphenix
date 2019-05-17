@@ -1,0 +1,37 @@
+{% extends "envol/void.html.twig" %}
+
+{% block title %}
+
+    {{ parent() }} - Rondes
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+        <h1>{{ round.name }} <small>nombre de tables : {{ round.activities.count }}</small></h1>
+        <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="15000">
+            <div class="carousel-inner">
+                {% for activity in round.activities %}
+                    <div  class="carousel-item {% if loop.first %}active{% endif %}">
+                        {% include 'envol/pages/activity/roleplay/block/activity.block.html.twig' with {'activity': activity, 'buttons': false, 'index': loop.index } only %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready( function() {
+            $('#myCarousel').on('slide.bs.carousel', function () {
+                console.log('ok');
+            })
+        });
+
+    </script>
+
+{% endblock %}

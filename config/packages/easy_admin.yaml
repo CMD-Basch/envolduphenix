@@ -1,25 +1,36 @@
 easy_admin:
   design:
     menu:
-      - User
-      - Booking
-      - Event
-      - MenuAdmin
-      - ViewAdmin
-      - Article
-      - ActivityType
-      - Activity
-      - Round
-      - Parrainer
+      - label: 'Menu compliqué'
+        children:
+          - User
+          - Booking
+          - Event
+          - MenuAdmin
+          - ViewAdmin
+          - Article
+          - ActivityType
+          - Activity
+          - Round
+          - Parrainer
 #      - { label: 'Admin' }
 #
 #      - Menu
 #      - View
 #      - { label: 'Moderateur' }
+      - label: 'Menu simple'
+        children:
+          - { label: 'Utilisateurs', entity: UserLight, default: true }
+          - { label: 'Tables de JDR', entity: ActivityRPG }
 
   entities:
     User:
       class: App\Entity\User
+
+
+
+
+
 
     Booking:
       class: App\Entity\Booking
@@ -246,3 +257,68 @@ easy_admin:
           - name
           - { property: 'imageFile', type: 'vich_image' }
           - { property: 'content', type: 'fos_ckeditor' }
+
+
+
+
+
+    UserLight:
+      class: App\Entity\User
+      disabled_actions: ['delete']
+      list:
+        fields:
+          - username
+          - firstName
+          - lastName
+          - email
+
+      edit:
+        fields:
+          - username
+          - firstName
+          - lastName
+          - email
+          - { property: 'plainPassword', type: 'text', type_options: { required: false } }
+        form_options: { validation_groups: ['Profile'] }
+
+      new:
+        fields:
+          - username
+          - firstName
+          - lastName
+          - email
+          - { property: 'plainPassword', type: 'text', type_options: { required: true } }
+        form_options: { validation_groups: ['Registration'] }
+
+    ActivityRPG:
+      class: App\Entity\Activity
+      form:
+        fields:
+          - name
+#          - event
+#          - type
+#          - { property: 'start', type: 'datetime', type_options: { widget: 'single_text' } }
+#          - { property: 'end', type: 'datetime', type_options: { widget: 'single_text' } }
+          - description
+          - game
+          - style
+          - slots
+          - { property: 'round', type_options: { required: true } }
+          - players
+          - { property: 'master', type_options: { required: true } }
+
+      list:
+        dql_filter: 'entity.type = 1'
+        sort: ['round', 'ASC']
+        fields:
+          - name
+          - master.username
+          - round
+
+      search:
+        dql_filter: 'entity.type = 1'
+        fields:
+          - name
+          - master.username
+          - round.name
+

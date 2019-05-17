@@ -1,0 +1,19 @@
+{% extends "envol/void.html.twig" %}
+
+{% block title %}
+
+    {{ parent() }} - Rondes
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="d-flex flex-column mt-5">
+        {% for round in rounds %}
+            <a href=" {{ path('advert.round', {round: round.id}) }}" class="btn btn-primary btn-lg mt-3" tabindex="-1" role="button" aria-disabled="true"><h1>{{ round.name }}</h1></a>
+        {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

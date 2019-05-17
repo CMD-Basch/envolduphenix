@@ -9,6 +9,10 @@
     {% set panel_color = 'card-blue' %}
 {% endif %}
 
+{% set activity_title -%}
+    {% if index is defined %}#{{ index }} {% endif -%}
+    {{- activity.name -}}
+{%- endset %}
 
 {% if buttons is not defined %}
     {% set buttons = true %}
@@ -16,7 +20,7 @@
 
 <div class="card {{ panel_color }}">
     <div class="card-header">
-        <h4>{{ activity.name }}</h4>
+        <h4>{{ activity_title }}</h4>
     </div>
     <div class="card-body">
         <p><strong>Meneur :</strong> {{ activity.master }}
