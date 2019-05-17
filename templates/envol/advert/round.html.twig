@@ -16,7 +16,8 @@
 
 
     <div class="container-fluid pl-0 pr-0 mt-5">
-        <h1>{{ round.name }} <small>nombre de tables : {{ round.activities.count }}</small></h1> <a href="#" id="btn-refresh" class="btn btn-primary" role="button" aria-disabled="true">Refresh</a>
+        <h1>{{ round.name }} <small>nombre de tables : <span id="#nbr-activities">{{ round.activities.count }}</span></small></h1>
+        {#<a href="#" id="btn-refresh" class="btn btn-primary" role="button" aria-disabled="true">Refresh</a>#}
 
         <div id="carousel">
             {% for activity in round.activities %}

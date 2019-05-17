@@ -18,18 +18,16 @@ $(document).ready( function() {
             round_id = $global.data('round-id')
     ;
 
-    console.log($global, round_id);
+    // console.log($global, round_id);
 
     function refreshRounds() {
-
-
         $.ajax({
             url: '/advert/ajax/'+round_id,
             type: "POST",
             data:{},
             async: true,
             success: function (data) {
-                console.log(data);
+                // console.log(data);
 
                 if( data.status !== 'ok') return;
 
@@ -47,15 +45,23 @@ $(document).ready( function() {
                     }
                 }
 
+                $('#nbr-activities').html( data.total );
+
 
             }
         }).always( function () {
-
+            setTimeout(function() {
+                refreshRounds();
+            }, 5000);
         });
     }
 
-    $("#btn-refresh").on('click', function () {
+    setTimeout(function() {
         refreshRounds();
-    });
+    }, 5000);
+
+    // $("#btn-refresh").on('click', function () {
+    //     refreshRounds();
+    // });
 
 });

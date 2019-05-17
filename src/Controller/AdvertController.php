@@ -70,6 +70,7 @@ class AdvertController extends AbstractController
 
         return new JsonResponse([
             'status' => 'ok',
+            'total' => count($blocks),
             'blocks' => $blocks
         ]);
     }
